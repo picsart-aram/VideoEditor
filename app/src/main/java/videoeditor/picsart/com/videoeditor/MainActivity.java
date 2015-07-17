@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_SELECT_VIDEO = 100;
     private ProgressDialog progress = null;
     private View actionsContainer = null;
-    private SeekBarWithTwoThumb swtt;
     private LinearLayout container;
 
     @Override
@@ -44,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-
     }
 
     private void init(){
@@ -69,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
                 effect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
             }
         });
-        swtt = (SeekBarWithTwoThumb) findViewById(R.id.myseekbar);
         container = (LinearLayout) findViewById(R.id.frames_holder);
     }
 
@@ -96,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addFrameToLayout(ArrayList<String> paths){
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.frames_holder);
 
 //        for (int i = 0; i < 3; i++) {
 //            File image = new File(paths.get(i));
@@ -117,10 +113,23 @@ public class MainActivity extends AppCompatActivity {
             ImageView imageView = new ImageView(this);
             imageView.setLayoutParams(new ViewGroup.LayoutParams(115, 115));
             imageView.setImageBitmap(bitmap);
-            linearLayout.addView(imageView);
+            container.addView(imageView);
         }
 
     }
+
+    private ArrayList<String> filterPaths (ArrayList<String> paths){
+        int duration=paths.size()/5;
+        ArrayList<String> result=new ArrayList<>();
+        for (int i = 0; i <paths.size() ; i++) {
+            if(i%duration==0){
+                result.add(paths.get(i));
+            }
+        }
+        return result;
+
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
@@ -143,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                         super.onPostExecute(aVoid);
                         progress.dismiss();
                         actionsContainer.setVisibility(View.VISIBLE);
-                        addFrameToLayout(getImages());
+                        addFrameToLayout(filterPaths(getImages()));
                     }
 
                     @Override
