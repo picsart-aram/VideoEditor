@@ -1,29 +1,19 @@
 package videoeditor.picsart.com.videoeditor;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.media.MediaCodec;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import videoeditor.picsart.com.videoeditor.effects.GrayScaleEffect;
@@ -33,9 +23,9 @@ import videoeditor.picsart.com.videoeditor.text_art.TextArtObject;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button selectVideoButton = null;
     private ExtractMpegFramesTest mediaExtractor = null;
     private static final int REQUEST_SELECT_VIDEO = 100;
+    private static final int REQUEST_SELECT_IMAGE = 101;
     private ProgressDialog progress = null;
     private View actionsContainer = null;
     private LinearLayout container;
@@ -49,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init(){
         mediaExtractor = new ExtractMpegFramesTest();
-        selectVideoButton = (Button) findViewById(R.id.select_video);
-        selectVideoButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.select_video).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent mediaChooser = new Intent(Intent.ACTION_GET_CONTENT);
@@ -82,6 +71,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         container = (LinearLayout) findViewById(R.id.frames_holder);
+
+
+        findViewById(R.id.select_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent imgChooser = new Intent(Intent.ACTION_GET_CONTENT);
+                imgChooser.setType("image/*");
+                startActivityForResult(Intent.createChooser(imgChooser, "Select Picture"), REQUEST_SELECT_IMAGE);
+            }
+        });
     }
 
 
@@ -154,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     protected Void doInBackground(Void... params) {
                         try {
-                            mediaExtractor.testExtractMpegFrames(getRealPathFromURI(getApplicationContext(), data.getData()));
+                            mediaExtractor.testExtractMpegFrames(Util.getRealPathFromURI(getApplicationContext(), data.getData()));
                         } catch (Throwable throwable) {
                             throwable.printStackTrace();
                         }
@@ -177,27 +176,33 @@ public class MainActivity extends AppCompatActivity {
                 };
                 createDir("test_images");
                 encoderTask.execute();
-                System.out.println("path = "+getRealPathFromURI(getApplicationContext(), data.getData()));
+                System.out.println("path = " + Util.getRealPathFromURI(getApplicationContext(), data.getData()));
 
+            } else if (requestCode == REQUEST_SELECT_IMAGE) {
+                String imgPath = Util.getRealPathFromGallery(this, data);
+                System.out.println("Video::  imgPath= " + imgPath);
+                Intent intent = new Intent(this, ClipartActivity.class);
+                intent.putExtra("path", imgPath);
+                startActivity(intent);
             }
         }
     }
 
 
-    public String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
+//    public String getRealPathFromURI(Context context, Uri contentUri) {
+//        Cursor cursor = null;
+//        try {
+//            String[] proj = {MediaStore.Images.Media.DATA};
+//            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//            cursor.moveToFirst();
+//            return cursor.getString(column_index);
+//        } finally {
+//            if (cursor != null) {
+//                cursor.close();
+//            }
+//        }
+//    }
 
     public static void clearDir(File dir) {
         try {
