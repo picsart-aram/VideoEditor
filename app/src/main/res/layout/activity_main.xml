@@ -27,6 +27,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/select_video"
             android:text="Make GrayScale" />
+        <Button
+            android:id="@+id/add_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/select_video"
+            android:text="Add Text" />
     </LinearLayout>
 
     <FrameLayout

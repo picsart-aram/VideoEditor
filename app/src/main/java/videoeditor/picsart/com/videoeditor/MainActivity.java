@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import videoeditor.picsart.com.videoeditor.effects.GrayScaleEffect;
+import videoeditor.picsart.com.videoeditor.text_art.SimpleTextArt;
+import videoeditor.picsart.com.videoeditor.text_art.TextArtObject;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -67,6 +69,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 GrayScaleEffect effect = new GrayScaleEffect(MainActivity.this);
                 effect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
+            }
+        });
+
+        findViewById(R.id.add_text).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SimpleTextArt addTextArt = new SimpleTextArt(MainActivity.this);
+                TextArtObject obj = new TextArtObject();
+                obj.x = 100;
+                obj.y = 30;
+                obj.text = "Hello ashxarh";
+                addTextArt.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath(), obj);
             }
         });
         swtt = (SeekBarWithTwoThumb) findViewById(R.id.myseekbar);
