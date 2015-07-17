@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaCodec;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,9 @@ import android.view.View;
 import android.widget.Button;
 
 import java.io.File;
+import java.io.IOException;
+
+import videoeditor.picsart.com.videoeditor.effects.GrayScaleEffect;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private ExtractMpegFramesTest mediaExtractor = null;
     private static final int REQUEST_SELECT_VIDEO = 100;
     private ProgressDialog progress = null;
+    private View actionsContainer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +44,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(mediaChooser, REQUEST_SELECT_VIDEO);
             }
         });
+        actionsContainer = findViewById(R.id.video_actions_layout);
         progress = new ProgressDialog(MainActivity.this);
         progress.setMessage("Please wait...");
+
+        findViewById(R.id.make_grayscale).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GrayScaleEffect effect = new GrayScaleEffect(MainActivity.this);
+                effect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
+            }
+        });
     }
 
     @Override
@@ -86,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                     protected void onPostExecute(Void aVoid) {
                         super.onPostExecute(aVoid);
                         progress.dismiss();
+                        actionsContainer.setVisibility(View.VISIBLE);
                     }
 
                     @Override
