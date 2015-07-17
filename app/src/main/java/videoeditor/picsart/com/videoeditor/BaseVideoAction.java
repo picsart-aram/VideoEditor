@@ -37,7 +37,9 @@ public abstract class BaseVideoAction<T> {
                 String[] bitmapPaths = parentDirectory.list();
 
                 for (int i = 0; i < bitmapPaths.length; i++) {
-                    Bitmap bitmap = BitmapFactory.decodeFile(parentDirectory.getPath()+"/"+bitmapPaths[i]);
+                    BitmapFactory.Options opts = new BitmapFactory.Options();
+                    opts.inMutable = true;
+                    Bitmap bitmap = BitmapFactory.decodeFile(parentDirectory.getPath()+"/"+bitmapPaths[i], opts);
                     Bitmap bitmapAfterAction = doActionOnBitmap(bitmap, parameters);
                     bitmap.recycle();
                     saveBitmapToFile(parentDirectory.getPath()+"/"+bitmapPaths[i], bitmapAfterAction);
