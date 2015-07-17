@@ -57,6 +57,7 @@
 
 
         <videoeditor.picsart.com.videoeditor.SeekBarWithTwoThumb
+            android:progressDrawable="@android:color/transparent"
             android:id="@+id/myseekbar"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"

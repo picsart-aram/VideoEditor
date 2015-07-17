@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -18,6 +19,7 @@ public class SeekBarWithTwoThumb extends ImageView {
 	private int thumb1Value, thumb2Value;
 	private int thumbY;
 	private Paint paint = new Paint();
+	private Paint transparentPaint = new Paint();
 	private int selectedThumb;
 	private int thumbHalfWidth;
 	private SeekBarChangeListener scl;
@@ -71,8 +73,12 @@ public class SeekBarWithTwoThumb extends ImageView {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		canvas.drawBitmap(thumb, thumb1X - thumbHalfWidth/2, thumbY,paint);
+		transparentPaint.setColor(Color.parseColor("#55555555"));
+		canvas.drawRect(0, 0, thumb1X, getHeight(), transparentPaint);
+		canvas.drawRect(thumb2X , thumbY  ,getWidth(), getHeight() ,transparentPaint);
+		canvas.drawBitmap(thumb, thumb1X - thumbHalfWidth / 2, thumbY, paint);
 		canvas.drawBitmap(thumb, thumb2X - thumbHalfWidth, thumbY,paint);
+
 	}
 
 	@Override
@@ -142,6 +148,4 @@ public class SeekBarWithTwoThumb extends ImageView {
 	public interface SeekBarChangeListener{
 		void SeekBarValueChanged(int Thumb1Value, int Thumb2Value);
 	}
-
-
 }
