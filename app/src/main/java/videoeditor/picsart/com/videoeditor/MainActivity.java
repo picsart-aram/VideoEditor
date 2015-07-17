@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaCodec;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -22,7 +23,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import videoeditor.picsart.com.videoeditor.effects.GrayScaleEffect;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ExtractMpegFramesTest mediaExtractor = null;
     private static final int REQUEST_SELECT_VIDEO = 100;
     private ProgressDialog progress = null;
+    private View actionsContainer = null;
     private SeekBarWithTwoThumb swtt;
     private LinearLayout container;
 
@@ -53,8 +58,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(mediaChooser, REQUEST_SELECT_VIDEO);
             }
         });
+        actionsContainer = findViewById(R.id.video_actions_layout);
         progress = new ProgressDialog(MainActivity.this);
         progress.setMessage("Please wait...");
+
+        findViewById(R.id.make_grayscale).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GrayScaleEffect effect = new GrayScaleEffect(MainActivity.this);
+                effect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
+            }
+        });
+    }
         swtt = (SeekBarWithTwoThumb) findViewById(R.id.myseekbar);
         container = (LinearLayout) findViewById(R.id.frames_holder);
 
@@ -127,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
                     protected void onPostExecute(Void aVoid) {
                         super.onPostExecute(aVoid);
                         progress.dismiss();
+                        actionsContainer.setVisibility(View.VISIBLE);
                         addFrameToLayout(getImages());
                     }
 

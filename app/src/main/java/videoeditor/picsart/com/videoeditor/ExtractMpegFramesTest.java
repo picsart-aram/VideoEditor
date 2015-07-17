@@ -123,8 +123,8 @@ public class ExtractMpegFramesTest extends AndroidTestCase {
         int width;
         int height;
 
-        int saveWidth = 480;
-        int saveHeight = 640;
+        int saveWidth = 320;
+        int saveHeight = 480;
 
 
         try {
@@ -170,13 +170,13 @@ public class ExtractMpegFramesTest extends AndroidTestCase {
 
             Log.d("gagagagagaga", "isport" + isPortriet);
 
-            if (isPortriet) {
-                saveHeight = width / 3;
-                saveWidth = height / 3;
-            } else {
-                saveHeight = height / 3;
-                saveWidth = width / 3;
-            }
+//            if (isPortriet) {
+//                saveHeight = width / 3;
+//                saveWidth = height / 3;
+//            } else {
+//                saveHeight = height / 3;
+//                saveWidth = width / 3;
+//            }
 
             if (VERBOSE) {
                 Log.d(TAG, "Video size is " + format.getInteger(MediaFormat.KEY_WIDTH) + "x" +
