@@ -45,8 +45,9 @@ public class GrayScaleEffect extends BaseVideoAction<Void> {
         return bmpGrayscale;
     }
 
+
     @Override
-    protected Bitmap doActionOnBitmap(Bitmap bmp) {
+    protected Bitmap doActionOnBitmap(Bitmap bmp, Void... params) {
         return toGrayscale(bmp);
     }
 }
