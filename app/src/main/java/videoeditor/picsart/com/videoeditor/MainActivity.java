@@ -69,11 +69,11 @@ public class MainActivity extends AppCompatActivity {
                 effect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
             }
         });
-    }
         swtt = (SeekBarWithTwoThumb) findViewById(R.id.myseekbar);
         container = (LinearLayout) findViewById(R.id.frames_holder);
-
     }
+
+
 
     private ArrayList<String> getImages(){
 
