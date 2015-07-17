@@ -37,12 +37,12 @@ public abstract class BaseVideoAction<T> {
                 String[] bitmapPaths = parentDirectory.list();
 
                 for (int i = 0; i < bitmapPaths.length; i++) {
-                    BitmapFactory.Options opts = new BitmapFactory.Options();
-                    opts.inMutable = true;
-                    Bitmap bitmap = BitmapFactory.decodeFile(parentDirectory.getPath()+"/"+bitmapPaths[i], opts);
-                    Bitmap bitmapAfterAction = doActionOnBitmap(bitmap, parameters);
+                    Bitmap bitmap = BitmapFactory.decodeFile(parentDirectory.getPath()+"/"+bitmapPaths[i]);
+                    Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.RGB_565, true);
                     bitmap.recycle();
-                    saveBitmapToFile(parentDirectory.getPath()+"/"+bitmapPaths[i], bitmapAfterAction);
+                    Bitmap bitmapAfterAction = doActionOnBitmap(mutableBitmap, parameters);
+                    saveBitmapToFile(parentDirectory.getPath() + "/" + bitmapPaths[i], bitmapAfterAction);
+                    mutableBitmap.recycle();
                     bitmapAfterAction.recycle();
                     onProgressUpdate(i, bitmapPaths.length);
                 }
