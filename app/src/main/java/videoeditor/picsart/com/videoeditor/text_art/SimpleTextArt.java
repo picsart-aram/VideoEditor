@@ -3,6 +3,8 @@ package videoeditor.picsart.com.videoeditor.text_art;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
@@ -17,13 +19,21 @@ public class SimpleTextArt extends BaseVideoAction<TextArtObject> {
         super(activity, params);
     }
 
+    public Bitmap addText(Bitmap bmpOriginal, TextArtObject... params) {
+        int width, height;
+        height = bmpOriginal.getHeight();
+        width = bmpOriginal.getWidth();
+        Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bmpGrayscale);
+        Paint paint = new Paint();
+        c.drawBitmap(bmpOriginal, 0, 0, paint);
+        c.drawText(params[0].text, params[0].x, params[0].y, paint);
+        return bmpGrayscale;
+    }
+
     @Override
     protected Bitmap doActionOnBitmap(Bitmap bmp, TextArtObject... params) {
-        Canvas canvas = new Canvas(bmp);
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        Rect bounds = new Rect();
-        paint.getTextBounds(params[0].text, 0, params[0].text.length(), bounds);
-        canvas.drawText(params[0].text, params[0].x, params[0].y, paint);
-        return bmp;
+        return addText(bmp, params);
     }
+
 }

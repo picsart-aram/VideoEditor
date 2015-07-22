@@ -5,6 +5,9 @@ import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,9 +21,9 @@ public abstract class BaseVideoAction<T> {
     private Activity activity = null;
     private ProgressDialog progressDialog = null;
 
-    protected abstract Bitmap doActionOnBitmap (Bitmap bmp, T... params);
+    protected abstract Bitmap doActionOnBitmap(Bitmap bmp, T... params);
 
-    public BaseVideoAction( Activity activity, T... params) {
+    public BaseVideoAction(Activity activity, T... params) {
         this.activity = activity;
         if (activity != null) {
             progressDialog = new ProgressDialog(activity);
@@ -28,7 +31,7 @@ public abstract class BaseVideoAction<T> {
         }
     }
 
-    public void startAction(final String folderPath, final T... parameters) {
+    public void startAction(final String folderPath, final Adapter adapter, final T... parameters) {
 
         AsyncTask<Void, Integer, Void> doActionTask = new AsyncTask<Void, Integer, Void>() {
             @Override
@@ -37,8 +40,8 @@ public abstract class BaseVideoAction<T> {
                 String[] bitmapPaths = parentDirectory.list();
 
                 for (int i = 0; i < bitmapPaths.length; i++) {
-                    Bitmap bitmap = BitmapFactory.decodeFile(parentDirectory.getPath()+"/"+bitmapPaths[i]);
-                    Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.RGB_565, true);
+                    Bitmap bitmap = BitmapFactory.decodeFile(parentDirectory.getPath() + "/" + bitmapPaths[i]);
+                    Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
                     bitmap.recycle();
                     Bitmap bitmapAfterAction = doActionOnBitmap(mutableBitmap, parameters);
                     saveBitmapToFile(parentDirectory.getPath() + "/" + bitmapPaths[i], bitmapAfterAction);
@@ -59,6 +62,10 @@ public abstract class BaseVideoAction<T> {
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 progressDialog.dismiss();
+                ImageLoader.getInstance().clearDiskCache();
+                ImageLoader.getInstance().clearMemoryCache();
+                adapter.notifyDataSetChanged();
+                Log.d("gagagagag", "hasar iji");
             }
 
             @Override
@@ -85,6 +92,7 @@ public abstract class BaseVideoAction<T> {
         } finally {
             try {
                 if (out != null) {
+                    out.flush();
                     out.close();
                 }
             } catch (IOException e) {
