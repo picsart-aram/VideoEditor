@@ -32,6 +32,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import videoeditor.picsart.com.videoeditor.EditVideoActivity;
+import videoeditor.picsart.com.videoeditor.Util;
+
 
 //20131122: minor tweaks to saveFrame() I/O
 //20131205: add alpha to EGLConfig (huge glReadPixels speedup); pre-allocate pixel buffers;
@@ -176,7 +179,7 @@ public class ExtractMpegFrames extends AndroidTestCase {
 
             Log.d(TAG, "isportriet:  " + isPortriet);
 
-            if (isPortriet) {
+            if (isPortriet || !Util.isTablet(EditVideoActivity.context)) {
                 savedFrameHeight = width / 8;
                 savedFrameWidth = height / 8;
             } else {

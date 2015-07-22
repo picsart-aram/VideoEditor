@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -47,7 +48,7 @@ public class Util {
                 return contentUri.getPath();
             }
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
             return contentUri.getPath();
         } finally {
             if (cursor != null) {
@@ -81,7 +82,7 @@ public class Util {
                 realPath = null;
             }
         } catch (Exception ex) {
-           ex.printStackTrace();
+            ex.printStackTrace();
         }
 
         // /read from inputstream
@@ -94,7 +95,7 @@ public class Util {
                     Uri uri = Uri.parse(data.getData().toString());
                     is = res.openInputStream(uri);
                 } catch (SecurityException e) {
-                   e.printStackTrace();
+                    e.printStackTrace();
                 }
 
                 if (is == null) {
@@ -121,7 +122,7 @@ public class Util {
             }
         }
 
-        Log.d( "realPath:", realPath);
+        Log.d("realPath:", realPath);
         return realPath;
     }
 
@@ -160,7 +161,7 @@ public class Util {
     public static float pixelsToDp(float px, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        return  px / (metrics.densityDpi / 160f);
+        return px / (metrics.densityDpi / 160f);
 
     }
 
@@ -239,6 +240,12 @@ public class Util {
 
         } catch (Exception e) {
         }
+    }
+
+    public static boolean isTablet(Context context) {
+        boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+        boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+        return (xlarge || large);
     }
 
 }

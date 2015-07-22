@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -28,8 +29,10 @@ public class MainActivity extends AppCompatActivity {
         Util.initImageLoader(MainActivity.this);
         ImageLoader.getInstance().clearMemoryCache();
         ImageLoader.getInstance().clearDiskCache();
+
         Util.createDir("test_images");
 
+        Log.d("gagagaga",""+Util.isTablet(MainActivity.this));
         init();
     }
 

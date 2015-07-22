@@ -26,8 +26,9 @@ public class SimpleTextArt extends BaseVideoAction<TextArtObject> {
         Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bmpGrayscale);
         Paint paint = new Paint();
+        paint.setColor(params[0].getColor());
         c.drawBitmap(bmpOriginal, 0, 0, paint);
-        c.drawText(params[0].text, params[0].x, params[0].y, paint);
+        c.drawText(params[0].getText(), params[0].getX(), params[0].getY(), paint);
         return bmpGrayscale;
     }
 

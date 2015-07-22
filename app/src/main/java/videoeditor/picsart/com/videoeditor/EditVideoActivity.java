@@ -3,6 +3,7 @@ package videoeditor.picsart.com.videoeditor;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
@@ -157,19 +158,16 @@ public class EditVideoActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 //TextUtils.addTextToBitmap("hakob",adapter);
-                SimpleTextArt addTextArt = new SimpleTextArt(EditVideoActivity.this);
-                TextArtObject obj = new TextArtObject();
-                obj.x = 10;
-                obj.y = 10;
-                obj.text = "Hello ashxarh";
-                addTextArt.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath(), adapter, obj);
-                /*editTextDialod = new EditTextDialod(EditVideoActivity.this);
+
+                editTextDialod = new EditTextDialod(EditVideoActivity.this);
                 editTextDialod.show();
                 editTextDialod.setOnRadioGroupChangedListener(new EditTextDialod.OnRadioGroupChangedListener() {
                     @Override
                     public void onRadioGroupChanged(int shapeIndex, int colorIndex, String s) {
 
                         if (!s.equals("")) {
+
+                            int color=0;
                             switch (shapeIndex) {
                                 case 0:
                                     //textView.setTextSize(20);
@@ -185,21 +183,23 @@ public class EditVideoActivity extends ActionBarActivity {
                             }
                             switch (colorIndex) {
                                 case 0:
-                                    //textView.setTextColor(Color.parseColor("#0192E6"));
+                                    color=Color.BLUE;
                                     break;
                                 case 1:
-                                    //textView.setTextColor(Color.RED);
+                                    color=Color.RED;
                                     break;
                                 case 2:
-                                    //textView.setTextColor(Color.GREEN);
+                                    color=Color.GREEN;
                                     break;
                                 default:
                                     break;
                             }
-                            TextUtils.addTextToBitmap(s,adapter);
+                            SimpleTextArt addTextArt = new SimpleTextArt(EditVideoActivity.this);
+                            TextArtObject obj = new TextArtObject(s,10,10,color);
+                            addTextArt.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath(), adapter, obj);
                         }
                     }
-                });*/
+                });
             }
         });
 
