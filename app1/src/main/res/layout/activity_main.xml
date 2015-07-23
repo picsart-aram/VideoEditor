@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_view"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="Time 0/0" />
+
+    <LinearLayout
+        android:layout_marginTop="7dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/preview_frame1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/camera_preview"
+                android:layout_width="180dp"
+                android:layout_height="260dp"
+                android:background="@android:color/background_light"
+                android:orientation="horizontal" />
+
+            <ImageButton
+                android:id="@+id/vid_left"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:background="@drawable/campick"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/switch_camera1"
+                android:layout_margin="15dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/switchcam"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/preview_frame2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/camera_preview2"
+                android:layout_width="180dp"
+                android:layout_height="260dp"
+                android:background="@android:color/background_light"
+                android:orientation="horizontal" />
+
+            <ImageButton
+                android:id="@+id/vid_right"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:background="@drawable/campick" />
+
+            <Button
+                android:id="@+id/switch_camera2"
+                android:layout_gravity="right|top"
+                android:layout_margin="15dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:visibility="gone"
+                android:background="@drawable/switchcam"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/pickMusicbtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/pick"
+            android:onClick="onPickMusicClick" />
+
+        <Button
+            android:id="@+id/playButtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/play"
+            android:onClick="onPlayClick" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:gravity="center">
+        <SeekBar
+            android:layout_marginLeft="20dp"
+            android:id="@+id/seekbar"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/musicTimeText"
+            android:layout_width="40dp"
+            android:layout_marginLeft="10dp"
+            android:text="00:00"
+            android:layout_height="wrap_content"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/musicNameText"
+            android:layout_width="250dp"
+            android:layout_height="25dp"
+            android:text="No music selected"
+            android:lines="1"/>
+
+        <ImageView
+            android:id="@+id/deleteMusicImg"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/delete"
+            android:clickable="true"
+            android:onClick="onDeleteMusicPathClick" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+       <!-- <Button
+            android:id="@+id/button_ChangeCamera"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:textColor="#0192E6"
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp"
+            android:text="Switch Camera" />-->
+
+        <Button
+            android:id="@+id/button_capture"
+            android:layout_width="wrap_content"
+            android:textColor="#0192E6"
+            android:layout_height="wrap_content"
+            android:text="Capture" />
+
+    </LinearLayout>
+
+</LinearLayout>

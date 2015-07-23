@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="record">Record</string>
+    <string name="stop">Stop</string>
+    <string name="description_info">Info</string>
+
+    <string name="min_label">Min</string>
+    <string name="max_label">Max</string>
+
+    <string-array name="view_scroll_picker_ymd_separater">
+        <item>/</item>
+        <item>/</item>
+    </string-array>
+
+    <string-array name="seconds_list">
+        <item>0.5 sec</item>
+        <item>1 sec</item>
+        <item>2 sec</item>
+        <item>3 sec</item>
+        <item>4 sec</item>
+        <item>5 sec</item>
+        <item>6 sec</item>
+        <item>7 sec</item>
+        <item>8 sec</item>
+
+    </string-array>
+    <string-array name="effects_list">
+        <item>None</item>
+        <item>Fade In</item>
+        <item>Slide Left</item>
+        <item>Rotate</item>
+
+    </string-array>
+</resources>

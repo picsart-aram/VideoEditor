@@ -12,11 +12,11 @@ public class TextArtObject {
     private int y = 0;
     private int color;
 
-    public TextArtObject(String text,int x,int y,int color){
-        this.text=text;
-        this.x=x;
-        this.y=y;
-        this.color=color;
+    public TextArtObject(String text, int x, int y, int color) {
+        this.text = text;
+        this.x = x;
+        this.y = y;
+        this.color = color;
     }
 
     public String getText() {

@@ -100,7 +100,6 @@ public class EditVideoActivity extends ActionBarActivity {
             }
         });
 
-
         final VideoDecoder videoDecoder = new VideoDecoder(videoPath, VideoDecoder.FrameSize.SMALL, myDir.toString());
         videoDecoder.extractVideoFrames();
         videoDecoder.setOnDecodeFinishedListener(new VideoDecoder.OnDecodeFinishedListener() {
@@ -149,57 +148,21 @@ public class EditVideoActivity extends ActionBarActivity {
         grayScaleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 GrayScaleEffect effect = new GrayScaleEffect(EditVideoActivity.this);
-                effect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath(), adapter);
+                effect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
+
             }
         });
 
         addTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TextUtils.addTextToBitmap("hakob",adapter);
 
-                editTextDialod = new EditTextDialod(EditVideoActivity.this);
-                editTextDialod.show();
-                editTextDialod.setOnRadioGroupChangedListener(new EditTextDialod.OnRadioGroupChangedListener() {
-                    @Override
-                    public void onRadioGroupChanged(int shapeIndex, int colorIndex, String s) {
+                Intent intent = new Intent(EditVideoActivity.this, TextArtActivity.class);
+                intent.putExtra("image_path", arrayList.get(0));
+                startActivityForResult(intent, 300);
 
-                        if (!s.equals("")) {
-
-                            int color=0;
-                            switch (shapeIndex) {
-                                case 0:
-                                    //textView.setTextSize(20);
-                                    break;
-                                case 1:
-                                    //textView.setTextSize(30);
-                                    break;
-                                case 2:
-                                    //textView.setTextSize(50);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            switch (colorIndex) {
-                                case 0:
-                                    color=Color.BLUE;
-                                    break;
-                                case 1:
-                                    color=Color.RED;
-                                    break;
-                                case 2:
-                                    color=Color.GREEN;
-                                    break;
-                                default:
-                                    break;
-                            }
-                            SimpleTextArt addTextArt = new SimpleTextArt(EditVideoActivity.this);
-                            TextArtObject obj = new TextArtObject(s,10,10,color);
-                            addTextArt.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath(), adapter, obj);
-                        }
-                    }
-                });
             }
         });
 
@@ -245,4 +208,15 @@ public class EditVideoActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 300) {
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
 }

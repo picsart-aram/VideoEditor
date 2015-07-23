@@ -31,7 +31,7 @@ public abstract class BaseVideoAction<T> {
         }
     }
 
-    public void startAction(final String folderPath, final Adapter adapter, final T... parameters) {
+    public void startAction(final String folderPath,  final T... parameters) {
 
         AsyncTask<Void, Integer, Void> doActionTask = new AsyncTask<Void, Integer, Void>() {
             @Override
@@ -64,7 +64,8 @@ public abstract class BaseVideoAction<T> {
                 progressDialog.dismiss();
                 ImageLoader.getInstance().clearDiskCache();
                 ImageLoader.getInstance().clearMemoryCache();
-                adapter.notifyDataSetChanged();
+                //adapter.notifyDataSetChanged();
+                activity.finish();
                 Log.d("gagagagag", "hasar iji");
             }
 

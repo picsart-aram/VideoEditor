@@ -25,6 +25,10 @@
             android:name=".EditVideoActivity"
             android:label="@string/title_activity_edit_video" >
         </activity>
+        <activity
+            android:name=".TextArtActivity"
+            android:label="@string/title_activity_text_art" >
+        </activity>
     </application>
 
 </manifest>

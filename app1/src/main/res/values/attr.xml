@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="zetbrush.com.view.DateScrollPickerView">
+	</declare-styleable>
+	<declare-styleable name="zetbrush.com.view.TimeScrollPickerView">
+	</declare-styleable>
+	<declare-styleable name="zetbrush.com.view.ScrollPickerView">
+	</declare-styleable>
+</resources>
+

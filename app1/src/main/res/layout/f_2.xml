@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="5dp"
+    android:id="@+id/frame_layout"
+    android:layout_width="match_parent"
+    android:layout_height="400dp">
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|bottom">
+        <LinearLayout
+            android:id="@+id/camera_preview"
+            android:layout_width="180dp"
+            android:layout_height="250dp"
+            android:background="@android:color/background_light"
+            android:orientation="horizontal" />
+
+        <ImageButton
+            android:id="@+id/vid_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_vid"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:layout_marginLeft="10dp">
+        <LinearLayout
+            android:id="@+id/camera_preview2"
+            android:layout_width="180dp"
+            android:layout_height="250dp"
+            android:background="@android:color/background_light"
+            android:orientation="horizontal" />
+
+        <ImageButton
+            android:id="@+id/vid_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_vid"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/frame3"/>
+
+</FrameLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:background="@color/button_material_light"
+    android:id="@+id/popupLayout">
+
+
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="Name of video"
+        android:textSize="12sp"
+        android:id = "@+id/videoName"
+        android:layout_toLeftOf="@+id/fxx"
+        android:layout_toStartOf="@+id/fxx" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cut music"
+        android:id="@+id/captionmusic"
+        android:layout_above="@+id/rangeSeekbar"
+         />
+
+    <zetbrush.com.generatingmain.RangeSeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rangeSeekbar"
+        android:layout_below="@+id/scrollpicker"
+
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FX"
+        android:id="@+id/fxx"
+
+        android:layout_alignBottom="@+id/videoName"
+        android:layout_toLeftOf="@+id/scrollpicker"
+        android:layout_toStartOf="@+id/scrollpicker" />
+
+<zetbrush.com.view.ScrollPickerView
+    android:layout_width="160dp"
+    android:layout_height="90dp"
+    android:id="@+id/scrollpicker"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true" />
+
+
+
+
+</RelativeLayout>

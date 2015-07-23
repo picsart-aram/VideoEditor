@@ -15,8 +15,6 @@ import android.widget.RadioGroup;
 public class EditTextDialod extends Dialog {
 
     private EditText editText;
-    private RadioGroup radioGroupSize;
-    private RadioGroup radioGroupColor;
     private Button setButton;
     private Button cancelButton;
     private Context context;
@@ -30,8 +28,6 @@ public class EditTextDialod extends Dialog {
 
         editText = (EditText) findViewById(R.id.edt_txt_dialog);
 
-        radioGroupSize = (RadioGroup) findViewById(R.id.radio_group_size);
-        radioGroupColor = (RadioGroup) findViewById(R.id.radio_group_color);
         setButton = (Button) findViewById(R.id.set_button);
         cancelButton = (Button) findViewById(R.id.cancel_button);
 
@@ -40,10 +36,7 @@ public class EditTextDialod extends Dialog {
             public void onClick(View v) {
                 if (onRadioGroupChangedListener != null) {
 
-                    int radioButtonID = radioGroupSize.getCheckedRadioButtonId();
-                    View radioButton = radioGroupSize.findViewById(radioButtonID);
-                    int idx = radioGroupSize.indexOfChild(radioButton);
-                    onRadioGroupChangedListener.onRadioGroupChanged(idx, radioGroupColor.indexOfChild(radioGroupColor.findViewById(radioGroupColor.getCheckedRadioButtonId())), editText.getText().toString());
+                    onRadioGroupChangedListener.onRadioGroupChanged(editText.getText().toString());
                 }
                 dismiss();
             }
@@ -70,7 +63,7 @@ public class EditTextDialod extends Dialog {
 
 
     public interface OnRadioGroupChangedListener {
-        void onRadioGroupChanged(int shapeIndex, int colorIndex, String text);
+        void onRadioGroupChanged(String text);
     }
 
 }
