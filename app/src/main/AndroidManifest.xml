@@ -29,6 +29,10 @@
             android:name=".TextArtActivity"
             android:label="@string/title_activity_text_art" >
         </activity>
+        <activity
+            android:name=".VideoEffectsActivity"
+            android:label="@string/title_activity_effects" >
+        </activity>
     </application>
 
 </manifest>
