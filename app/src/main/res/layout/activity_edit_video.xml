@@ -26,15 +26,14 @@
 
 
     <FrameLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="120dp"
         android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:orientation="vertical">
+        android:layout_marginRight="12dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rec_view"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp" />
 
@@ -44,42 +43,48 @@
             android:layout_height="match_parent"
             android:progressDrawable="@android:color/transparent"
             android:scaleType="fitXY"
-            android:src="#22996699"
             android:visibility="visible" />
 
     </FrameLayout>
 
     <LinearLayout
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal">
 
         <Button
+            android:layout_weight="1"
             android:id="@+id/gray_scale_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="gray" />
 
         <Button
+            android:layout_weight="1"
             android:id="@+id/add_text_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="text" />
 
         <Button
+            android:layout_weight="1"
             android:id="@+id/add_clipart_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+" />
 
         <Button
+            android:layout_weight="1"
             android:id="@+id/scale_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="scale" />
 
         <Button
+            android:layout_weight="1"
             android:id="@+id/encode_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

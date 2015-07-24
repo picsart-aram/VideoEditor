@@ -3,6 +3,7 @@ package videoeditor.picsart.com.videoeditor;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
@@ -52,6 +53,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
     public static Context context;
 
     private SeekBarWithTwoThumb seekBarWithTwoThumb;
+    private int framesCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +103,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
             @Override
             public void onFinish(boolean isDone) {
                 File[] files = myDir.listFiles();
+                framesCount = files.length;
                 int x = (4 * files.length) / 25;
                 for (int i = 0; i < files.length; i++) {
                     arrayList.add(files[i].getAbsolutePath());
@@ -123,8 +126,6 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
                 progressDialog.dismiss();
             }
         });
-
-
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,8 +192,8 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
                 //TODO
             }
         });
-
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -232,6 +233,6 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
 
     @Override
     public void SeekBarValueChanged(int Thumb1Value, int Thumb2Value) {
-        Log.d("MyLog", "thumb1 : " +Thumb1Value + " thumb2 " + Thumb2Value);
+        Log.d("MyLog", "thumb1 : " +Thumb1Value*framesCount/100 + " thumb2 " + Thumb2Value*framesCount/100);
     }
 }
