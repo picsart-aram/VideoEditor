@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.select_image).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.select_slider).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, EditVideoActivity.class);

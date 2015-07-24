@@ -22,12 +22,24 @@
         android:layout_marginTop="8dp"
         android:textSize="16sp"
         android:textColor="@android:color/white"
+        android:id="@+id/select_slider"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/main_screen_select_image"
+        android:gravity="center"
+        android:text="Slider"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
         android:id="@+id/select_image"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:drawableTop="@drawable/main_screen_select_image"
         android:gravity="center"
-        android:text="Select Image" />
+        android:text="Video Collage" />
 
 
 </LinearLayout>
