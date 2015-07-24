@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Environment;
@@ -32,7 +34,7 @@ import videoeditor.picsart.com.videoeditor.decoder.VideoDecoder;
 import videoeditor.picsart.com.videoeditor.effects.EngraveEffect;
 
 
-public class EditVideoActivity extends Activity implements SeekBarWithTwoThumb.SeekBarChangeListener{
+public class EditVideoActivity extends ActionBarActivity implements SeekBarWithTwoThumb.SeekBarChangeListener{
 
     private static final int REQUEST_ADD_TEXT = 300;
     private static final int REQUEST_ADD_CLIPART = 301;
@@ -63,7 +65,11 @@ public class EditVideoActivity extends Activity implements SeekBarWithTwoThumb.S
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_video);
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().show();
+            getSupportActionBar().setTitle("Illusion");
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+        }
         context = this;
         init();
     }
@@ -203,29 +209,6 @@ public class EditVideoActivity extends Activity implements SeekBarWithTwoThumb.S
                 //TODO
             }
         });
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_video, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
