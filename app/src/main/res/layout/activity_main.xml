@@ -6,16 +6,26 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Button
+    <TextView
+        android:layout_marginBottom="8dp"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
         android:id="@+id/select_video"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:drawableTop="@drawable/main_screen_select_video"
+        android:gravity="center"
         android:text="Select Video" />
 
-    <Button
+    <TextView
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
         android:id="@+id/select_image"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:drawableTop="@drawable/main_screen_select_image"
+        android:gravity="center"
         android:text="Select Image" />
 
 
