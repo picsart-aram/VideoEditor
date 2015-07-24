@@ -293,43 +293,23 @@ public class SlideShowActivity extends ActionBarActivity {
             Bitmap bitmap = null;
             for (int i = 0; i < path[0].size(); i++) {
 
-                String fname = "image_" + String.format("%03d", i) + ".jpg";
-
                 try {
-                    File file = new File(myDir, fname);
 
-                    if (file.exists()) {
-                        file.delete();
-                    }
-
-                    if (!path[i].get(i).isFromFileSystem()) {
-                        bitmap = ImageLoader.getInstance().loadImageSync(path + "?r1024x1024", new ImageSize(720, 720), DisplayImageOptions.createSimple());
+                    if (!path[0].get(i).isFromFileSystem()) {
+                        bitmap = ImageLoader.getInstance().loadImageSync(path[0].get(i).getPath() + "?r1024x1024", new ImageSize(720, 720), DisplayImageOptions.createSimple());
                         bitmap = Utils.scaleCenterCrop(bitmap, 720, 720);
                     } else {
-                        bitmap = ImageLoader.getInstance().loadImageSync("file://" + path, new ImageSize(720, 720), DisplayImageOptions.createSimple());
+                        bitmap = ImageLoader.getInstance().loadImageSync("file://" + path[0].get(i).getPath(), new ImageSize(720, 720), DisplayImageOptions.createSimple());
                         bitmap = Utils.scaleCenterCrop(bitmap, 720, 720);
                     }
-
-                    if (path[i].get(i).getPath().contains("req_images")) {
-                        File file1 = new File(myDir, path[i].get(i).getPath().substring(path[i].get(i).getPath().lastIndexOf("/")));
-                        file1.delete();
-                    }
-
-                    FileOutputStream out = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                    out.flush();
-                    out.close();
-                    bitmap.recycle();
+                    encoder.addFrame(bitmap, 600);
+                    onProgressUpdate(i);
 
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Error while SaveToMemory", Toast.LENGTH_SHORT).show();
                 }
 
-
-                Log.d("gagagagag", path[0].get(i).getPath() + "   /   " + path[0].get(i).isFromFileSystem());
-                //encoder.addFrame(bitmap, 600);
-                onProgressUpdate(i);
             }
 
             return null;
@@ -340,6 +320,7 @@ public class SlideShowActivity extends ActionBarActivity {
                 progressDialog.setProgress(progress[0]);
                 progressDialog.setMax(selectedImagesPathList.size());
             }
+            Log.d("gagagagaga",""+progress[0]);
         }
 
         @Override
