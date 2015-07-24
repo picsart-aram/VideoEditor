@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,11 +17,12 @@ import android.widget.LinearLayout;
 
 import java.io.File;
 
+import hackathon.videoeditor.utils.OnVideoActionFinishListener;
 import videoeditor.picsart.com.videoeditor.MainView;
 import videoeditor.picsart.com.videoeditor.R;
 import videoeditor.picsart.com.videoeditor.Util;
 
-public class ClipartActivity extends ActionBarActivity {
+public class ClipartActivity extends ActionBarActivity implements OnVideoActionFinishListener {
 
     private final String TAG = ClipartActivity.class.getSimpleName();
     private final int[] clipartList = new int[]{
@@ -51,13 +53,13 @@ public class ClipartActivity extends ActionBarActivity {
         String realPath = getIntent().getStringExtra("image_path");
         String message = realPath;
         File imgFile = new File(Environment.getExternalStorageDirectory() + realPath);
-        System.out.println(TAG + "::  imgFile= " + imgFile.getAbsolutePath());
+        Log.i(TAG, " imgFile= " + imgFile.getAbsolutePath());
         if (imgFile.exists()) {
             Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            System.out.println(TAG + "::  bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight());
+            Log.i(TAG, "bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight());
             message += "\n bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight();
         }
-        System.out.println(message);
+        Log.i(TAG, message);
 
         initView(realPath);
         intiCliparts();
@@ -68,22 +70,17 @@ public class ClipartActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(final MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             done();
-            finish();
         }
         return true;
     }
 
     private void done() {
         if (mainView != null) {
-            mainView.saveItemsToBitmap();
-            Bitmap resultBitmap = mainView.getOriginBitmapCopy();
-            if (resultBitmap != null) {
+            Clipart clipart = mainView.getClipartItem();
+            if (clipart != null) {
                 ClipArtAction clipartAction = new ClipArtAction(ClipartActivity.this);
-                Clipart clipart = new Clipart(resultBitmap, 0, 0);
+                clipartAction.setOnVideoFinishListener(this);
                 clipartAction.startAction(Util.getVideoFilePath(), clipart);
-                //TODO replace with callback listener
-                setResult(RESULT_OK);
-                finish();
             }
         }
     }
@@ -134,5 +131,17 @@ public class ClipartActivity extends ActionBarActivity {
         if (mainView != null) {
             mainView.addClipart(clipartList[position]);
         }
+    }
+
+    @Override
+    public void onSuccess() {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void onFailure() {
+        setResult(RESULT_CANCELED);
+        finish();
     }
 }

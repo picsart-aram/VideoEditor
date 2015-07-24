@@ -25,7 +25,7 @@ public abstract class BaseVideoAction<T> {
     private ProgressDialog progressDialog = null;
     private OnVideoActionFinishListener listener = null;
 
-    protected abstract Bitmap doActionOnBitmap(Bitmap bmp, T... params);
+    protected abstract Bitmap doActionOnBitmap(Bitmap videoFrameBitmap, T... params);
 
     public BaseVideoAction(Activity activity, T... params) {
         this.activity = activity;

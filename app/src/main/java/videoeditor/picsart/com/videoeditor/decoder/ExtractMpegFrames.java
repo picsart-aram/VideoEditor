@@ -70,6 +70,8 @@ public class ExtractMpegFrames extends AndroidTestCase {
     private int size;
 
 
+    public static int SCALE_FACTOR = 8;
+
     /**
      * test entry point
      */
@@ -180,11 +182,11 @@ public class ExtractMpegFrames extends AndroidTestCase {
             Log.d(TAG, "isportriet:  " + isPortriet);
 
             if (isPortriet || !Util.isTablet(EditVideoActivity.context)) {
-                savedFrameHeight = width / 8;
-                savedFrameWidth = height / 8;
+                savedFrameHeight = width / SCALE_FACTOR;
+                savedFrameWidth = height / SCALE_FACTOR;
             } else {
-                savedFrameHeight = height / 8;
-                savedFrameWidth = width / 8;
+                savedFrameHeight = height / SCALE_FACTOR;
+                savedFrameWidth = width / SCALE_FACTOR;
             }
 
             if (VERBOSE) {
