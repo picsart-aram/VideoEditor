@@ -23,6 +23,7 @@ import com.socialin.android.encoder.Encoder;
 import java.io.File;
 import java.util.ArrayList;
 
+import videoeditor.picsart.com.videoeditor.clipart.ClipartActivity;
 import videoeditor.picsart.com.videoeditor.decoder.VideoDecoder;
 import videoeditor.picsart.com.videoeditor.effects.GrayScaleEffect;
 
@@ -33,7 +34,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
     private static final int REQUEST_ADD_CLIPART = 301;
 
     private static final String root = Environment.getExternalStorageDirectory().toString();
-    private File myDir = new File(root + "/test_images");
+    private File myDir = new File(root + "/" + Util.VIDEO_FILES_DIR);
 
     private VideoView videoView;
     private ProgressDialog progressDialog;
@@ -144,7 +145,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
             @Override
             public void onClick(View v) {
                 GrayScaleEffect effect = new GrayScaleEffect(EditVideoActivity.this);
-                effect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
+                effect.startAction(Util.getVideoFilePath());
             }
         });
 
@@ -219,15 +220,15 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
+//        if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_ADD_TEXT) {
                 adapter.notifyDataSetChanged();
             }
 
             if (requestCode == REQUEST_ADD_CLIPART) {
-                //TODO
+                adapter.notifyDataSetChanged();
             }
-        }
+//        }
     }
 
     @Override

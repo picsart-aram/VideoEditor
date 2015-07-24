@@ -89,7 +89,7 @@ public class TextArtActivity extends ActionBarActivity {
                 if (textView.getVisibility() == View.VISIBLE && !textView.getText().toString().equals("")) {
                     SimpleTextArt addTextArt = new SimpleTextArt(TextArtActivity.this);
                     TextArtObject obj = new TextArtObject(text, 10, 30, Color.RED);
-                    addTextArt.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath(), obj);
+                    addTextArt.startAction(Util.getVideoFilePath(), obj);
                 }
 
             }

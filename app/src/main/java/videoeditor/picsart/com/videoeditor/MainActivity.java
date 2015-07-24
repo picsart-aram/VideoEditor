@@ -12,11 +12,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 import java.util.ArrayList;
 
+import videoeditor.picsart.com.videoeditor.clipart.ClipartActivity;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String root = Environment.getExternalStorageDirectory().toString();
-    private File myDir = new File(root + "/test_images");
+    private File myDir = new File(root + "/" + Util.VIDEO_FILES_DIR);
 
     private static final int REQUEST_SELECT_VIDEO = 100;
     private static final int REQUEST_SELECT_IMAGE = 101;
@@ -30,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         ImageLoader.getInstance().clearMemoryCache();
         ImageLoader.getInstance().clearDiskCache();
 
-        Util.createDir("test_images");
+        Util.createDir(Util.VIDEO_FILES_DIR);
 
         Log.d("gagagaga",""+Util.isTablet(MainActivity.this));
         init();
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<String> test = new ArrayList<>();
         String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/test_images");
+        File myDir = new File(root + "/" + Util.VIDEO_FILES_DIR);
         for (int i = 0; i < myDir.list().length; i++) {
             test.add(myDir.list()[i]);
         }
