@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:background="@drawable/ba3"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="PicsArtVideo"
+        android:textColor="#0192E6"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:layout_marginTop="5dp"
+        android:id="@+id/app_cover"
+        android:layout_width="@dimen/image_width"
+        android:layout_height="@dimen/image_height"
+        android:background="@drawable/icon" />
+
+    <Button
+        android:id="@+id/pics_art_gallery_button"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/button_height"
+        android:textColor="#0192E6"
+        android:layout_marginTop="30dp"
+        android:text="PicsArt Gallery" />
+
+    <Button
+        android:id="@+id/custom_gallery_button"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/button_height"
+        android:textColor="#0192E6"
+        android:layout_marginTop="20dp"
+        android:text="Custom Gallery" />
+
+</LinearLayout>

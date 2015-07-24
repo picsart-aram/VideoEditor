@@ -1,1 +1,1 @@
-include ':app', ':picsart_video_encoder', ':oMXPlayer', ':app1'
+include ':app', ':picsart_video_encoder', ':oMXPlayer', ':app1', ':fab_library', ':cropper', ':SlideShow'

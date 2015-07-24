@@ -1,0 +1,27 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/slide_show_image"
+        android:layout_width="@dimen/photo_width"
+        android:layout_height="@dimen/photo_height"
+        android:background="@android:color/darker_gray" />
+
+    <Button
+        android:id="@+id/slide_show_delete_button"
+        android:layout_width="@dimen/icon_button_width"
+        android:layout_height="@dimen/icon_button_height"
+        android:background="@drawable/ic_action_remove"
+        android:padding="6dp" />
+
+    <Button
+        android:id="@+id/slide_show_edit_button"
+        android:layout_width="@dimen/icon_button_width"
+        android:layout_height="@dimen/icon_button_height"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="2dp"
+        android:layout_marginRight="2dp"
+        android:background="@drawable/ic_action_edit" />
+
+</FrameLayout>

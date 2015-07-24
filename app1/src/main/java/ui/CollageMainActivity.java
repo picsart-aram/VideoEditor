@@ -48,8 +48,6 @@ import com.generatingmain.AbsolutePathActivity;
 import com.javacodegeeks.androidvideocaptureexample.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import net.pocketmagic.android.openmxplayer.OpenMXPlayer;
-import net.pocketmagic.android.openmxplayer.PlayerEvents;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,7 +97,6 @@ public class CollageMainActivity extends Activity{
     private Button pickMusicbtn;
     private long musictotalTime = 0;
     private static String musicPath = null;
-    OpenMXPlayer player = null;
     ImageView imagepreview;
     String newMusicPath;
     public static int secondsfromstarting = 0;
@@ -184,10 +181,6 @@ public class CollageMainActivity extends Activity{
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser && player != null) try {
-                    player.seek(progress);
-                } catch (NullPointerException e) {
-                }
 
             }
         });
@@ -832,88 +825,10 @@ public class CollageMainActivity extends Activity{
     }
 
 
-    PlayerEvents events = new PlayerEvents() {
-        @Override
-        public void onStop() {
-            seekbar.setProgress(0);
-            playButton.setText("|>");
-            isplaying = false;
-        }
 
-        @Override
-        public void onStart(String mime, int sampleRate, int channels, long duration) {
-            Log.d("on startplay", "onStart called: " + mime + " sampleRate:" + sampleRate + " channels:" + channels);
-            if (duration == 0) {
-
-            } else {
-
-            }
-            // .setText("Playing content:" + mime + " " + sampleRate + "Hz " + (duration/1000000) + "sec");
-        }
-
-        @Override
-        public void onPlayUpdate(int percent, long currentms, long totalms) {
-            seekbar.setProgress(percent);
-            musicTimeText.setText(String.format("%02d:%02d",
-                    TimeUnit.MILLISECONDS.toMinutes(currentms),
-                    TimeUnit.MILLISECONDS.toSeconds(currentms) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(currentms))
-            ));
-            secondsfromstarting = (int) currentms / 1000;
-            musictotalTime = totalms;
-            if (musicPath == null) {
-                player.stop();
-                player.setDataSource("");
-
-            }
-
-        }
-
-        @Override
-        public void onPlay() {
-
-            //playButton.setText("||");
-
-        }
-
-        @Override
-        public void onError() {
-            seekbar.setProgress(0);
-            Toast.makeText(CollageMainActivity.this, "Not supported content..", Toast.LENGTH_SHORT).show();
-            player = new OpenMXPlayer(events);
-        }
-    };
-
-    public void onPlayClick(View v) {
-
-        if (player == null) {
-            player = new OpenMXPlayer(events);
-
-        }
-
-        if (isplaying) {
-            player.pause();
-            //playButton.setText("|>");
-
-            isplaying = false;
-        } else {
-            if (musicPath != null) {
-                player.setDataSource(musicPath);   //"/storage/removable/sdcard1/DCIM/100ANDRO/newfold/strangeclouds.aac");
-                player.play();
-                //playButton.setText("||");
-                isplaying = true;
-            } else {
-                Toast.makeText(this, "No music is selected", Toast.LENGTH_SHORT).show();
-
-            }
-        }
-
-
-    }
 
     public void onDeleteMusicPathClick(View v) {
         musicPath = null;
-        player.stop();
         musictotalTime = 0;
         musicNameText.setText("No music Selected");
 
@@ -929,58 +844,6 @@ public class CollageMainActivity extends Activity{
             newMusicPath = musicPath;
             if (musicPath != null)
                 musicNameText.setText(musicPath);
-            if (!musicPath.equals(newMusicPath)) {
-                try {
-                    player.stop();
-                    player.setDataSource("");
-                } catch (NullPointerException e) {
-                }
-            }
-
-            PlayerEvents events1 = new PlayerEvents() {
-                @Override
-                public void onStart(String mime, int sampleRate, int channels, long duration) {
-                    musictotalTime = duration / 1000;
-                }
-
-                @Override
-                public void onPlay() {
-
-                }
-
-                @Override
-                public void onPlayUpdate(int percent, long currentms, long totalms) {
-
-                }
-
-                @Override
-                public void onStop() {
-
-                }
-
-                @Override
-                public void onError() {
-
-                }
-            };
-
-            OpenMXPlayer mplyr = new OpenMXPlayer(events1);
-            mplyr.setDataSource(musicPath);
-            try {
-                mplyr.play();
-                mplyr.seek(2);
-                try {
-                    Thread.currentThread().wait(20);
-                } catch (InterruptedException e) {
-
-                }
-                mplyr.stop();
-
-            } catch (Exception e) {
-
-            }
-            mplyr.stop();
-            mplyr = null;
 
         }
     }

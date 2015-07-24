@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.intern.picsartvideo">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="activity.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="activity.PicsArtGalleryActvity"
+            android:label="@string/title_activity_pics_art_gallery_actvity"></activity>
+        <activity
+            android:name="activity.CustomGalleryActivity"
+            android:label="@string/title_activity_custom_gallery"></activity>
+        <activity
+            android:name="activity.SlideShowActivity"
+            android:label="@string/title_activity_slide_show"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="activity.ImageEditActivity"
+            android:label="@string/title_activity_image_edit"
+            android:screenOrientation="portrait"></activity>
+
+        <service android:name="service.MyService" />
+    </application>
+
+</manifest>
