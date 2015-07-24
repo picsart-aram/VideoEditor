@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaMetadataRetriever;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -45,7 +48,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
     private VideoView videoView;
     private ProgressDialog progressDialog;
 
-//    private EditTextDialod editTextDialod;
+    //    private EditTextDialod editTextDialod;
     private RecyclerView recyclerView;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private RecyclerView.ItemAnimator itemAnimator;
@@ -82,7 +85,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
         final Button playPauseButton = (Button) findViewById(R.id.play_pause_button);
         seekBarWithTwoThumb = (SeekBarWithTwoThumb) findViewById(R.id.seek_bar_with_two_thumb);
         seekBarWithTwoThumb.setSeekBarChangeListener(this);
-        
+
         progressDialog = new ProgressDialog(EditVideoActivity.this);
         progressDialog.setMessage("Please Wait...");
         progressDialog.show();
@@ -187,19 +190,52 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
         findViewById(R.id.encode_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProgressDialog progressDialog = new ProgressDialog(EditVideoActivity.this);
-                progressDialog.show();
-                ImageLoader.getInstance().clearDiskCache();
-                ImageLoader.getInstance().clearMemoryCache();
-                Encoder encoder = new Encoder();
-                encoder.init(ImageLoader.getInstance().loadImageSync("file://" + arrayList.get(0)).getWidth(), ImageLoader.getInstance().loadImageSync("file://" + arrayList.get(0)).getHeight(), 15, null);
-                encoder.startVideoGeneration(new File(root + "/vid.mp4"));
-                for (int i = 0; i < arrayList.size(); i++) {
-                    encoder.addFrame(ImageLoader.getInstance().loadImageSync("file://" + arrayList.get(i)), 50);
-                }
-                progressDialog.dismiss();
-                videoView.setVideoPath(root + "/vid.mp4");
-                videoView.start();
+
+                AsyncTask<Void, Integer, Void> doActionTask = new AsyncTask<Void, Integer, Void>() {
+                    Encoder encoder;
+                    ProgressDialog progressDialog1;
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        for (int i = 0; i < arrayList.size(); i++) {
+                            encoder.addFrame(ImageLoader.getInstance().loadImageSync("file://" + arrayList.get(i)), 50);
+                            onProgressUpdate(i, arrayList.size());
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+
+                        ImageLoader.getInstance().clearDiskCache();
+                        ImageLoader.getInstance().clearMemoryCache();
+                        progressDialog1=new ProgressDialog(EditVideoActivity.this);
+                        progressDialog1.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                        progressDialog1.show();
+                        encoder = new Encoder();
+                        encoder.init(ImageLoader.getInstance().loadImageSync("file://" + arrayList.get(0)).getWidth(), ImageLoader.getInstance().loadImageSync("file://" + arrayList.get(0)).getHeight(), 15, null);
+                        encoder.startVideoGeneration(new File(root + "/vid.mp4"));
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        super.onPostExecute(aVoid);
+                        videoView.setVideoPath(root + "/vid.mp4");
+                        videoView.start();
+                        progressDialog1.dismiss();
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(Integer... values) {
+                        super.onProgressUpdate(values);
+                        if (progressDialog1 != null) {
+                            progressDialog1.setProgress(values[0]);
+                            progressDialog1.setMax(values[1]);
+                        }
+                    }
+                };
+                doActionTask.execute();
+
             }
         });
 

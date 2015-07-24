@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="activity.PicsArtGalleryActvity">
+
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/logout"
+        android:title="logout"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="next  "
+        app:showAsAction="always" />
+
+</menu>

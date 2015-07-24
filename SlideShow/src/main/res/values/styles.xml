@@ -1,0 +1,28 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="colorPrimary">#74BBFB</item>
+        <item name="colorPrimaryDark">#0192E6</item>
+        <item name="android:textColorPrimary">#ffffff</item>
+        <item name="android:windowBackground">@color/background_material_light</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:actionBarTabTextStyle">@style/ActionBarTabTextStyle.Tabtheme</item>
+    </style>
+
+    <style name="MyActionButtonStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:paddingRight">30dp</item>
+    </style>
+
+    <style name="MyActionBarTheme" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">#0192E6</item>
+        <item name="android:showAsAction">always</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="ActionBarTabTextStyle.Tabtheme" parent="Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textSize">30dp</item>
+    </style>
+
+</resources>

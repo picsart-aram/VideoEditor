@@ -1,18 +1,30 @@
 package videoeditor.picsart.com.videoeditor;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
+import android.media.MediaMuxer;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.google.utils.WavReader;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import videoeditor.picsart.com.videoeditor.clipart.ClipartActivity;
+import videoeditor.picsart.com.videoeditor.decoder.MediaMuxerTest;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         Util.createDir(Util.VIDEO_FILES_DIR);
 
-        Log.d("gagagaga",""+Util.isTablet(MainActivity.this));
+        Log.d("gagagaga", "" + Util.isTablet(MainActivity.this));
         init();
     }
 
@@ -46,9 +58,10 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.select_video).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mediaChooser = new Intent(Intent.ACTION_GET_CONTENT);
+                /*Intent mediaChooser = new Intent(Intent.ACTION_GET_CONTENT);
                 mediaChooser.setType("video/*");
-                startActivityForResult(mediaChooser, REQUEST_SELECT_VIDEO);
+                startActivityForResult(mediaChooser, REQUEST_SELECT_VIDEO);*/
+                foo();
             }
         });
 
@@ -106,6 +119,69 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return result;
+    }
+
+    public void foo() {
+
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+        mediaMetadataRetriever.setDataSource(root + "/myvideo1.mp4");
+
+        String METADATA_KEY_DURATION = mediaMetadataRetriever
+                .extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+
+        Bitmap bmpOriginal = mediaMetadataRetriever.getFrameAtTime(0);
+        int bmpVideoHeight = bmpOriginal.getHeight();
+        int bmpVideoWidth = bmpOriginal.getWidth();
+
+        Log.d("gagagagagag", "bmpVideoWidth:'" + bmpVideoWidth + "'  bmpVideoHeight:'" + bmpVideoHeight + "'");
+
+        byte[] lastSavedByteArray = new byte[0];
+
+        float factor = 0.20f;
+        int scaleWidth = (int) ((float) bmpVideoWidth * factor);
+        int scaleHeight = (int) ((float) bmpVideoHeight * factor);
+        int max = (int) Long.parseLong(METADATA_KEY_DURATION);
+        for (int index = 0; index < max; index++) {
+
+            bmpOriginal = mediaMetadataRetriever.getFrameAtTime(index * 1000000, MediaMetadataRetriever.OPTION_CLOSEST);
+
+            bmpVideoHeight = bmpOriginal == null ? -1 : bmpOriginal.getHeight();
+
+            bmpVideoWidth = bmpOriginal == null ? -1 : bmpOriginal.getWidth();
+
+            int byteCount = bmpOriginal.getWidth() * bmpOriginal.getHeight() * 4;
+            ByteBuffer tmpByteBuffer = ByteBuffer.allocate(byteCount);
+            bmpOriginal.copyPixelsToBuffer(tmpByteBuffer);
+            byte[] tmpByteArray = tmpByteBuffer.array();
+
+            if (!Arrays.equals(tmpByteArray, lastSavedByteArray)) {
+                int quality = 100;
+
+                File outputFile = new File(myDir, "IMG_" + (index + 1)
+                        + "_" + max + "_quality_" + quality + "_w" + scaleWidth + "_h" + scaleHeight + ".png");
+
+                OutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(outputFile);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                Bitmap bmpScaledSize = Bitmap.createScaledBitmap(bmpOriginal, scaleWidth, scaleHeight, false);
+
+                bmpScaledSize.compress(Bitmap.CompressFormat.PNG, quality, outputStream);
+
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                lastSavedByteArray = tmpByteArray;
+            }
+        }
+
+        mediaMetadataRetriever.release();
     }
 
 }

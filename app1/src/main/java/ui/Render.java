@@ -62,9 +62,7 @@ public class Render {
     }
 
     /**
-     *
      * Merging two images with asynctask
-     *
      */
     private class MergeFrames extends AsyncTask<Void, Void, Void> {
 
@@ -96,8 +94,6 @@ public class Render {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             Log.d("gagagagagaga", "mergvav");
-            ProgressDialog progressDialog = new ProgressDialog(context);
-            progressDialog.show();
             ImageLoader.getInstance().clearDiskCache();
             ImageLoader.getInstance().clearMemoryCache();
             Encoder encoder = new Encoder();
@@ -106,7 +102,6 @@ public class Render {
             for (int i = 0; i < arrayList.size(); i++) {
                 encoder.addFrame(ImageLoader.getInstance().loadImageSync("file://" + arrayList.get(i)), 50);
             }
-            progressDialog.dismiss();
 
         }
     }
