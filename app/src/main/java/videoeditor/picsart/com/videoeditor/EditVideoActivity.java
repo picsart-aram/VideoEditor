@@ -1,5 +1,6 @@
 package videoeditor.picsart.com.videoeditor;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -26,16 +27,12 @@ import java.io.File;
 import java.util.ArrayList;
 
 import videoeditor.picsart.com.videoeditor.clipart.ClipartActivity;
-import hackathon.videoeditor.utils.OnVideoActionFinishListener;
+import videoeditor.picsart.com.videoeditor.clipart.EmbossEffect;
 import videoeditor.picsart.com.videoeditor.decoder.VideoDecoder;
-import videoeditor.picsart.com.videoeditor.effects.GrayScaleEffect;
-import videoeditor.picsart.com.videoeditor.effects.SnowEffect;
-import videoeditor.picsart.com.videoeditor.text_art.SimpleTextArt;
-import videoeditor.picsart.com.videoeditor.text_art.TextArtObject;
-import videoeditor.picsart.com.videoeditor.text_art.TextUtils;
+import videoeditor.picsart.com.videoeditor.effects.EngraveEffect;
 
 
-public class EditVideoActivity extends ActionBarActivity implements SeekBarWithTwoThumb.SeekBarChangeListener{
+public class EditVideoActivity extends Activity implements SeekBarWithTwoThumb.SeekBarChangeListener{
 
     private static final int REQUEST_ADD_TEXT = 300;
     private static final int REQUEST_ADD_CLIPART = 301;
@@ -152,8 +149,13 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
             @Override
             public void onClick(View v) {
 
-                GrayScaleEffect effect = new GrayScaleEffect(EditVideoActivity.this);
-                effect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
+//                EmbossEffect effect = new EmbossEffect(EditVideoActivity.this);
+//                effect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
+
+                Intent intent = new Intent(EditVideoActivity.this, VideoEffectsActivity.class);
+                intent.putExtra("image_path", arrayList.get(0));
+                intent.putExtra("folder_path", new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
+                startActivity(intent);
 
             }
         });

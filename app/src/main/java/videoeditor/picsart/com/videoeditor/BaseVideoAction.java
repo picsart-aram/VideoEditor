@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import hackathon.videoeditor.utils.OnVideoActionFinishListener;
 import hackathon.videoeditor.utils.OnVideoSaveFinishedListener;
+import videoeditor.picsart.com.videoeditor.effects.Utils.OnEffectApplyFinishedListener;
 
 /**
  * Created by AramNazaryan on 7/17/15.
@@ -35,7 +36,7 @@ public abstract class BaseVideoAction<T> {
         }
     }
 
-    public void startAction(final String folderPath,  final T... parameters) {
+    public void startAction(final String folderPath, final T... parameters) {
 
         AsyncTask<Void, Integer, Void> doActionTask = new AsyncTask<Void, Integer, Void>() {
             @Override
@@ -59,13 +60,17 @@ public abstract class BaseVideoAction<T> {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                progressDialog.show();
+                if (progressDialog != null) {
+                    progressDialog.show();
+                }
             }
 
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                progressDialog.dismiss();
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
                 ImageLoader.getInstance().clearDiskCache();
                 ImageLoader.getInstance().clearMemoryCache();
                 //adapter.notifyDataSetChanged();
@@ -111,5 +116,30 @@ public abstract class BaseVideoAction<T> {
 
     public void setOnVideoFinishListener(OnVideoActionFinishListener listener) {
         this.listener = listener;
+    }
+
+    public void applyOnOneFrame(final String path, final OnEffectApplyFinishedListener listener, final T... parameters) {
+        AsyncTask<Void, Void, Bitmap> doActionTask = new AsyncTask<Void, Void, Bitmap>() {
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                System.out.println("decode file "+path);
+                Bitmap bitmap = BitmapFactory.decodeFile(path);
+                System.out.println("bitmap = "+bitmap);
+                Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+//                bitmap.recycle();
+                Bitmap bitmapAfterAction = doActionOnBitmap(mutableBitmap, parameters);
+//                mutableBitmap.recycle();
+                return bitmapAfterAction;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bmp) {
+                if (listener != null) {
+                    listener.onFinish(bmp);
+                }
+            }
+        };
+
+        doActionTask.execute();
     }
 }
