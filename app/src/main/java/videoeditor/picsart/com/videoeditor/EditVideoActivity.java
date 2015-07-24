@@ -3,7 +3,6 @@ package videoeditor.picsart.com.videoeditor;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
@@ -25,25 +24,20 @@ import java.util.ArrayList;
 
 import videoeditor.picsart.com.videoeditor.decoder.VideoDecoder;
 import videoeditor.picsart.com.videoeditor.effects.GrayScaleEffect;
-import videoeditor.picsart.com.videoeditor.text_art.SimpleTextArt;
-import videoeditor.picsart.com.videoeditor.text_art.TextArtObject;
-import videoeditor.picsart.com.videoeditor.text_art.TextUtils;
 
 
 public class EditVideoActivity extends ActionBarActivity {
+
+    private static final int REQUEST_ADD_TEXT = 300;
+    private static final int REQUEST_ADD_CLIPART = 301;
 
     private static final String root = Environment.getExternalStorageDirectory().toString();
     private File myDir = new File(root + "/test_images");
 
     private VideoView videoView;
-    private Button playPauseButton;
     private ProgressDialog progressDialog;
-    private Button grayScaleButton;
-    private Button addTextButton;
-    private Button rotateButton;
-    private Button encodeButton;
 
-    private EditTextDialod editTextDialod;
+//    private EditTextDialod editTextDialod;
     private RecyclerView recyclerView;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private RecyclerView.ItemAnimator itemAnimator;
@@ -68,13 +62,9 @@ public class EditVideoActivity extends ActionBarActivity {
     public void init() {
 
         videoView = (VideoView) findViewById(R.id.video_view);
-        playPauseButton = (Button) findViewById(R.id.play_pause_button);
         recyclerView = (RecyclerView) findViewById(R.id.rec_view);
-        grayScaleButton = (Button) findViewById(R.id.gray_scale_button);
-        addTextButton = (Button) findViewById(R.id.add_text_button);
-        rotateButton = (Button) findViewById(R.id.scale_button);
-        encodeButton = (Button) findViewById(R.id.encode_button);
 
+        final Button playPauseButton = (Button) findViewById(R.id.play_pause_button);
 
         progressDialog = new ProgressDialog(EditVideoActivity.this);
         progressDialog.setMessage("Please Wait...");
@@ -96,7 +86,7 @@ public class EditVideoActivity extends ActionBarActivity {
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-
+                //TODO
             }
         });
 
@@ -145,28 +135,33 @@ public class EditVideoActivity extends ActionBarActivity {
             }
         });
 
-        grayScaleButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.gray_scale_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 GrayScaleEffect effect = new GrayScaleEffect(EditVideoActivity.this);
                 effect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
-
             }
         });
 
-        addTextButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.add_text_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(EditVideoActivity.this, TextArtActivity.class);
                 intent.putExtra("image_path", arrayList.get(0));
-                startActivityForResult(intent, 300);
-
+                startActivityForResult(intent, REQUEST_ADD_TEXT);
             }
         });
 
-        encodeButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.add_clipart_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditVideoActivity.this, ClipartActivity.class);
+                intent.putExtra("image_path", arrayList.get(0));
+                startActivityForResult(intent, REQUEST_ADD_CLIPART);
+            }
+        });
+
+        findViewById(R.id.encode_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ProgressDialog progressDialog = new ProgressDialog(EditVideoActivity.this);
@@ -182,6 +177,13 @@ public class EditVideoActivity extends ActionBarActivity {
                 progressDialog.dismiss();
                 videoView.setVideoPath(root + "/vid.mp4");
                 videoView.start();
+            }
+        });
+
+        findViewById(R.id.scale_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO
             }
         });
 
@@ -213,8 +215,12 @@ public class EditVideoActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == 300) {
+            if (requestCode == REQUEST_ADD_TEXT) {
                 adapter.notifyDataSetChanged();
+            }
+
+            if (requestCode == REQUEST_ADD_CLIPART) {
+                //TODO
             }
         }
     }

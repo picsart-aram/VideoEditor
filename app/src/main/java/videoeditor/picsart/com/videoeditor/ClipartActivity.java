@@ -16,6 +16,7 @@ import java.io.File;
 
 public class ClipartActivity extends Activity {
 
+    private final String TAG = ClipartActivity.class.getSimpleName();
     private final int[] clipartList = new int[]{
             R.drawable.clipart_1,
             R.drawable.clipart_2,
@@ -27,20 +28,20 @@ public class ClipartActivity extends Activity {
             R.drawable.clipart_8
     };
 
-    private  MainView mainView;
+    private MainView mainView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.clipart_main);
 
-        String realPath = getIntent().getStringExtra("path");
+        String realPath = getIntent().getStringExtra("image_path");
         String message = realPath;
         File imgFile = new File(Environment.getExternalStorageDirectory() + realPath);
-        System.out.println("ClipartActivity::  imgFile= " + imgFile.getAbsolutePath());
+        System.out.println(TAG + "::  imgFile= " + imgFile.getAbsolutePath());
         if (imgFile.exists()) {
             Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            System.out.println("ClipartActivity::  bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight());
+            System.out.println(TAG + "::  bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight());
             message += "\n bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight();
         }
         System.out.println(message);
@@ -91,8 +92,8 @@ public class ClipartActivity extends Activity {
     }
 
 
-    private void addClipart(int position){
-        if(mainView != null){
+    private void addClipart(int position) {
+        if (mainView != null) {
             mainView.addClipart(clipartList[position]);
         }
     }
