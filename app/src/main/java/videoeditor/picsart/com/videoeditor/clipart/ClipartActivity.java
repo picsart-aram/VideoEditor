@@ -1,12 +1,14 @@
-package videoeditor.picsart.com.videoeditor;
+package videoeditor.picsart.com.videoeditor.clipart;
 
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,8 +16,13 @@ import android.widget.LinearLayout;
 
 import java.io.File;
 
-public class ClipartActivity extends Activity {
+import videoeditor.picsart.com.videoeditor.MainView;
+import videoeditor.picsart.com.videoeditor.R;
+import videoeditor.picsart.com.videoeditor.Util;
 
+public class ClipartActivity extends ActionBarActivity {
+
+    private final String TAG = ClipartActivity.class.getSimpleName();
     private final int[] clipartList = new int[]{
             R.drawable.clipart_1,
             R.drawable.clipart_2,
@@ -27,26 +34,58 @@ public class ClipartActivity extends Activity {
             R.drawable.clipart_8
     };
 
-    private  MainView mainView;
+    private MainView mainView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.clipart_main);
 
-        String realPath = getIntent().getStringExtra("path");
+        if (getSupportActionBar() != null) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(false);
+            actionBar.setTitle("Add Clipart");
+        }
+
+        String realPath = getIntent().getStringExtra("image_path");
         String message = realPath;
         File imgFile = new File(Environment.getExternalStorageDirectory() + realPath);
-        System.out.println("ClipartActivity::  imgFile= " + imgFile.getAbsolutePath());
+        System.out.println(TAG + "::  imgFile= " + imgFile.getAbsolutePath());
         if (imgFile.exists()) {
             Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            System.out.println("ClipartActivity::  bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight());
+            System.out.println(TAG + "::  bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight());
             message += "\n bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight();
         }
         System.out.println(message);
 
         initView(realPath);
         intiCliparts();
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            done();
+            finish();
+        }
+        return true;
+    }
+
+    private void done() {
+        if (mainView != null) {
+            mainView.saveItemsToBitmap();
+            Bitmap resultBitmap = mainView.getOriginBitmapCopy();
+            if (resultBitmap != null) {
+                ClipArtAction clipartAction = new ClipArtAction(ClipartActivity.this);
+                Clipart clipart = new Clipart(resultBitmap, 0, 0);
+                clipartAction.startAction(Util.getVideoFilePath(), clipart);
+                //TODO replace with callback listener
+                setResult(RESULT_OK);
+                finish();
+            }
+        }
     }
 
     @Override
@@ -91,8 +130,8 @@ public class ClipartActivity extends Activity {
     }
 
 
-    private void addClipart(int position){
-        if(mainView != null){
+    private void addClipart(int position) {
+        if (mainView != null) {
             mainView.addClipart(clipartList[position]);
         }
     }

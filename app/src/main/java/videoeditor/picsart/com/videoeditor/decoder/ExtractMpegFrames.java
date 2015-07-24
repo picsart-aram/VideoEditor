@@ -61,7 +61,7 @@ public class ExtractMpegFrames extends AndroidTestCase {
     // where to find files (note: requires WRITE_EXTERNAL_STORAGE permission)
     private static final File FILES_DIR = Environment.getExternalStorageDirectory();
     private static String INPUT_FILE_PATH = "";
-    private static String OUTPUT_DIR = FILES_DIR + "/test_images";
+    private static String OUTPUT_DIR = FILES_DIR + "/" + Util.VIDEO_FILES_DIR;
 
     private static int MAX_FRAMES = 0;       // stop extracting after this many
     private static boolean isPortriet = false;

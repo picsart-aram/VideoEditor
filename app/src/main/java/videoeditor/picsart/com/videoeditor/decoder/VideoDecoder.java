@@ -7,13 +7,15 @@ import android.util.Log;
 import java.io.File;
 import java.util.ArrayList;
 
+import videoeditor.picsart.com.videoeditor.Util;
+
 /**
  * Created by Tigran on 7/20/15.
  */
 public class VideoDecoder {
 
     private static final String root = Environment.getExternalStorageDirectory().toString();
-    private File myDir = new File(root + "/test_images");
+    private File myDir = new File(root + "/" + Util.VIDEO_FILES_DIR);
 
     private String inputFilePath = "";
     private String outputDirectory;

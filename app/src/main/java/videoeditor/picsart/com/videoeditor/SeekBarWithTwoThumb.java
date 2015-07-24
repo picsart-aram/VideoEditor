@@ -74,11 +74,12 @@ public class SeekBarWithTwoThumb extends ImageView {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		transparentPaint.setColor(Color.parseColor("#55555555"));
+		// transparent layout
 		canvas.drawRect(0, 0, thumb1X, getHeight(), transparentPaint);
-		canvas.drawRect(thumb2X , thumbY  ,getWidth(), getHeight() ,transparentPaint);
+		canvas.drawRect(thumb2X , thumbY-50  ,getWidth(), getHeight() ,transparentPaint);
+		// thumbs
 		canvas.drawBitmap(thumb, thumb1X - thumbHalfWidth / 2, thumbY, paint);
 		canvas.drawBitmap(thumb, thumb2X - thumbHalfWidth, thumbY,paint);
-
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import java.io.IOException;
 
 import videoeditor.picsart.com.videoeditor.Adapter;
 import videoeditor.picsart.com.videoeditor.EditVideoActivity;
+import videoeditor.picsart.com.videoeditor.Util;
 
 /**
  * Created by Tigran on 7/22/15.
@@ -82,7 +83,7 @@ public class TextUtils {
     private static class AddText extends AsyncTask<String, Integer, Void> {
 
         ProgressDialog progressDialog = new ProgressDialog(EditVideoActivity.context);
-        File file = new File(Environment.getExternalStorageDirectory(), "test_images");
+        File file = new File(Environment.getExternalStorageDirectory(), Util.VIDEO_FILES_DIR);
         File[] files = file.listFiles();
 
         @Override

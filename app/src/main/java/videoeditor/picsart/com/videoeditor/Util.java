@@ -33,6 +33,8 @@ import java.io.OutputStream;
 
 public class Util {
 
+    public static final String VIDEO_FILES_DIR = "test_images";
+
     public static String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
@@ -246,6 +248,10 @@ public class Util {
         boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
         boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
         return (xlarge || large);
+    }
+
+    public static String getVideoFilePath(){
+        return new File(Environment.getExternalStorageDirectory(), VIDEO_FILES_DIR).getPath();
     }
 
 }
