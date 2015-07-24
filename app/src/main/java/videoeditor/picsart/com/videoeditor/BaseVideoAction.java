@@ -13,6 +13,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import hackathon.videoeditor.utils.OnVideoActionFinishListener;
+import hackathon.videoeditor.utils.OnVideoSaveFinishedListener;
+
 /**
  * Created by AramNazaryan on 7/17/15.
  */
@@ -20,6 +23,7 @@ public abstract class BaseVideoAction<T> {
 
     private Activity activity = null;
     private ProgressDialog progressDialog = null;
+    private OnVideoActionFinishListener listener = null;
 
     protected abstract Bitmap doActionOnBitmap(Bitmap bmp, T... params);
 
@@ -65,7 +69,10 @@ public abstract class BaseVideoAction<T> {
                 ImageLoader.getInstance().clearDiskCache();
                 ImageLoader.getInstance().clearMemoryCache();
                 //adapter.notifyDataSetChanged();
-                activity.finish();
+//                activity.finish();
+                if (listener != null) {
+                    listener.onSuccess();
+                }
                 Log.d("gagagagag", "hasar iji");
             }
 
@@ -100,5 +107,9 @@ public abstract class BaseVideoAction<T> {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setOnVideoFinishListener(OnVideoActionFinishListener listener) {
+        this.listener = listener;
     }
 }

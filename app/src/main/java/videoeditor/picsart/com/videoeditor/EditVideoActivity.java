@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -23,8 +24,10 @@ import com.socialin.android.encoder.Encoder;
 import java.io.File;
 import java.util.ArrayList;
 
+import hackathon.videoeditor.utils.OnVideoActionFinishListener;
 import videoeditor.picsart.com.videoeditor.decoder.VideoDecoder;
 import videoeditor.picsart.com.videoeditor.effects.GrayScaleEffect;
+import videoeditor.picsart.com.videoeditor.effects.SnowEffect;
 import videoeditor.picsart.com.videoeditor.text_art.SimpleTextArt;
 import videoeditor.picsart.com.videoeditor.text_art.TextArtObject;
 import videoeditor.picsart.com.videoeditor.text_art.TextUtils;
@@ -149,9 +152,22 @@ public class EditVideoActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                GrayScaleEffect effect = new GrayScaleEffect(EditVideoActivity.this);
-                effect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
+//                GrayScaleEffect effect = new GrayScaleEffect(EditVideoActivity.this);
+//                effect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
 
+                SnowEffect snowEffect = new SnowEffect(EditVideoActivity.this);
+                snowEffect.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath());
+                snowEffect.setOnVideoFinishListener(new OnVideoActionFinishListener() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
             }
         });
 
