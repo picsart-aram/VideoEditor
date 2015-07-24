@@ -229,7 +229,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_ADD_TEXT) {
                 adapter.notifyDataSetChanged();
             }
@@ -237,7 +237,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
             if (requestCode == REQUEST_ADD_CLIPART) {
                 adapter.notifyDataSetChanged();
             }
-//        }
+        }
     }
 
     @Override

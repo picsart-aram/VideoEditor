@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import videoeditor.picsart.com.videoeditor.clipart.Clipart;
 import videoeditor.picsart.com.videoeditor.clipart.ClipartActivity;
 
 public class MainView extends View {
@@ -189,9 +190,8 @@ public class MainView extends View {
     }
 
     public void saveItemsToBitmap() {
-        //TODO
-        if(savedCanvas != null){
-           drawClipart(savedCanvas);
+        if (savedCanvas != null) {
+            drawClipart(savedCanvas);
         }
     }
 
@@ -210,11 +210,21 @@ public class MainView extends View {
         if (clipartBitmap != null && !clipartBitmap.isRecycled()) {
 
             canvas.save();
-            canvas.scale(0.5f, 0.5f, onDrawRect.centerX(), onDrawRect.centerY());
+            canvas.scale(0.5F, 0.5F, onDrawRect.centerX(), onDrawRect.centerY());
             canvas.translate(0, 0);
             canvas.drawBitmap(clipartBitmap, onDrawRect.centerX() / 2, onDrawRect.centerY() / 2, bitmapPaint);
             canvas.restore();
         }
+    }
+
+    public Clipart getClipartItem() {
+        return new Clipart(clipartBitmap, (int) onDrawRect.centerX(), (int) onDrawRect.centerY());
+
+//        Bitmap resultBitmap = Bitmap.createBitmap(clipartBitmap.getWidth(), clipartBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(resultBitmap);
+//        drawClipart(canvas);
+//        return new Clipart(resultBitmap, 0, 0);
+
     }
 
     public Bitmap getOriginBitmapCopy() {

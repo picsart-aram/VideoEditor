@@ -23,11 +23,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 
+import hackathon.videoeditor.utils.OnVideoActionFinishListener;
 import videoeditor.picsart.com.videoeditor.text_art.SimpleTextArt;
 import videoeditor.picsart.com.videoeditor.text_art.TextArtObject;
 
 
-public class TextArtActivity extends ActionBarActivity {
+public class TextArtActivity extends ActionBarActivity implements OnVideoActionFinishListener {
 
     private ImageView imageView;
     private SeekBar colorSeekBar;
@@ -85,10 +86,10 @@ public class TextArtActivity extends ActionBarActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (textView.getVisibility() == View.VISIBLE && !textView.getText().toString().equals("")) {
                     SimpleTextArt addTextArt = new SimpleTextArt(TextArtActivity.this);
                     TextArtObject obj = new TextArtObject(text, 10, 30, Color.RED);
+                    addTextArt.setOnVideoFinishListener(TextArtActivity.this);
                     addTextArt.startAction(Util.getVideoFilePath(), obj);
                 }
 
@@ -197,5 +198,15 @@ public class TextArtActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onSuccess() {
+        setResult(RESULT_OK);
+        finish();
+    }
 
+    @Override
+    public void onFailure() {
+        setResult(RESULT_CANCELED);
+        finish();
+    }
 }

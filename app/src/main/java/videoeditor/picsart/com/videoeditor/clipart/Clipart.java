@@ -9,8 +9,8 @@ import android.graphics.Bitmap;
 public class Clipart {
 
     private Bitmap bitmap;
-    private int x;
-    private int y;
+    private int x = 0;
+    private int y = 0;
 
     public Clipart() {
 
