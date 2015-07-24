@@ -2,9 +2,8 @@ package videoeditor.picsart.com.videoeditor;
 
 import android.content.ClipData;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -31,11 +30,14 @@ import videoeditor.picsart.com.videoeditor.text_art.TextArtObject;
 public class TextArtActivity extends ActionBarActivity implements OnVideoActionFinishListener {
 
     private ImageView imageView;
-    private SeekBar colorSeekBar;
+//    private SeekBar colorSeekBar;
     private SeekBar sizeSeekBar;
     private Button saveButton;
     private Button addTextButton;
+    private Button setColor;
     private TextView textView;
+    private int initialColor = Color.WHITE;
+    private int initialSize;
 
     private Intent intent;
     int color = 0;
@@ -55,21 +57,23 @@ public class TextArtActivity extends ActionBarActivity implements OnVideoActionF
         intent = getIntent();
 
         imageView = (ImageView) findViewById(R.id.image_view);
-        colorSeekBar = (SeekBar) findViewById(R.id.color_seek_bar);
+//        colorSeekBar = (SeekBar) findViewById(R.id.color_seek_bar);
         sizeSeekBar = (SeekBar) findViewById(R.id.size_seek_bar);
         saveButton = (Button) findViewById(R.id.save_button);
+        setColor = (Button) findViewById(R.id.btn_color);
         addTextButton = (Button) findViewById(R.id.add_text_button);
         textView = (TextView) findViewById(R.id.text_view);
         textView.setVisibility(View.GONE);
+
 
         imageView.setImageBitmap(ImageLoader.getInstance().loadImageSync("file://" + intent.getStringExtra("image_path")));
 
         addTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditTextDialod editTextDialod = new EditTextDialod(TextArtActivity.this);
-                editTextDialod.show();
-                editTextDialod.setOnRadioGroupChangedListener(new EditTextDialod.OnRadioGroupChangedListener() {
+                EditTextDialog editTextDialog = new EditTextDialog(TextArtActivity.this);
+                editTextDialog.show();
+                editTextDialog.setOnRadioGroupChangedListener(new EditTextDialog.OnRadioGroupChangedListener() {
                     @Override
                     public void onRadioGroupChanged(String s) {
 
@@ -82,15 +86,30 @@ public class TextArtActivity extends ActionBarActivity implements OnVideoActionF
                 });
             }
         });
+        setColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ColorPickerDialog colorPickerDialog = new ColorPickerDialog(TextArtActivity.this, initialColor, new ColorPickerDialog.OnColorSelectedListener() {
+                    @Override
+                    public void onColorSelected(int color) {
+                        textView.setTextColor(color);
+                        initialColor = color;
+                    }
+                });
+                colorPickerDialog.show();
+            }
+        });
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Typeface typeface = Typeface.SANS_SERIF;
                 if (textView.getVisibility() == View.VISIBLE && !textView.getText().toString().equals("")) {
                     SimpleTextArt addTextArt = new SimpleTextArt(TextArtActivity.this);
-                    TextArtObject obj = new TextArtObject(text, 10, 30, Color.RED);
+                    TextArtObject obj = new TextArtObject(text, 10, 30, initialColor,initialSize,typeface);
                     addTextArt.setOnVideoFinishListener(TextArtActivity.this);
-                    addTextArt.startAction(Util.getVideoFilePath(), obj);
+                    addTextArt.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath(), obj);
                 }
 
             }
@@ -140,11 +159,12 @@ public class TextArtActivity extends ActionBarActivity implements OnVideoActionF
             }
         });
 
-        final int x = (int) textView.getTextSize();
+        final int defaultTextSize = (int) textView.getTextSize();
         sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                textView.setTextSize(x + progress - 50);
+                initialSize = defaultTextSize + progress - 50;
+                textView.setTextSize(initialSize);
             }
 
             @Override
@@ -158,22 +178,23 @@ public class TextArtActivity extends ActionBarActivity implements OnVideoActionF
             }
         });
 
-        colorSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                textView.setTextColor(progress);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+//        colorSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//
+//                textView.setTextColor(progress);
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//        });
 
     }
 

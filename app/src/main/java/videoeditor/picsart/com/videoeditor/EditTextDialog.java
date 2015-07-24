@@ -12,7 +12,7 @@ import android.widget.RadioGroup;
 /**
  * Created by Tigran Isajanyan on 6/4/15.
  */
-public class EditTextDialod extends Dialog {
+public class EditTextDialog extends Dialog {
 
     private EditText editText;
     private Button setButton;
@@ -21,7 +21,7 @@ public class EditTextDialod extends Dialog {
 
     private OnRadioGroupChangedListener onRadioGroupChangedListener;
 
-    public EditTextDialod(Context context) {
+    public EditTextDialog(Context context) {
         super(context, R.style.Base_Theme_AppCompat_Dialog);
         this.context = context;
         setContentView(R.layout.edit_text_dialog);
