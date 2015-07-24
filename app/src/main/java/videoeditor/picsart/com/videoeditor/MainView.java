@@ -14,6 +14,8 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import videoeditor.picsart.com.videoeditor.clipart.ClipartActivity;
+
 public class MainView extends View {
 
     private Bitmap origBitmap;
@@ -212,6 +214,14 @@ public class MainView extends View {
             canvas.translate(0, 0);
             canvas.drawBitmap(clipartBitmap, onDrawRect.centerX() / 2, onDrawRect.centerY() / 2, bitmapPaint);
             canvas.restore();
+        }
+    }
+
+    public Bitmap getOriginBitmapCopy() {
+        try {
+            return Bitmap.createBitmap(origBitmap, 0, 0, origBitmap.getWidth(), origBitmap.getHeight());
+        } catch (OutOfMemoryError e) {
+            return null;
         }
     }
 }
