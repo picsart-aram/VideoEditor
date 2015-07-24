@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +27,7 @@ import videoeditor.picsart.com.videoeditor.decoder.VideoDecoder;
 import videoeditor.picsart.com.videoeditor.effects.GrayScaleEffect;
 
 
-public class EditVideoActivity extends ActionBarActivity {
+public class EditVideoActivity extends ActionBarActivity implements SeekBarWithTwoThumb.SeekBarChangeListener{
 
     private static final int REQUEST_ADD_TEXT = 300;
     private static final int REQUEST_ADD_CLIPART = 301;
@@ -50,6 +51,8 @@ public class EditVideoActivity extends ActionBarActivity {
     private ArrayList<String> previewArrayList = new ArrayList<>();
     public static Context context;
 
+    private SeekBarWithTwoThumb seekBarWithTwoThumb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +68,9 @@ public class EditVideoActivity extends ActionBarActivity {
         recyclerView = (RecyclerView) findViewById(R.id.rec_view);
 
         final Button playPauseButton = (Button) findViewById(R.id.play_pause_button);
-
+        seekBarWithTwoThumb = (SeekBarWithTwoThumb) findViewById(R.id.seek_bar_with_two_thumb);
+        seekBarWithTwoThumb.setSeekBarChangeListener(this);
+        
         progressDialog = new ProgressDialog(EditVideoActivity.this);
         progressDialog.setMessage("Please Wait...");
         progressDialog.show();
@@ -225,4 +230,8 @@ public class EditVideoActivity extends ActionBarActivity {
         }
     }
 
+    @Override
+    public void SeekBarValueChanged(int Thumb1Value, int Thumb2Value) {
+        Log.d("MyLog", "thumb1 : " +Thumb1Value + " thumb2 " + Thumb2Value);
+    }
 }
