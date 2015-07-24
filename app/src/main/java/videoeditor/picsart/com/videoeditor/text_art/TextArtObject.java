@@ -1,6 +1,6 @@
 package videoeditor.picsart.com.videoeditor.text_art;
 
-import android.graphics.Color;
+import android.graphics.Typeface;
 
 /**
  * Created by intern on 7/17/15.
@@ -11,12 +11,16 @@ public class TextArtObject {
     private int x = 0;
     private int y = 0;
     private int color;
+    private int textSize;
+    private Typeface typeFace;
 
-    public TextArtObject(String text, int x, int y, int color) {
+    public TextArtObject(String text, int x, int y, int color, int textSize,Typeface typeface) {
         this.text = text;
         this.x = x;
         this.y = y;
         this.color = color;
+        this.textSize = textSize;
+        this.typeFace = typeFace;
     }
 
     public String getText() {
@@ -51,4 +55,19 @@ public class TextArtObject {
         this.color = color;
     }
 
+    public int getTextSize() {
+        return textSize;
+    }
+
+    public void setTextSize(int textSize) {
+        this.textSize = textSize;
+    }
+
+    public Typeface getTypeFace() {
+        return typeFace;
+    }
+
+    public void setTypeFace(Typeface typeFace) {
+        this.typeFace = typeFace;
+    }
 }
