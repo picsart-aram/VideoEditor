@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,12 +26,9 @@ import java.util.ArrayList;
 
 import videoeditor.picsart.com.videoeditor.decoder.VideoDecoder;
 import videoeditor.picsart.com.videoeditor.effects.GrayScaleEffect;
-import videoeditor.picsart.com.videoeditor.text_art.SimpleTextArt;
-import videoeditor.picsart.com.videoeditor.text_art.TextArtObject;
-import videoeditor.picsart.com.videoeditor.text_art.TextUtils;
 
 
-public class EditVideoActivity extends ActionBarActivity {
+public class EditVideoActivity extends ActionBarActivity implements SeekBarWithTwoThumb.SeekBarChangeListener{
 
     private static final String root = Environment.getExternalStorageDirectory().toString();
     private File myDir = new File(root + "/test_images");
@@ -56,6 +54,8 @@ public class EditVideoActivity extends ActionBarActivity {
     private ArrayList<String> previewArrayList = new ArrayList<>();
     public static Context context;
 
+    private SeekBarWithTwoThumb seekBarWithTwoThumb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +74,8 @@ public class EditVideoActivity extends ActionBarActivity {
         addTextButton = (Button) findViewById(R.id.add_text_button);
         rotateButton = (Button) findViewById(R.id.scale_button);
         encodeButton = (Button) findViewById(R.id.encode_button);
-
+        seekBarWithTwoThumb = (SeekBarWithTwoThumb) findViewById(R.id.seek_bar_with_two_thumb);
+        seekBarWithTwoThumb.setSeekBarChangeListener(this);
 
         progressDialog = new ProgressDialog(EditVideoActivity.this);
         progressDialog.setMessage("Please Wait...");
@@ -219,4 +220,8 @@ public class EditVideoActivity extends ActionBarActivity {
         }
     }
 
+    @Override
+    public void SeekBarValueChanged(int Thumb1Value, int Thumb2Value) {
+        Log.d("MyLog", "thumb1 : " +Thumb1Value + " thumb2 " + Thumb2Value);
+    }
 }
