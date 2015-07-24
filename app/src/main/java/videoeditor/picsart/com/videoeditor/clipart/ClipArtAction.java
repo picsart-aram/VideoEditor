@@ -29,14 +29,20 @@ public class ClipArtAction extends BaseVideoAction<Clipart> {
         Paint paint = new Paint();
 
         canvas.drawBitmap(videoFrameBitmap, 0, 0, paint);
-        int centerX = width / 2;
-        int centerY = height / 2;
+//        int centerX = width / 2;
+//        int centerY = height / 2;
+//        canvas.save();
+//        canvas.scale(0.5F / ExtractMpegFrames.SCALE_FACTOR, 0.5F / ExtractMpegFrames.SCALE_FACTOR, centerX, centerY);
+//        canvas.translate(0, 0);
+//        canvas.drawBitmap(params[0].getBitmap(), centerX / 2, centerY / 2, paint);
+//        canvas.restore();
 
-        canvas.save();
-        canvas.scale(0.5F / ExtractMpegFrames.SCALE_FACTOR, 0.5F / ExtractMpegFrames.SCALE_FACTOR, centerX, centerY);
-        canvas.translate(0, 0);
-        canvas.drawBitmap(params[0].getBitmap(), centerX / 2, centerY / 2, paint);
-        canvas.restore();
+
+//        canvas.save();
+//        canvas.scale(1/ExtractMpegFrames.SCALE_FACTOR, 1/ExtractMpegFrames.SCALE_FACTOR, width / 2, height/2);
+//        canvas.translate(0, 0);
+        canvas.drawBitmap(params[0].getBitmap(), params[0].getX(), params[0].getY(), paint);
+//        canvas.restore();
 
         return resultBitmap;
     }

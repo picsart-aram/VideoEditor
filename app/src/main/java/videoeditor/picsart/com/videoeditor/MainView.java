@@ -5,22 +5,30 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import hackathon.videoeditor.framegrabber.view.MultitouchHandler;
 import videoeditor.picsart.com.videoeditor.clipart.Clipart;
 import videoeditor.picsart.com.videoeditor.clipart.ClipartActivity;
+import videoeditor.picsart.com.videoeditor.clipart.ClipartView;
 
 public class MainView extends View {
 
+    private Handler handler = new Handler();
     private Bitmap origBitmap;
-    private Bitmap clipartBitmap;
+//    private Bitmap clipartBitmap;
+
+    private ClipartView clipartView;
     private RectF onDrawRect = new RectF();
     private RectF savedRect = new RectF();
     private RectF bitmapRect = new RectF();
@@ -46,9 +54,16 @@ public class MainView extends View {
     public int left = 0;
     public int top = 0;
 
-
     private int imgWidth;
     private int imgHeight;
+
+    boolean itemAction = false;
+    boolean zoomAction = false;
+    long multitouchTimer = 0;
+    long multitouchTimerStart = 0;
+
+    private float maxZoom = 20f;
+    private float minZoom = 0.7f;
 
     private final Queue<Runnable> sizeChangedActioQueue = new LinkedList<Runnable>();
 
@@ -115,7 +130,9 @@ public class MainView extends View {
 
     public void sizeChanged(int viewWidth, int viewHeight, float oldScaleFactor, int oldLeft, int oldTop) {
         initImageData();
-        //clipart size changed
+        if (clipartView != null) {
+            clipartView.sizeChanged(left, top, oldLeft, oldTop, scaleFactor / oldScaleFactor, currentZoom);
+        }
         invalidate();
     }
 
@@ -184,16 +201,39 @@ public class MainView extends View {
         invalidate();
     }
 
-    public void addClipart(int clipartResId) {
-        clipartBitmap = BitmapFactory.decodeResource(getContext().getResources(), clipartResId);
+    public ClipartView addClipart(int clipartResId) {
+        if (clipartResId == -1) {
+            return null;
+        }
+        if (clipartView != null) {
+            clipartView.cleanBitmaps();
+        }
+        clipartView = new ClipartView(getContext(), clipartResId, this, 0);
+
+        Runnable initializePosition = new Runnable() {
+            @Override
+            public void run() {
+                clipartView.initSizeParams(viewWidth, viewHeight);
+            }
+        };
+
+        if (viewWidth != 0 && viewHeight != 0) {
+            initializePosition.run();
+        } else {
+            sizeChangedActioQueue.add(initializePosition);
+        }
+
         invalidate();
+        return clipartView;
+//        clipartBitmap = BitmapFactory.decodeResource(getContext().getResources(), clipartResId);
+//        invalidate();
     }
 
-    public void saveItemsToBitmap() {
-        if (savedCanvas != null) {
-            drawClipart(savedCanvas);
-        }
-    }
+//    public void saveItemsToBitmap() {
+//        if (savedCanvas != null) {
+//            drawClipart(savedCanvas);
+//        }
+//    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -203,28 +243,36 @@ public class MainView extends View {
             return;
         }
         canvas.drawBitmap(origBitmap, null, onDrawRect, bitmapPaint);
-        drawClipart(canvas);
-    }
+//        drawClipart(canvas);
 
-    private void drawClipart(Canvas canvas) {
-        if (clipartBitmap != null && !clipartBitmap.isRecycled()) {
-
-            canvas.save();
-            canvas.scale(0.5F, 0.5F, onDrawRect.centerX(), onDrawRect.centerY());
-            canvas.translate(0, 0);
-            canvas.drawBitmap(clipartBitmap, onDrawRect.centerX() / 2, onDrawRect.centerY() / 2, bitmapPaint);
-            canvas.restore();
+        if (clipartView != null) {
+            clipartView.draw(canvas);
         }
     }
 
+//    private void drawClipart(Canvas canvas) {
+//        if (clipartBitmap != null && !clipartBitmap.isRecycled()) {
+//
+//            canvas.save();
+//            canvas.scale(0.5F, 0.5F, onDrawRect.centerX(), onDrawRect.centerY());
+//            canvas.translate(0, 0);
+//            canvas.drawBitmap(clipartBitmap, onDrawRect.centerX() / 2, onDrawRect.centerY() / 2, bitmapPaint);
+//            canvas.restore();
+//        }
+//    }
+
     public Clipart getClipartItem() {
-        return new Clipart(clipartBitmap, (int) onDrawRect.centerX(), (int) onDrawRect.centerY());
+        if (clipartView != null) {
+//            Bitmap clipartBitmap = clipartView.getBitmap();
+//            Bitmap resultBitmap = Bitmap.createBitmap(origBitmap.getWidth(), origBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+//            Canvas canvas = new Canvas(resultBitmap);
+//            clipartView.draw(canvas);
+//            clipartView.draw(canvas, onImgRect.centerX(), onImgRect.centerY(), scaleFactor, currentZoom, 0);
 
-//        Bitmap resultBitmap = Bitmap.createBitmap(clipartBitmap.getWidth(), clipartBitmap.getHeight(), Bitmap.Config.ARGB_8888);
-//        Canvas canvas = new Canvas(resultBitmap);
-//        drawClipart(canvas);
-//        return new Clipart(resultBitmap, 0, 0);
-
+            return new Clipart(clipartView.getBitmap(), (int)clipartView.getX(), (int)clipartView.getY());
+        }
+//        return new Clipart(clipartBitmap, (int) onDrawRect.centerX(), (int) onDrawRect.centerY());
+        return null;
     }
 
     public Bitmap getOriginBitmapCopy() {
@@ -234,4 +282,102 @@ public class MainView extends View {
             return null;
         }
     }
+
+    public Bitmap getOrigBitmap() {
+        return origBitmap;
+    }
+
+    public RectF getOnDrawRect() {
+        return onDrawRect;
+    }
+
+    ///////////////Touch events
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final float x = event.getX();
+        final float y = event.getY();
+        int eventAction = event.getAction();
+
+        if (eventAction == MotionEvent.ACTION_DOWN) {
+            multitouchTimerStart = System.currentTimeMillis();
+            zoomAction = false;
+            itemAction = false;
+        }
+
+        if (clipartView != null && clipartView.isDrawHandle()) {
+            clipartView.onTouchEvent(event);
+
+            if (clipartView.pinchOutOfBounds && MultitouchHandler.getInstance().handlePitchZoom(event, onDrawRect, savedRect, maxZoom, minZoom)) {
+                updateZoomDragParams(maxZoom);
+//                if (ItemContext.getContext().getSelectedItem().isActive()) {
+//                clearDraw();
+//                drawItemsOnMBitmap(true);
+                //TODO
+//                }
+            }
+        }
+
+//        if (currentImageAction == Graphics.ACTION_DRAG) {
+//            dragImage(eventAction, x, y);
+//        }
+
+        switch (eventAction) {
+            case MotionEvent.ACTION_DOWN:
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!zoomAction) {
+                            touchDown(x, y);
+                            invalidate();
+                        }
+                    }
+                }, 70);
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if (itemAction && clipartView != null) {
+                    clipartView.touch_move(x, y);
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+                if (itemAction && clipartView != null) {
+                    clipartView.touch_up();
+                    itemAction = false;
+                }
+
+                break;
+        }// end action switch
+
+        invalidate();
+
+        return true;
+    }// end onTouch
+
+
+    public void updateZoomDragParams(float maxZoom) {
+
+        float zoom = (onDrawRect.width() + 0.5f) / savedRect.width();
+        if (zoom > maxZoom) {
+            return;
+        }
+
+        currentWidth = (int) (onDrawRect.width() + 0.5f);
+        currentHeight = (int) (onDrawRect.height() + 0.5f);
+        currentZoom = currentWidth / savedRect.width();
+
+        left = (int) (onDrawRect.left + 0.5f);
+        top = (int) (onDrawRect.top + 0.5f);
+    }
+
+    private boolean touchDown(float x, float y) {
+        if (clipartView != null) {
+            itemAction = clipartView.touch_down(x, y);
+            return true;
+        }
+
+        return false;
+    }
+
 }

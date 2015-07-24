@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -254,6 +255,25 @@ public class Util {
         return new File(Environment.getExternalStorageDirectory(), VIDEO_FILES_DIR).getPath();
     }
 
+    public static float convertDpToPixel(float dp, Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return dp * (metrics.densityDpi / 160f);
+    }
 
+    public static void getMidPoint(PointF lineStart, PointF lineEnd, PointF outPoint) {
+        outPoint.set((lineStart.x + lineEnd.x) / 2, (lineStart.y + lineEnd.y) / 2);
+    }
 
+    public static float getAngleBetweenLines(PointF lineStart1, PointF lineEnd1, PointF lineStart2, PointF lineEnd2) {
+        float dx1 = lineStart1.x - lineEnd1.x;
+        float dy1 = lineStart1.y - lineEnd1.y;
+
+        float dx2 = lineStart2.x - lineEnd2.x;
+        float dy2 = lineStart2.y - lineEnd2.y;
+
+        double radians = Math.atan2(dy2, dx2) - Math.atan2(dy1, dx1);
+
+        return (float) Math.toDegrees(radians);
+    }
 }

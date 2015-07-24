@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ClipartActivity"
+            android:name=".clipart.ClipartActivity"
             android:hardwareAccelerated="true" />
         <activity
             android:name=".EditVideoActivity"
