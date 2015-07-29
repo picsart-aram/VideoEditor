@@ -4,8 +4,7 @@ package decoder;
  * Created by Tigran on 7/13/15.
  */
 
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
+import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
@@ -23,14 +22,13 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 import android.view.Surface;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+
 
 
 //20131122: minor tweaks to saveFrame() I/O
@@ -58,22 +56,24 @@ public class ExtractMpegFrames extends AndroidTestCase {
     // where to find files (note: requires WRITE_EXTERNAL_STORAGE permission)
     private static final File FILES_DIR = Environment.getExternalStorageDirectory();
     private static String INPUT_FILE_PATH = "";
-    private static String OUTPUT_DIR = FILES_DIR + "/test_images";
+    private static String OUTPUT_DIR = FILES_DIR + "/" + "test_images";
 
     private static int MAX_FRAMES = 0;       // stop extracting after this many
     private static boolean isPortriet = false;
-    private int savedFrameWidth = 360;
-    private int savedFrameHeight = 640;
+    private int savedFrameWidth = 0;
+    private int savedFrameHeight = 0;
     private int size;
 
+    private Context context;
 
     /**
      * test entry point
      */
-    public void extractMpegFrames(String filePath, int size, String outputDir) throws Throwable {
+    public void extractMpegFrames(Context context, String filePath, int size, String outputDir) throws Throwable {
 
-        INPUT_FILE_PATH = filePath;
+        this.context = context;
         this.size = size;
+        INPUT_FILE_PATH = filePath;
         OUTPUT_DIR = outputDir;
         ExtractMpegFramesWrapper.runTest(this);
 
@@ -177,11 +177,11 @@ public class ExtractMpegFrames extends AndroidTestCase {
             Log.d(TAG, "isportriet:  " + isPortriet);
 
             if (isPortriet) {
-                savedFrameHeight = width / 8;
-                savedFrameWidth = height / 8;
+                savedFrameHeight = width / size;
+                savedFrameWidth = height / size;
             } else {
-                savedFrameHeight = height / 8;
-                savedFrameWidth = width / 8;
+                savedFrameHeight = height / size;
+                savedFrameWidth = width / size;
             }
 
             if (VERBOSE) {
@@ -332,9 +332,9 @@ public class ExtractMpegFrames extends AndroidTestCase {
 
                         if (decodeCount < MAX_FRAMES) {
                             File outputFile = new File(OUTPUT_DIR,
-                                    String.format("frame-%03d.png", decodeCount));
+                                    String.format("frame-%03d", decodeCount));
                             long startWhen = System.nanoTime();
-                            outputSurface.saveFrame(outputFile.toString());
+                            outputSurface.saveFrame(outputFile.getAbsolutePath());
                             frameSaveTime += System.nanoTime() - startWhen;
 
                             Log.d(TAG, decodeCount + " / " + MAX_FRAMES);
@@ -617,7 +617,9 @@ public class ExtractMpegFrames extends AndroidTestCase {
             GLES20.glReadPixels(0, 0, mWidth, mHeight, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE,
                     mPixelBuf);
 
-            BufferedOutputStream bos = null;
+            PhotoUtils.saveBufferToSDCard(filename, mPixelBuf);
+
+            /*BufferedOutputStream bos = null;
             try {
                 bos = new BufferedOutputStream(new FileOutputStream(filename));
                 Bitmap bmp = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
@@ -641,7 +643,7 @@ public class ExtractMpegFrames extends AndroidTestCase {
             }
             if (VERBOSE) {
                 Log.d(TAG, "Saved " + mWidth + "x" + mHeight + " frame as '" + filename + "'");
-            }
+            }*/
         }
 
         /**

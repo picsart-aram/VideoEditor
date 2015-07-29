@@ -114,7 +114,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                                 }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                //perform operation here after getting error
+                                finish();
                             }
                         });
                         queue.add(stringRequest);
@@ -178,7 +178,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //perform operation here after getting error
+                        finish();
                     }
                 });
                 queue.add(stringRequest);

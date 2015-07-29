@@ -27,10 +27,13 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 public class Util {
 
@@ -276,4 +279,41 @@ public class Util {
 
         return (float) Math.toDegrees(radians);
     }
+
+    public static void WriteByteToFile(Context contexts,byte[] mybytes, String filename){
+
+        FileOutputStream outputStream;
+        try {
+            outputStream = contexts.openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream.write(mybytes);
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public static byte[] ReadByteFromFile (String filename){
+
+        byte[] mybytes = null;
+
+        try {
+            File file = new File(filename);
+            FileInputStream FIS = new FileInputStream(file);
+
+            mybytes = new byte[(int)file.length()];
+
+            FIS.read(mybytes);
+            FIS.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return mybytes;
+    }
+
 }

@@ -4,8 +4,7 @@ package videoeditor.picsart.com.videoeditor.decoder;
  * Created by Tigran on 7/13/15.
  */
 
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
+import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
@@ -23,16 +22,13 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 import android.view.Surface;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import videoeditor.picsart.com.videoeditor.EditVideoActivity;
 import videoeditor.picsart.com.videoeditor.Util;
 
 
@@ -65,20 +61,20 @@ public class ExtractMpegFrames extends AndroidTestCase {
 
     private static int MAX_FRAMES = 0;       // stop extracting after this many
     private static boolean isPortriet = false;
-    private int savedFrameWidth = 360;
-    private int savedFrameHeight = 640;
+    private int savedFrameWidth = 0;
+    private int savedFrameHeight = 0;
     private int size;
 
-
-    public static int SCALE_FACTOR = 8;
+    private Context context;
 
     /**
      * test entry point
      */
-    public void extractMpegFrames(String filePath, int size, String outputDir) throws Throwable {
+    public void extractMpegFrames(Context context, String filePath, int size, String outputDir) throws Throwable {
 
-        INPUT_FILE_PATH = filePath;
+        this.context = context;
         this.size = size;
+        INPUT_FILE_PATH = filePath;
         OUTPUT_DIR = outputDir;
         ExtractMpegFramesWrapper.runTest(this);
 
@@ -181,12 +177,12 @@ public class ExtractMpegFrames extends AndroidTestCase {
 
             Log.d(TAG, "isportriet:  " + isPortriet);
 
-            if (isPortriet || !Util.isTablet(EditVideoActivity.context)) {
-                savedFrameHeight = width / SCALE_FACTOR;
-                savedFrameWidth = height / SCALE_FACTOR;
+            if (isPortriet || !Util.isTablet(context)) {
+                savedFrameHeight = width / size;
+                savedFrameWidth = height / size;
             } else {
-                savedFrameHeight = height / SCALE_FACTOR;
-                savedFrameWidth = width / SCALE_FACTOR;
+                savedFrameHeight = height / size;
+                savedFrameWidth = width / size;
             }
 
             if (VERBOSE) {
@@ -337,9 +333,9 @@ public class ExtractMpegFrames extends AndroidTestCase {
 
                         if (decodeCount < MAX_FRAMES) {
                             File outputFile = new File(OUTPUT_DIR,
-                                    String.format("frame-%03d.png", decodeCount));
+                                    String.format("frame-%03d", decodeCount));
                             long startWhen = System.nanoTime();
-                            outputSurface.saveFrame(outputFile.toString());
+                            outputSurface.saveFrame(outputFile.getAbsolutePath());
                             frameSaveTime += System.nanoTime() - startWhen;
 
                             Log.d(TAG, decodeCount + " / " + MAX_FRAMES);
@@ -622,7 +618,9 @@ public class ExtractMpegFrames extends AndroidTestCase {
             GLES20.glReadPixels(0, 0, mWidth, mHeight, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE,
                     mPixelBuf);
 
-            BufferedOutputStream bos = null;
+            PhotoUtils.saveBufferToSDCard(filename, mPixelBuf);
+
+            /*BufferedOutputStream bos = null;
             try {
                 bos = new BufferedOutputStream(new FileOutputStream(filename));
                 Bitmap bmp = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
@@ -646,7 +644,7 @@ public class ExtractMpegFrames extends AndroidTestCase {
             }
             if (VERBOSE) {
                 Log.d(TAG, "Saved " + mWidth + "x" + mHeight + " frame as '" + filename + "'");
-            }
+            }*/
         }
 
         /**

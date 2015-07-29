@@ -5,9 +5,13 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -24,6 +28,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.example.intern.picsartvideo.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -33,7 +38,9 @@ import com.socialin.android.encoder.Encoder;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import adapter.ImagePagerAdapter;
@@ -292,9 +299,7 @@ public class SlideShowActivity extends ActionBarActivity {
 
             Bitmap bitmap = null;
             for (int i = 0; i < path[0].size(); i++) {
-
                 try {
-
                     if (!path[0].get(i).isFromFileSystem()) {
                         bitmap = ImageLoader.getInstance().loadImageSync(path[0].get(i).getPath() + "?r1024x1024", new ImageSize(720, 720), DisplayImageOptions.createSimple());
                         bitmap = Utils.scaleCenterCrop(bitmap, 720, 720);
@@ -302,14 +307,13 @@ public class SlideShowActivity extends ActionBarActivity {
                         bitmap = ImageLoader.getInstance().loadImageSync("file://" + path[0].get(i).getPath(), new ImageSize(720, 720), DisplayImageOptions.createSimple());
                         bitmap = Utils.scaleCenterCrop(bitmap, 720, 720);
                     }
-                    encoder.addFrame(bitmap, 600);
+                    encoder.addFrame(bitmap, 1000);
                     onProgressUpdate(i);
 
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Error while SaveToMemory", Toast.LENGTH_SHORT).show();
                 }
-
             }
 
             return null;
@@ -320,14 +324,16 @@ public class SlideShowActivity extends ActionBarActivity {
                 progressDialog.setProgress(progress[0]);
                 progressDialog.setMax(selectedImagesPathList.size());
             }
-            Log.d("gagagagaga",""+progress[0]);
+            Log.d("gagagagaga", "" + progress[0]);
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             progressDialog.dismiss();
-
+            /*Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(root + "/vid1.mp4"));
+            intent.setDataAndType(Uri.parse(root + "/vid1.mp4"), "video/mp4");
+            startActivity(intent);*/
         }
 
         @Override
@@ -336,7 +342,6 @@ public class SlideShowActivity extends ActionBarActivity {
             progressDialog = new ProgressDialog(SlideShowActivity.this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.show();
-
         }
     }
 

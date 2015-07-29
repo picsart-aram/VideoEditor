@@ -144,4 +144,5 @@ public class ClipartActivity extends ActionBarActivity implements OnVideoActionF
         setResult(RESULT_CANCELED);
         finish();
     }
+
 }

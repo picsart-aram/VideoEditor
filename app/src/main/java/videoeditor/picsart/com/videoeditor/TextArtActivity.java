@@ -1,8 +1,12 @@
 package videoeditor.picsart.com.videoeditor;
 
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
@@ -14,15 +18,16 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import java.io.File;
+import java.nio.ByteBuffer;
 
 import hackathon.videoeditor.utils.OnVideoActionFinishListener;
+import videoeditor.picsart.com.videoeditor.decoder.PhotoUtils;
 import videoeditor.picsart.com.videoeditor.text_art.SimpleTextArt;
 import videoeditor.picsart.com.videoeditor.text_art.TextArtObject;
 
@@ -30,7 +35,6 @@ import videoeditor.picsart.com.videoeditor.text_art.TextArtObject;
 public class TextArtActivity extends ActionBarActivity implements OnVideoActionFinishListener {
 
     private ImageView imageView;
-//    private SeekBar colorSeekBar;
     private SeekBar sizeSeekBar;
     private Button saveButton;
     private Button addTextButton;
@@ -40,7 +44,6 @@ public class TextArtActivity extends ActionBarActivity implements OnVideoActionF
     private int initialSize;
 
     private Intent intent;
-    int color = 0;
     String text = "gaga";
 
     @Override
@@ -57,7 +60,6 @@ public class TextArtActivity extends ActionBarActivity implements OnVideoActionF
         intent = getIntent();
 
         imageView = (ImageView) findViewById(R.id.image_view);
-//        colorSeekBar = (SeekBar) findViewById(R.id.color_seek_bar);
         sizeSeekBar = (SeekBar) findViewById(R.id.size_seek_bar);
         saveButton = (Button) findViewById(R.id.save_button);
         setColor = (Button) findViewById(R.id.btn_color);
@@ -65,8 +67,15 @@ public class TextArtActivity extends ActionBarActivity implements OnVideoActionF
         textView = (TextView) findViewById(R.id.text_view);
         textView.setVisibility(View.GONE);
 
-
-        imageView.setImageBitmap(ImageLoader.getInstance().loadImageSync("file://" + intent.getStringExtra("image_path")));
+        SharedPreferences sharedPreferences = getSharedPreferences("pics_art_video_editor", Context.MODE_PRIVATE);
+        int bufferSize = sharedPreferences.getInt("buffer_size", 0);
+        int width = sharedPreferences.getInt("frame_width", 0);
+        int height = sharedPreferences.getInt("frame_height", 0);
+        int orientation = sharedPreferences.getInt("frame_orientation", 0);
+        ByteBuffer buffer = PhotoUtils.readBufferFromFile(intent.getStringExtra("image_path"), bufferSize);
+        Bitmap bitmap = PhotoUtils.fromBufferToBitmap(width, height, orientation, buffer);
+        imageView.setLayoutParams(new FrameLayout.LayoutParams(bitmap.getWidth(), bitmap.getHeight()));
+        imageView.setImageBitmap(bitmap);
 
         addTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +116,7 @@ public class TextArtActivity extends ActionBarActivity implements OnVideoActionF
                 Typeface typeface = Typeface.SANS_SERIF;
                 if (textView.getVisibility() == View.VISIBLE && !textView.getText().toString().equals("")) {
                     SimpleTextArt addTextArt = new SimpleTextArt(TextArtActivity.this);
-                    TextArtObject obj = new TextArtObject(text, 10, 30, initialColor,initialSize,typeface);
+                    TextArtObject obj = new TextArtObject(text, (int) textView.getX(), (int) textView.getY(), initialColor, (int) textView.getTextSize(), typeface);
                     addTextArt.setOnVideoFinishListener(TextArtActivity.this);
                     addTextArt.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath(), obj);
                 }
@@ -132,10 +141,6 @@ public class TextArtActivity extends ActionBarActivity implements OnVideoActionF
                 switch (action) {
 
                     case DragEvent.ACTION_DRAG_STARTED:
-
-                        Log.d("gagagagaga", event.getX() + "");
-                        Log.d("gagagagaga", event.getY() + "");
-
                         break;
 
                     case DragEvent.ACTION_DRAG_EXITED:
@@ -178,24 +183,6 @@ public class TextArtActivity extends ActionBarActivity implements OnVideoActionF
             }
         });
 
-//        colorSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//
-//                textView.setTextColor(progress);
-//            }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//            }
-//
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//
-//            }
-//        });
-
     }
 
     @Override
@@ -211,8 +198,12 @@ public class TextArtActivity extends ActionBarActivity implements OnVideoActionF
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            setResult(RESULT_OK);
-            finish();
+            /*setResult(RESULT_OK);
+            finish();*/
+            Log.d("textView.getX", textView.getX() + "");
+            Log.d("textView.getY", textView.getY() + "");
+            Log.d("imageviewx", imageView.getX() + "");
+            Log.d("size", textView.getTextSize() + "");
             return true;
         }
 

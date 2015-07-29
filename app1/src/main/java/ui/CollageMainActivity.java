@@ -535,7 +535,7 @@ public class CollageMainActivity extends Activity{
                 // set a picture callback
                 // refresh the preview
 
-                mPreview.setOrientation(270);
+                mPreview.setOrientation(90);
                 mCamera = Camera.open(cameraId);
                 // mPicture = getPictureCallback();
                 mPreview.refreshCamera(mCamera);

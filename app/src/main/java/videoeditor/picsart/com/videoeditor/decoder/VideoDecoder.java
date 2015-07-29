@@ -1,8 +1,8 @@
 package videoeditor.picsart.com.videoeditor.decoder;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,15 +18,17 @@ public class VideoDecoder {
     private File myDir = new File(root + "/" + Util.VIDEO_FILES_DIR);
 
     private String inputFilePath = "";
-    private String outputDirectory;
+    private String outputDirectory = "";
 
     private FrameSize frameSize;
+    private Context context;
 
     private ArrayList<String> savedFramePath = new ArrayList<>();
     private static OnDecodeFinishedListener onDecodeFinishedListener;
 
-    public VideoDecoder(String inputFilePath, FrameSize frameSize, String outputDirectory) {
+    public VideoDecoder(Context context, String inputFilePath, FrameSize frameSize, String outputDirectory) {
 
+        this.context = context;
         this.inputFilePath = inputFilePath;
         this.frameSize = frameSize;
         this.outputDirectory = outputDirectory;
@@ -38,32 +40,6 @@ public class VideoDecoder {
      */
     public void extractVideoFrames() {
         new ExtractFrames().execute();
-    }
-
-    /**
-     * Call after extractVideoFrames()
-     * returns all saved frames absolut paths
-     *
-     * @return
-     */
-    public ArrayList<String> getSavedFrames() {
-        return savedFramePath;
-    }
-
-    /**
-     * Call after extractVideoFrames() , returns saved frames absolut paths from - to
-     *
-     * @return
-     */
-    private ArrayList<String> getSavedFramesFromTo(int offset, int limit) {
-        ArrayList<String> subArray = new ArrayList<>();
-        int a = savedFramePath.size();
-        if (offset + limit < a)
-            a = offset + limit;
-        for (int i = offset; i < a; i++) {
-            subArray.add(savedFramePath.get(i));
-        }
-        return subArray;
     }
 
     public void setOnDecodeFinishedListener(OnDecodeFinishedListener l) {
@@ -83,7 +59,7 @@ public class VideoDecoder {
 
             ExtractMpegFrames extractMpegFrames = new ExtractMpegFrames();
             try {
-                extractMpegFrames.extractMpegFrames(inputFilePath, frameSize.ordinal()+1, outputDirectory);
+                extractMpegFrames.extractMpegFrames(context, inputFilePath, frameSize.ordinal() + 1, outputDirectory);
 
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
