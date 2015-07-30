@@ -1,6 +1,8 @@
 package videoeditor.picsart.com.videoeditor.clipart;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,11 +18,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 
 import hackathon.videoeditor.utils.OnVideoActionFinishListener;
 import videoeditor.picsart.com.videoeditor.MainView;
 import videoeditor.picsart.com.videoeditor.R;
 import videoeditor.picsart.com.videoeditor.Util;
+import videoeditor.picsart.com.videoeditor.decoder.PhotoUtils;
 
 public class ClipartActivity extends ActionBarActivity implements OnVideoActionFinishListener {
 
@@ -52,9 +56,16 @@ public class ClipartActivity extends ActionBarActivity implements OnVideoActionF
 
         String realPath = getIntent().getStringExtra("image_path");
         String message = realPath;
-        File imgFile = new File(Environment.getExternalStorageDirectory() + realPath);
+        File imgFile = new File(realPath);
         Log.i(TAG, " imgFile= " + imgFile.getAbsolutePath());
         if (imgFile.exists()) {
+            /*SharedPreferences sharedPreferences = getSharedPreferences("pics_art_video_editor", Context.MODE_PRIVATE);
+            int bufferSize = sharedPreferences.getInt("buffer_size", 0);
+            int width = sharedPreferences.getInt("frame_width", 0);
+            int height = sharedPreferences.getInt("frame_height", 0);
+            int orientation = sharedPreferences.getInt("frame_orientation", 0);
+            ByteBuffer buffer = PhotoUtils.readBufferFromFile(realPath, bufferSize);
+            Bitmap bitmap = PhotoUtils.fromBufferToBitmap(width, height, orientation, buffer);*/
             Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             Log.i(TAG, "bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight());
             message += "\n bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight();

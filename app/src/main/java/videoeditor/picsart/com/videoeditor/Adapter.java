@@ -3,7 +3,6 @@ package videoeditor.picsart.com.videoeditor;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import videoeditor.picsart.com.videoeditor.decoder.PhotoUtils;
-import videoeditor.picsart.com.videoeditor.decoder.VideoDecoder;
 
 /**
  * Created by Tigran on 6/23/15.

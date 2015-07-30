@@ -1,25 +1,23 @@
 package decoder;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.media.MediaMetadataRetriever;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.HashMap;
+
 
 
 /**
  * Created by Tigran on 7/28/15.
  */
 public class PhotoUtils {
-
 
     public static void saveBufferToSDCard(String filePath, ByteBuffer buffer) throws UnsatisfiedLinkError {
 
@@ -37,6 +35,7 @@ public class PhotoUtils {
             inputStream = new FileInputStream(bufferPath);
 
             ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+            //ByteBuffer buffer = ImageOpCommon.allocNativeBuffer(bufferSize);
 
             channel = inputStream.getChannel();
             channel.read(buffer);
@@ -78,62 +77,6 @@ public class PhotoUtils {
         wChannel.close();
     }
 
-    public static HashMap<Object, Object> saveBitmapBufferToSDCard(String filePath, Bitmap image) throws UnsatisfiedLinkError {
-        final int width = image.getWidth();
-        final int height = image.getHeight();
-
-        ByteBuffer buffer = ByteBuffer.allocate(4 * width * height);
-        image.copyPixelsToBuffer(buffer);
-        buffer.position(0);
-        try {
-            writeToSd(filePath, buffer);
-        } catch (IOException e) {
-
-        }
-
-        HashMap<Object, Object> bufferData = new HashMap<Object, Object>();
-        bufferData.put("width", width);
-        bufferData.put("height", height);
-        bufferData.put("path", filePath);
-
-        return bufferData;
-    }
-
-    public static Bitmap getRotatedBitmapAndRecycle_ARGB8(Bitmap bitmap, int rotation) {
-        if (bitmap == null || bitmap.isRecycled())
-            return bitmap;
-
-        if (rotation == 0 || rotation == 360)
-            return bitmap;
-
-        Bitmap rotatedBitmap;
-
-        Matrix matrix = new Matrix();
-        matrix.reset();
-        if (rotation == 90 || rotation == 270) {
-            rotatedBitmap = BitmapManager.createBitmap(bitmap.getHeight(), bitmap.getWidth(), Bitmap.Config.ARGB_8888);
-            if (rotation == 90) {
-                matrix.postRotate(90);
-                matrix.postTranslate(rotatedBitmap.getWidth(), 0);
-            } else { // 270
-                matrix.postRotate(270);
-                matrix.postTranslate(0, rotatedBitmap.getHeight());
-            }
-        } else {
-            rotatedBitmap = BitmapManager.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-            matrix.postRotate(180);
-            matrix.postTranslate(rotatedBitmap.getWidth(), rotatedBitmap.getHeight());
-        }
-        Canvas c = new Canvas(rotatedBitmap);
-        Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
-        c.drawBitmap(bitmap, matrix, paint);
-
-        BitmapManager.recycle(bitmap);
-
-        return rotatedBitmap;
-
-    }
-
     public static ByteBuffer fromBitmapToBuffer(Bitmap b) {
         ByteBuffer result = ByteBuffer.allocate(b.getWidth() * b.getHeight() * 4); // ByteBuffer.allocate(capacity)
         result.position(0);
@@ -142,10 +85,21 @@ public class PhotoUtils {
         return result;
     }
 
-    public static Bitmap fromBufferToBitmap(int w, int h, ByteBuffer buffer) {
-        Bitmap result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        buffer.rewind();
-        result.copyPixelsFromBuffer(buffer);
+    public static Bitmap fromBufferToBitmap(int w, int h, int orientation, ByteBuffer buffer) {
+        Bitmap result = null;
+        if (orientation == 90 || orientation == 270) {
+            result = Bitmap.createBitmap(h, w, Bitmap.Config.ARGB_8888);
+            buffer.rewind();
+            result.copyPixelsFromBuffer(buffer);
+            Matrix m = new Matrix();
+            m.postRotate(180);
+            m.preScale(-1, 1);
+            result = Bitmap.createBitmap(result, 0, 0, result.getWidth(), result.getHeight(), m, false);
+        } else {
+            result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            buffer.rewind();
+            result.copyPixelsFromBuffer(buffer);
+        }
         return result;
     }
 
@@ -160,4 +114,95 @@ public class PhotoUtils {
         return (newHeight * newWidth * 4);
     }
 
+    public static int checkFrameWidth(String videoPath, VideoDecoder.FrameSize frameSize) {
+        MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+        metaRetriever.setDataSource(videoPath);
+        int height = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
+        int width = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
+        return width / (frameSize.ordinal() + 1);
+    }
+
+    public static int checkFrameHeight(String videoPath, VideoDecoder.FrameSize frameSize) {
+        MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+        metaRetriever.setDataSource(videoPath);
+        int height = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
+        int width = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
+        return height / (frameSize.ordinal() + 1);
+    }
+
+    public static int checkFrameOrientation(String videoPath) {
+        MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+        metaRetriever.setDataSource(videoPath);
+        String orientation = metaRetriever.extractMetadata(
+                MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
+        return Integer.parseInt(orientation);
+    }
+
+    public static byte[] bytebuffertobytearray(ByteBuffer byteBuffer) {
+
+
+        byte[] bytes = byteBuffer.array();
+        /*byte[] bytes = new byte[10];
+
+        // Wrap a byte array into a buffer
+        ByteBuffer buf = ByteBuffer.wrap(bytes);
+
+        // Retrieve bytes between the position and limit
+        // (see Putting Bytes into a ByteBuffer)
+        bytes = new byte[buf.remaining()];
+
+        // transfer bytes from this buffer into the given destination array
+        buf.get(bytes, 0, bytes.length);
+
+        // Retrieve all bytes in the buffer
+        buf.clear();
+        bytes = new byte[buf.capacity()];
+
+        // transfer bytes from this buffer into the given destination array
+        buf.get(bytes, 0, bytes.length);*/
+
+        return bytes;
+
+    }
+
+    public static void writeToFile(byte[] array, String path) {
+
+        try {
+            FileOutputStream stream = new FileOutputStream(path);
+            stream.write(array);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static byte[] readByteFromFile(String filename) {
+
+        byte[] mybytes = null;
+
+        try {
+            File file = new File(filename);
+            FileInputStream FIS = new FileInputStream(file);
+
+            mybytes = new byte[(int) file.length()];
+
+            FIS.read(mybytes);
+            FIS.close();
+
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return mybytes;
+    }
+
+    public static native Object allocNative(long size);
+
+    public static native void freeNative(Object globalRef);
 }
+

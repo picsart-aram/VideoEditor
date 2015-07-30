@@ -11,11 +11,11 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
+
 /**
  * Created by Tigran on 7/28/15.
  */
 public class PhotoUtils {
-
 
     public static void saveBufferToSDCard(String filePath, ByteBuffer buffer) throws UnsatisfiedLinkError {
 

@@ -1,6 +1,6 @@
 package ui;
 
-import android.app.ActionBar;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -18,17 +18,10 @@ import android.hardware.Camera.CameraInfo;
 import android.media.CamcorderProfile;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -52,10 +45,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 
-public class CollageMainActivity extends Activity{
+public class CollageMainActivity extends Activity {
 
     public static int currentFrameId;
     private Camera mCamera;
@@ -483,8 +475,8 @@ public class CollageMainActivity extends Activity{
       /*  if (cameraFront) {
             mediaRecorder.setOrientationHint(270);
         } else {*/
-            mediaRecorder.setOrientationHint(90);
-       // }
+        mediaRecorder.setOrientationHint(90);
+        // }
 
         mediaRecorder.setOutputFile(file.getAbsolutePath());
         mediaRecorder.setMaxDuration(90000); // Set max duration 90 sec.
@@ -606,22 +598,22 @@ public class CollageMainActivity extends Activity{
                     adb.setPositiveButton("Render/Save", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            /*FFGraber ffGraber = new FFGraber(CollageMainActivity.this);
-                            final ProgressDialog progressDialog=new ProgressDialog(myContext);
-                            progressDialog.setMessage("Please wait while rendering...  0/4");
+
+                            final ProgressDialog progressDialog = new ProgressDialog(myContext);
+                            progressDialog.setMessage("Please wait while rendering...  0/3");
                             progressDialog.setCancelable(false);
                             progressDialog.show();
-                            ffGraber.setListener(new IThreadCompleteListener() {
+                            Render render = new Render(CollageMainActivity.this);
+                            render.decodeVideos();
+                            render.setOnRenderFinishedListener(new Render.OnRenderFinishedListener() {
                                 @Override
-                                public void notifyOfThreadComplete(int id) {
-                                    if (id==1)
-                                        progressDialog.setMessage("Please wait while rendering...  1/4");
-                                    if (id==2)
-                                        progressDialog.setMessage("Please wait while rendering...  2/4");
-                                    if (id==3)
-                                        progressDialog.setMessage("Please wait while rendering...  3/4");
-                                    if (id==4){
-                                        progressDialog.setMessage("Please wait while rendering...  4/4");
+                                public void onFinish(int progress) {
+                                    if (progress == 1)
+                                        progressDialog.setMessage("Please wait while rendering...  1/3");
+                                    if (progress == 2)
+                                        progressDialog.setMessage("Please wait while rendering...  2/3");
+                                    if (progress == 3) {
+                                        progressDialog.setMessage("Please wait while rendering...  3/3");
                                         progressDialog.dismiss();
                                         cameraPreview.removeAllViews();
                                         cameraPreview2.removeAllViews();
@@ -638,9 +630,6 @@ public class CollageMainActivity extends Activity{
                                     }
                                 }
                             });
-                            ffGraber.execute();*/
-                            Render render=new Render(CollageMainActivity.this);
-                            render.decodeVideos();
                         }
                     });
                     adb.setNegativeButton("Capture Again", new DialogInterface.OnClickListener() {
@@ -823,8 +812,6 @@ public class CollageMainActivity extends Activity{
         startActivityForResult(intent.createChooser(intent, "Complate action using"), 5);
 
     }
-
-
 
 
     public void onDeleteMusicPathClick(View v) {
