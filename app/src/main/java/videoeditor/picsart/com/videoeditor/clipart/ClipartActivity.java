@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -55,22 +56,15 @@ public class ClipartActivity extends ActionBarActivity implements OnVideoActionF
         }
 
         String realPath = getIntent().getStringExtra("image_path");
-        String message = realPath;
-        File imgFile = new File(realPath);
-        Log.i(TAG, " imgFile= " + imgFile.getAbsolutePath());
-        if (imgFile.exists()) {
-            /*SharedPreferences sharedPreferences = getSharedPreferences("pics_art_video_editor", Context.MODE_PRIVATE);
-            int bufferSize = sharedPreferences.getInt("buffer_size", 0);
-            int width = sharedPreferences.getInt("frame_width", 0);
-            int height = sharedPreferences.getInt("frame_height", 0);
-            int orientation = sharedPreferences.getInt("frame_orientation", 0);
-            ByteBuffer buffer = PhotoUtils.readBufferFromFile(realPath, bufferSize);
-            Bitmap bitmap = PhotoUtils.fromBufferToBitmap(width, height, orientation, buffer);*/
-            Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            Log.i(TAG, "bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight());
-            message += "\n bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight();
-        }
-        Log.i(TAG, message);
+//        String message = realPath;
+//        File imgFile = new File(realPath);
+//        Log.i(TAG, " imgFile= " + imgFile.getAbsolutePath());
+//        if (imgFile.exists()) {
+//            Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//            Log.i(TAG, "bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight());
+//            message += "\n bitmap= " + bitmap.getWidth() + "x" + bitmap.getHeight();
+//        }
+        Log.i(TAG, realPath);
 
         initView(realPath);
         intiCliparts();
@@ -102,7 +96,7 @@ public class ClipartActivity extends ActionBarActivity implements OnVideoActionF
     }
 
     private void initView(String path) {
-        mainView = new MainView(this, path);
+        mainView = new MainView(this, path, true);
         mainView.setId(R.id.mainViewId);
         ViewGroup container = (ViewGroup) findViewById(R.id.main_view_container);
         container.removeAllViews();

@@ -67,13 +67,8 @@ public class TextArtActivity extends ActionBarActivity implements OnVideoActionF
         textView = (TextView) findViewById(R.id.text_view);
         textView.setVisibility(View.GONE);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("pics_art_video_editor", Context.MODE_PRIVATE);
-        int bufferSize = sharedPreferences.getInt("buffer_size", 0);
-        int width = sharedPreferences.getInt("frame_width", 0);
-        int height = sharedPreferences.getInt("frame_height", 0);
-        int orientation = sharedPreferences.getInt("frame_orientation", 0);
-        ByteBuffer buffer = PhotoUtils.readBufferFromFile(intent.getStringExtra("image_path"), bufferSize);
-        Bitmap bitmap = PhotoUtils.fromBufferToBitmap(width, height, orientation, buffer);
+        Bitmap bitmap = Util.readBitmapFromBytes(this, intent.getStringExtra("image_path"));
+
         imageView.setLayoutParams(new FrameLayout.LayoutParams(bitmap.getWidth(), bitmap.getHeight()));
         imageView.setImageBitmap(bitmap);
 
