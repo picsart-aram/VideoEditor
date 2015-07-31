@@ -46,7 +46,7 @@ task nativeLibsToJar(type: Zip, description: 'create a jar archive of the native
 }
 
 tasks.withType(JavaCompile) {
-    compileTask -> compileTask.dependsOn(nativeLibsToJar);
+    compileTask -> compileTask.dependsOn(nativeLibsToJar)
 }
 
 
@@ -89,6 +89,11 @@ android {
         exclude 'com/socialin/android/encoder/factory/**'
         exclude 'com/socialin/android/encoder/factory/VideoEncoderFactory.**'
 
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 
 

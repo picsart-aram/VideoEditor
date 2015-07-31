@@ -1,8 +1,10 @@
-package decoder;
+package com.decoder;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.MediaMetadataRetriever;
+
+import com.socialin.android.photo.imgop.ImageOp;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-
 
 
 /**
@@ -34,8 +35,8 @@ public class PhotoUtils {
         try {
             inputStream = new FileInputStream(bufferPath);
 
-            ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
-            //ByteBuffer buffer = ImageOpCommon.allocNativeBuffer(bufferSize);
+//            ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+            ByteBuffer buffer = ImageOp.allocNativeBuffer(bufferSize);
 
             channel = inputStream.getChannel();
             channel.read(buffer);

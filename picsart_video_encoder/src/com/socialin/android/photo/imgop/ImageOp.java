@@ -3,7 +3,6 @@ package com.socialin.android.photo.imgop;
 import android.graphics.Color;
 import android.util.Log;
 
-
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 

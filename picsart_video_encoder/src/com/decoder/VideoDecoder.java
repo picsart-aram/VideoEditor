@@ -1,4 +1,4 @@
-package decoder;
+package com.decoder;
 
 import android.content.Context;
 import android.os.AsyncTask;

@@ -1,4 +1,4 @@
-package decoder;
+package com.decoder;
 
 /**
  * Created by Tigran on 7/13/15.
