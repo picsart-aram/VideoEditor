@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import videoeditor.picsart.com.videoeditor.BaseVideoAction;
-import videoeditor.picsart.com.videoeditor.decoder.ExtractMpegFrames;
 
 /**
  * Created by ani on 7/24/15.

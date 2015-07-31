@@ -25,7 +25,6 @@ import hackathon.videoeditor.utils.OnVideoActionFinishListener;
 import videoeditor.picsart.com.videoeditor.MainView;
 import videoeditor.picsart.com.videoeditor.R;
 import videoeditor.picsart.com.videoeditor.Util;
-import videoeditor.picsart.com.videoeditor.decoder.PhotoUtils;
 
 public class ClipartActivity extends ActionBarActivity implements OnVideoActionFinishListener {
 
