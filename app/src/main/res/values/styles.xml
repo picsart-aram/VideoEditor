@@ -6,12 +6,19 @@
     <style name="Illusion" parent="AppTheme">
         <item name="colorAccent">#00DAB8</item>
         <item name="actionBarStyle">@style/Illusion.ActionBar</item>
+        <item name="android:seekBarStyle">@style/Illusion.SeekBar</item>
     </style>
 
     <style name="Illusion.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="background">@color/action_bar_bg</item>
         <item name="homeAsUpIndicator">@drawable/add_effect</item>
         <item name="displayOptions">homeAsUp|showTitle</item>
+    </style>
+
+    <style name="Illusion.SeekBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal</item>
+        <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal</item>
+        <item name="android:thumb">@drawable/scrubber_control</item>
     </style>
 
 </resources>
