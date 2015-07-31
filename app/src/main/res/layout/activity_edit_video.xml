@@ -102,10 +102,17 @@
             android:text="scale" />
 
         <Button
+            android:layout_weight="1"
+            android:id="@+id/green_screen_blending_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GS Blend" />
+
+        <Button
+            android:layout_weight="1"
             android:id="@+id/encode_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="encode" />
     </LinearLayout>
 

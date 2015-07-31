@@ -2,6 +2,8 @@ package videoeditor.picsart.com.videoeditor;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -13,6 +15,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import hackathon.videoeditor.utils.OnVideoActionFinishListener;
 
@@ -129,13 +132,25 @@ public abstract class BaseVideoAction<T> {
         AsyncTask<Void, Void, Bitmap> doActionTask = new AsyncTask<Void, Void, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Void... params) {
-                System.out.println("decode file " + path);
-                Bitmap bitmap = BitmapFactory.decodeFile(path);
-                System.out.println("bitmap = " + bitmap);
+
+                SharedPreferences sharedPreferences = activity.getSharedPreferences("pics_art_video_editor", Context.MODE_PRIVATE);
+                int bufferSize = sharedPreferences.getInt("buffer_size", 0);
+                int width = sharedPreferences.getInt("frame_width", 0);
+                int height = sharedPreferences.getInt("frame_height", 0);
+                int orientation = sharedPreferences.getInt("frame_orientation", 0);
+                ByteBuffer buffer = PhotoUtils.readBufferFromFile(path, bufferSize);
+                Bitmap bitmap = PhotoUtils.fromBufferToBitmap(width, height, orientation, buffer);
+//                Bitmap bitmapAfterAction = doActionOnBitmap(bitmap, parameters);
+//                PhotoUtils.saveBufferToSDCard(path, PhotoUtils.fromBitmapToBuffer(bitmapAfterAction));
+//                onProgressUpdate(i, bitmapPaths.length);
+
+//                System.out.println("decode file " + path);
+//                Bitmap bitmap = BitmapFactory.decodeFile(path);
+//                System.out.println("bitmap = " + bitmap);
                 Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-//                bitmap.recycle();
+////                bitmap.recycle();
                 Bitmap bitmapAfterAction = doActionOnBitmap(mutableBitmap, parameters);
-//                mutableBitmap.recycle();
+////                mutableBitmap.recycle();
                 return bitmapAfterAction;
             }
 

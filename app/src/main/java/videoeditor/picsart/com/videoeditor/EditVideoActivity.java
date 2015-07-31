@@ -1,16 +1,23 @@
 package videoeditor.picsart.com.videoeditor;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -26,12 +33,18 @@ import com.decoder.PhotoUtils;
 import com.decoder.VideoDecoder;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.socialin.android.encoder.Encoder;
+import com.socialin.android.photo.imgop.ImageOp;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import videoeditor.picsart.com.videoeditor.clipart.ClipartActivity;
+import videoeditor.picsart.com.videoeditor.effects.GreenScreenAction;
 
 
 public class EditVideoActivity extends ActionBarActivity implements SeekBarWithTwoThumb.SeekBarChangeListener {
@@ -56,6 +69,8 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
     private ArrayList<String> arrayList = new ArrayList<>();
     private ArrayList<String> previewArrayList = new ArrayList<>();
     public static Context context;
+
+    private int REQUEST_SELECT_BG = 302;
 
     private SeekBarWithTwoThumb seekBarWithTwoThumb;
     int frameWidth;
@@ -187,6 +202,13 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
             }
         });
 
+        findViewById(R.id.green_screen_blending_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startGreenScreenBlending();
+            }
+        });
+
         findViewById(R.id.encode_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,10 +231,10 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
                             //m.postRotate(180);
                             //m.preScale(-1, 1);
                             //bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), m, false);
-                            encoder.addFrame(bmp, 50);
+                            encoder.addFrame(bmp, 40);
                             onProgressUpdate(i, arrayList.size());
                             //encoder.addFrame(ImageLoader.getInstance().loadImageSync("file://" + arrayList.get(i)), 50);
-                            //onProgressUpdate(i, arrayList.size());
+                            onProgressUpdate(i, arrayList.size());
                         }
                         return null;
                     }
@@ -227,7 +249,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
                         progressDialog1.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                         progressDialog1.show();
                         encoder = new Encoder();
-                        encoder.init(360, 640, 15, null);
+                        encoder.init(frameWidth, frameHeight, 25, null);
                         //encoder.init(ImageLoader.getInstance().loadImageSync("file://" + arrayList.get(0)).getWidth(), ImageLoader.getInstance().loadImageSync("file://" + arrayList.get(0)).getHeight(), 15, null);
                         encoder.startVideoGeneration(new File(root + "/vid.mp4"));
                     }
@@ -273,6 +295,10 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
             if (requestCode == REQUEST_ADD_CLIPART) {
                 adapter.notifyDataSetChanged();
             }
+
+            if (requestCode == REQUEST_SELECT_BG) {
+                handleGalleryResult(data);
+            }
         }
     }
 
@@ -304,4 +330,97 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
         return super.onOptionsItemSelected(item);
     }
 
+
+    private void startGreenScreenBlending() {
+        startActivityForResult( Intent.createChooser( new Intent(Intent.ACTION_GET_CONTENT).setType("image/*"), "Choose an image"), REQUEST_SELECT_BG);
+    }
+
+    private void handleGalleryResult(Intent data) {
+        Uri selectedImage = data.getData();
+        String mTmpGalleryPicturePath = getPath(selectedImage);
+        if (mTmpGalleryPicturePath != null) {
+            blendGreenScreenVideo(mTmpGalleryPicturePath);
+        } else {
+            try {
+                InputStream is = getContentResolver().openInputStream(selectedImage);
+                try {
+                    File file = new File(Environment.getExternalStorageDirectory(), "avatar_pic.jpg");
+                    OutputStream output = new FileOutputStream(file);
+                    try {
+                        try {
+                            byte[] buffer = new byte[4 * 1024]; // or other buffer size
+                            int read;
+
+                            while ((read = is.read(buffer)) != -1) {
+                                output.write(buffer, 0, read);
+                            }
+                            output.flush();
+                        } finally {
+                            output.close();
+                        }
+                        blendGreenScreenVideo(file.getPath());
+                    } catch (Exception e) {
+                        e.printStackTrace(); // handle exception, define IOException and others
+                    }
+                } finally {
+                    is.close();
+                }
+//                mImageView.setImageBitmap(BitmapFactory.decodeStream(is));
+                mTmpGalleryPicturePath = selectedImage.getPath();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private String getPath(Uri uri) {
+        if (uri == null) {
+            return null;
+        }
+
+        String[] projection = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor;
+        if (Build.VERSION.SDK_INT > 19) {
+            // Will return "image:x*"
+            String wholeID = DocumentsContract.getDocumentId(uri);
+            // Split at colon, use second item in the array
+            String id = wholeID.split(":")[1];
+            // where id is equal to
+            String sel = MediaStore.Images.Media._ID + "=?";
+
+            cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    projection, sel, new String[]{id}, null);
+        } else {
+            cursor = getContentResolver().query(uri, projection, null, null, null);
+        }
+        String path = null;
+        try {
+            int column_index = cursor
+                    .getColumnIndex(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            path = cursor.getString(column_index).toString();
+            cursor.close();
+        } catch (NullPointerException e) {
+
+        }
+        return path;
+    }
+
+    private void blendGreenScreenVideo(String bgPath) {
+        Bitmap bgBitmap = null;
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeFile(bgPath, opts);
+        int sampleSize = Math.max(opts.outWidth / frameWidth, opts.outHeight / frameHeight);
+        opts.inSampleSize = Math.max(0, sampleSize);
+        opts.inJustDecodeBounds = false;
+        bgBitmap = BitmapFactory.decodeFile(bgPath, opts);
+        GreenScreenAction greenScreenAction = new GreenScreenAction(EditVideoActivity.this, bgBitmap);
+        greenScreenAction.startAction(new File(Environment.getExternalStorageDirectory(), "test_images").getPath(), bgBitmap);
+
+    }
 }

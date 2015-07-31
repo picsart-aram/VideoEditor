@@ -35,8 +35,8 @@ public class PhotoUtils {
         try {
             inputStream = new FileInputStream(bufferPath);
 
-//            ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
-            ByteBuffer buffer = ImageOp.allocNativeBuffer(bufferSize);
+            ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+//            ByteBuffer buffer = ImageOp.allocNativeBuffer(bufferSize);
 
             channel = inputStream.getChannel();
             channel.read(buffer);
