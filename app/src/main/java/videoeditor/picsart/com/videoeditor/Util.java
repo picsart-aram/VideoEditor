@@ -322,14 +322,14 @@ public class Util {
     }
 
 
-    public static Bitmap readBitmapFromBytes(Context context, String bytesPath){
-        if(!TextUtils.isEmpty(bytesPath)) {
+    public static Bitmap readBitmapFromBufferFile(Context context, String bytesFilePath){
+        if(!TextUtils.isEmpty(bytesFilePath)) {
             SharedPreferences sharedPreferences = context.getSharedPreferences("pics_art_video_editor", Context.MODE_PRIVATE);
             int bufferSize = sharedPreferences.getInt("buffer_size", 0);
             int width = sharedPreferences.getInt("frame_width", 0);
             int height = sharedPreferences.getInt("frame_height", 0);
             int orientation = sharedPreferences.getInt("frame_orientation", 0);
-            ByteBuffer buffer = PhotoUtils.readBufferFromFile(bytesPath, bufferSize);
+            ByteBuffer buffer = PhotoUtils.readBufferFromFile(bytesFilePath, bufferSize);
             return PhotoUtils.fromBufferToBitmap(width, height, orientation, buffer);
         }
         return null;

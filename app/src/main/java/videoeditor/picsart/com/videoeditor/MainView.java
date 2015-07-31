@@ -1,12 +1,10 @@
 package videoeditor.picsart.com.videoeditor;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -15,7 +13,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.io.File;
-import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -23,7 +20,6 @@ import hackathon.videoeditor.framegrabber.view.MultitouchHandler;
 import videoeditor.picsart.com.videoeditor.clipart.Clipart;
 import videoeditor.picsart.com.videoeditor.clipart.ClipartActivity;
 import videoeditor.picsart.com.videoeditor.clipart.ClipartView;
-import videoeditor.picsart.com.videoeditor.decoder.PhotoUtils;
 
 public class MainView extends View {
 
@@ -96,7 +92,7 @@ public class MainView extends View {
 
                 final Bitmap tempBitmap;
                 if(userBytesData){
-                    tempBitmap = Util.readBitmapFromBytes(getContext(), path);
+                    tempBitmap = Util.readBitmapFromBufferFile(getContext(), path);
                 }else{
                     tempBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 }

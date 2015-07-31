@@ -2,8 +2,6 @@ package videoeditor.picsart.com.videoeditor;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -14,7 +12,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 import hackathon.videoeditor.utils.OnVideoActionFinishListener;
 import videoeditor.picsart.com.videoeditor.decoder.PhotoUtils;
@@ -56,7 +53,7 @@ public abstract class BaseVideoAction<T> {
                     mutableBitmap.recycle();
                     bitmapAfterAction.recycle();*/
 
-                    Bitmap bitmap = Util.readBitmapFromBytes(activity, bitmapPaths[i].getAbsolutePath());
+                    Bitmap bitmap = Util.readBitmapFromBufferFile(activity, bitmapPaths[i].getAbsolutePath());
                     Bitmap bitmapAfterAction = doActionOnBitmap(bitmap, parameters);
                     PhotoUtils.saveBufferToSDCard(bitmapPaths[i].getAbsolutePath(), PhotoUtils.fromBitmapToBuffer(bitmapAfterAction));
 

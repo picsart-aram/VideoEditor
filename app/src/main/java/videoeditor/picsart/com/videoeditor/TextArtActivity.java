@@ -1,12 +1,9 @@
 package videoeditor.picsart.com.videoeditor;
 
 import android.content.ClipData;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
@@ -24,10 +21,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.io.File;
-import java.nio.ByteBuffer;
 
 import hackathon.videoeditor.utils.OnVideoActionFinishListener;
-import videoeditor.picsart.com.videoeditor.decoder.PhotoUtils;
 import videoeditor.picsart.com.videoeditor.text_art.SimpleTextArt;
 import videoeditor.picsart.com.videoeditor.text_art.TextArtObject;
 
@@ -67,7 +62,7 @@ public class TextArtActivity extends ActionBarActivity implements OnVideoActionF
         textView = (TextView) findViewById(R.id.text_view);
         textView.setVisibility(View.GONE);
 
-        Bitmap bitmap = Util.readBitmapFromBytes(this, intent.getStringExtra("image_path"));
+        Bitmap bitmap = Util.readBitmapFromBufferFile(this, intent.getStringExtra("image_path"));
 
         imageView.setLayoutParams(new FrameLayout.LayoutParams(bitmap.getWidth(), bitmap.getHeight()));
         imageView.setImageBitmap(bitmap);
