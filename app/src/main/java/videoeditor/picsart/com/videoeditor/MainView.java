@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -79,7 +78,7 @@ public class MainView extends View {
         super(context);
     }
 
-    public MainView(Context context, String path) {
+    public MainView(Context context, String path, boolean userBytesData) {
         super(context);
 
         if (!TextUtils.isEmpty(path)) {
@@ -90,7 +89,14 @@ public class MainView extends View {
                     origBitmap = null;
                 }
 
-                Bitmap tempBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
+                final Bitmap tempBitmap;
+                if(userBytesData){
+                    tempBitmap = Util.readBitmapFromBufferFile(getContext(), path);
+                }else{
+                    tempBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                }
+
                 if (tempBitmap != null) {
                     origBitmap = tempBitmap.copy(Bitmap.Config.ARGB_8888, true);
                 }

@@ -105,6 +105,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
         frameWidth = PhotoUtils.checkFrameWidth(videoPath, VideoDecoder.FrameSize.NORMAL);
         frameHeight = PhotoUtils.checkFrameHeight(videoPath, VideoDecoder.FrameSize.NORMAL);
         frameOrientation = PhotoUtils.checkFrameOrientation(videoPath);
+
         SharedPreferences sharedPreferences = this.getSharedPreferences("pics_art_video_editor", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("buffer_size", PhotoUtils.checkBufferSize(videoPath, VideoDecoder.FrameSize.NORMAL));
