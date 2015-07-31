@@ -1,0 +1,47 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal"
+    tools:context=".MainActivity"
+    android:background="@drawable/bg">
+
+    <TextView
+        android:drawablePadding="8dp"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:id="@+id/select_video"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/main_screen_select_video"
+        android:gravity="center"
+        android:text="Select Video" />
+
+    <TextView
+        android:drawablePadding="8dp"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:id="@+id/select_slider"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/main_screen_select_image"
+        android:gravity="center"
+        android:text="Slider" />
+
+    <TextView
+        android:drawablePadding="8dp"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:id="@+id/select_image"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/main_screen_select_image"
+        android:gravity="center"
+        android:text="Video Collage" />
+
+
+</LinearLayout>
+
+
+
