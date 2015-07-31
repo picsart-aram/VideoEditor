@@ -60,14 +60,16 @@
                 android:layout_weight="1"
                 android:text="gray" />
 
-            <Button
+            <ImageView
+                android:src="@drawable/add_text"
                 android:id="@+id/add_text_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="text" />
 
-            <Button
+            <ImageView
+                android:src="@drawable/add_clipart"
                 android:id="@+id/add_clipart_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

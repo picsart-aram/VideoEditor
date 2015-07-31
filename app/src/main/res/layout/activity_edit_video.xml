@@ -72,38 +72,40 @@
         android:orientation="horizontal">
 
         <Button
-            android:layout_weight="1"
             android:id="@+id/gray_scale_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Effects" />
-
-        <Button
             android:layout_weight="1"
+            android:text="gray" />
+
+        <ImageView
+            android:src="@drawable/add_text"
             android:id="@+id/add_text_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="text" />
 
-        <Button
-            android:layout_weight="1"
+        <ImageView
+            android:src="@drawable/add_clipart"
             android:id="@+id/add_clipart_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="+" />
 
         <Button
-            android:layout_weight="1"
             android:id="@+id/scale_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="scale" />
 
         <Button
-            android:layout_weight="1"
             android:id="@+id/encode_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="encode" />
     </LinearLayout>
 
