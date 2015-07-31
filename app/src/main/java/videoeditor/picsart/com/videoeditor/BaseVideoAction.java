@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.decoder.PhotoUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
@@ -17,7 +18,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import hackathon.videoeditor.utils.OnVideoActionFinishListener;
-import videoeditor.picsart.com.videoeditor.decoder.PhotoUtils;
+
 import videoeditor.picsart.com.videoeditor.effects.Utils.OnEffectApplyFinishedListener;
 
 /**

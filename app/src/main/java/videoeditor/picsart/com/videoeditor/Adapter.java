@@ -9,10 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.decoder.PhotoUtils;
+
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-
-import videoeditor.picsart.com.videoeditor.decoder.PhotoUtils;
 
 /**
  * Created by Tigran on 6/23/15.

@@ -124,13 +124,13 @@ public class Render {
         ByteBuffer buffer1 = PhotoUtils.readBufferFromFile(path1, PhotoUtils.checkBufferSize(inputVideo1, VideoDecoder.FrameSize.NORMAL));
         Bitmap bitmap1 = PhotoUtils.fromBufferToBitmap(360, 640, PhotoUtils.checkFrameOrientation(inputVideo1), buffer1);
         ImageOp.freeNativeBuffer(buffer1);
-        //buffer1.clear();
+
 
         ByteBuffer buffer2 = PhotoUtils.readBufferFromFile(path2, PhotoUtils.checkBufferSize(inputVideo2, VideoDecoder.FrameSize.NORMAL));
         Bitmap bitmap2 = PhotoUtils.fromBufferToBitmap(360, 640, PhotoUtils.checkFrameOrientation(inputVideo2), buffer2);
         ImageOp.freeNativeBuffer(buffer2);
         //buffer2.clear();
-        //ImageOpCommon.freeAllNativeBuffers();
+        ImageOp.freeNativeBuffer(buffer2);
 
         Bitmap mergedBitmap = Bitmap.createBitmap(720, 640, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(mergedBitmap);

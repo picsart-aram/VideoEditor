@@ -23,11 +23,12 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.decoder.PhotoUtils;
+
 import java.io.File;
 import java.nio.ByteBuffer;
 
 import hackathon.videoeditor.utils.OnVideoActionFinishListener;
-import videoeditor.picsart.com.videoeditor.decoder.PhotoUtils;
 import videoeditor.picsart.com.videoeditor.text_art.SimpleTextArt;
 import videoeditor.picsart.com.videoeditor.text_art.TextArtObject;
 

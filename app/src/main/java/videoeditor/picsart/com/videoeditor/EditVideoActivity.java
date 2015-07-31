@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.VideoView;
 
+import com.decoder.PhotoUtils;
+import com.decoder.VideoDecoder;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.socialin.android.encoder.Encoder;
 
@@ -28,8 +30,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import videoeditor.picsart.com.videoeditor.clipart.ClipartActivity;
-import videoeditor.picsart.com.videoeditor.decoder.PhotoUtils;
-import videoeditor.picsart.com.videoeditor.decoder.VideoDecoder;
 
 
 public class EditVideoActivity extends ActionBarActivity implements SeekBarWithTwoThumb.SeekBarChangeListener {
@@ -84,6 +84,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
 
         progressDialog = new ProgressDialog(EditVideoActivity.this);
         progressDialog.setMessage("Please Wait...");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
