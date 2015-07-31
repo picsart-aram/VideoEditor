@@ -22,21 +22,21 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="160dp"
         android:orientation="horizontal">
 
         <FrameLayout
+            android:id="@+id/video_panel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1">
+            android:layout_gravity="center">
 
             <VideoView
                 android:id="@+id/video_view"
-                android:layout_width="wrap_content"
-                android:layout_height="140dp" />
+                android:layout_width="160dp"
+                android:layout_height="160dp" />
 
             <Button
                 android:id="@+id/play_pause_button"
@@ -47,10 +47,10 @@
         </FrameLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
             android:background="#00DAB8"
-            android:gravity="center"
             android:orientation="vertical">
 
             <Button
@@ -89,7 +89,7 @@
                 android:text="encode" />
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <FrameLayout
         android:layout_width="wrap_content"
