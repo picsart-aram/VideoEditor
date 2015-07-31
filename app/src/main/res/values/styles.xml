@@ -1,8 +1,17 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+    <style name="Illusion" parent="AppTheme">
+        <item name="colorAccent">#00DAB8</item>
+        <item name="actionBarStyle">@style/Illusion.ActionBar</item>
+    </style>
+
+    <style name="Illusion.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@color/action_bar_bg</item>
+        <item name="homeAsUpIndicator">@drawable/add_effect</item>
+        <item name="displayOptions">homeAsUp|showTitle</item>
     </style>
 
 </resources>

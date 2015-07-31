@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.VideoView;
@@ -66,8 +68,6 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
         setContentView(R.layout.activity_edit_video);
         if (getSupportActionBar() != null) {
             getSupportActionBar().show();
-            getSupportActionBar().setTitle("Illusion");
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         }
         context = this;
         init();
@@ -279,6 +279,29 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
     @Override
     public void SeekBarValueChanged(int Thumb1Value, int Thumb2Value) {
         //Log.d("MyLog", "thumb1 : " + Thumb1Value * framesCount / 100 + " thumb2 " + Thumb2Value * framesCount / 100);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_edit_video, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }
