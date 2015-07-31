@@ -17,9 +17,11 @@ import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import hackathon.videoeditor.framegrabber.util.ImageOpCommon;
 import hackathon.videoeditor.utils.OnVideoActionFinishListener;
 import hackathon.videoeditor.utils.RecyclerItemClickListener;
 import videoeditor.picsart.com.videoeditor.clipart.EmbossEffect;
+import videoeditor.picsart.com.videoeditor.effects.BoostEffect;
 import videoeditor.picsart.com.videoeditor.effects.EffectSelectorAdapter;
 import videoeditor.picsart.com.videoeditor.effects.EngraveEffect;
 import videoeditor.picsart.com.videoeditor.effects.GrayScaleEffect;
@@ -79,11 +81,13 @@ public class VideoEffectsActivity extends AppCompatActivity {
         EffectsItem item3 = new EffectsItem(framePath, new EmbossEffect(VideoEffectsActivity.this));
         EffectsItem item4 = new EffectsItem(framePath, new ReflectionEffect(VideoEffectsActivity.this));
         EffectsItem item5 = new EffectsItem(framePath, new SnowEffect(VideoEffectsActivity.this));
+        EffectsItem item6 = new EffectsItem(framePath, new BoostEffect(VideoEffectsActivity.this));
         adapter.addItem(item1);
         adapter.addItem(item2);
         adapter.addItem(item3);
         adapter.addItem(item4);
         adapter.addItem(item5);
+        adapter.addItem(item6);
     }
 
     @Override

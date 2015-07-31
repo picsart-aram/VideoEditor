@@ -1,4 +1,4 @@
-package decoder;
+package com.decoder;
 
 import android.app.Activity;
 import android.content.res.Resources;

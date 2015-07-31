@@ -76,7 +76,7 @@
             android:id="@+id/gray_scale_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="gray" />
+            android:text="Effects" />
 
         <Button
             android:layout_weight="1"
