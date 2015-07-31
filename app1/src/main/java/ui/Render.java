@@ -10,6 +10,8 @@ import android.os.Environment;
 import android.util.Log;
 
 
+import com.decoder.PhotoUtils;
+import com.decoder.VideoDecoder;
 import com.socialin.android.photo.imgop.ImageOp;
 import com.socialin.android.encoder.Encoder;
 
@@ -18,9 +20,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-
-import decoder.PhotoUtils;
-import decoder.VideoDecoder;
 
 
 /**
