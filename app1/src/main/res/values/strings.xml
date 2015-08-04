@@ -31,4 +31,8 @@
         <item>Rotate</item>
 
     </string-array>
+    <string name="title_activity_video_collage">VideoCollageActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

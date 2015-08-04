@@ -2,33 +2,28 @@ package activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.example.intern.picsartvideo.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -37,16 +32,13 @@ import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.socialin.android.encoder.Encoder;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import adapter.ImagePagerAdapter;
 import adapter.SlideShowAdapter;
 import item.SlideShowItem;
-import service.MyService;
+import utils.SlideShowConst;
 import utils.Utils;
 
 
@@ -57,6 +49,8 @@ public class SlideShowActivity extends ActionBarActivity {
     private Button openGalleryButton;
     private Button openPicsArtButton;
     private Button playButton;
+    private TextView textView;
+    private SeekBar seekBar;
 
     private ImagePagerAdapter imagePagerAdapter;
     private SlideShowAdapter slideShowAdapter;
@@ -65,6 +59,8 @@ public class SlideShowActivity extends ActionBarActivity {
 
     private SlideShow slideShow;
     private Boolean playButtonIsSelected = false;
+
+    private int frameDuration = 600;
 
     private ArrayList<SlideShowItem> selectedImagesPathList = new ArrayList<>();
 
@@ -76,7 +72,6 @@ public class SlideShowActivity extends ActionBarActivity {
     public static final String EDITED_IMAGE_PATH = "edited_image_path";
 
     private static final String root = Environment.getExternalStorageDirectory().toString();
-    private File myDir = new File(root + "/req_images");
     double halfWidth;
 
     @Override
@@ -113,6 +108,8 @@ public class SlideShowActivity extends ActionBarActivity {
         openGalleryButton = (Button) findViewById(R.id.open_gallery_button);
         openPicsArtButton = (Button) findViewById(R.id.open_pics_art_button);
         playButton = (Button) findViewById(R.id.play_button);
+        textView = (TextView) findViewById(R.id.duration_text);
+        seekBar = (SeekBar) findViewById(R.id.duration_seek_bar);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, width);
         viewPager.setLayoutParams(layoutParams);
@@ -158,6 +155,24 @@ public class SlideShowActivity extends ActionBarActivity {
                     slideShow.cancel(true);
                     Toast.makeText(getApplicationContext(), "stoped", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                textView.setText("dur : " + progress * 100 + " mls");
+                frameDuration = progress * 100 + 100;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
     }
@@ -211,21 +226,8 @@ public class SlideShowActivity extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             if (selectedImagesPathList.size() > 0) {
-
-                /*String[] pathsForDecoding = new String[selectedImagesPathList.size()];
-                for (int i = 0; i < selectedImagesPathList.size(); i++) {
-                    pathsForDecoding[i] = selectedImagesPathList.get(i).getPath();
-                }*/
-
                 new EncodeFrames().execute(selectedImagesPathList);
-
-                /*Intent intentService = new Intent(this, MyService.class);
-                intentService.putExtra("paths", pathsForDecoding);
-                startService(intentService);*/
-                /*Intent intent = new Intent("android.intent.action.videogen");
-                intent.putExtra("myimagespath", myDir.toString());
-                startActivity(intent);
-                finish();*/
+                //EncodeByteRgbFrameExample.encodeByteRgbFrameExample(root + "/vid1.mp4", array, LibVpxEnc.FOURCC_ABGR, 720, 720, 10, 1, 50, new StringBuilder());
 
             } else {
                 Toast.makeText(getApplicationContext(), "you have no image", Toast.LENGTH_SHORT).show();
@@ -238,7 +240,7 @@ public class SlideShowActivity extends ActionBarActivity {
 
     @Override
     protected void onDestroy() {
-        SharedPreferences sharedPreferences = this.getSharedPreferences("pics_art_video", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = this.getSharedPreferences(SlideShowConst.SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();
@@ -290,24 +292,25 @@ public class SlideShowActivity extends ActionBarActivity {
     private class EncodeFrames extends AsyncTask<ArrayList<SlideShowItem>, Integer, Void> {
 
         ProgressDialog progressDialog;
+        Encoder encoder;
 
         protected Void doInBackground(ArrayList<SlideShowItem>... path) {
 
-            Encoder encoder = new Encoder();
-            encoder.init(720, 720, 15, null);
-            encoder.startVideoGeneration(new File(root + "/vid1.mp4"));
-
             Bitmap bitmap = null;
-            for (int i = 0; i < path[0].size(); i++) {
+            for (int i = 0; i < path[0].size() + 1; i++) {
                 try {
-                    if (!path[0].get(i).isFromFileSystem()) {
-                        bitmap = ImageLoader.getInstance().loadImageSync(path[0].get(i).getPath() + "?r1024x1024", new ImageSize(720, 720), DisplayImageOptions.createSimple());
-                        bitmap = Utils.scaleCenterCrop(bitmap, 720, 720);
+                    if (i < path[0].size()) {
+                        if (!path[0].get(i).isFromFileSystem()) {
+                            bitmap = ImageLoader.getInstance().loadImageSync(path[0].get(i).getPath() + "?r1024x1024", new ImageSize(SlideShowConst.FRAME_SIZE, SlideShowConst.FRAME_SIZE), DisplayImageOptions.createSimple());
+                            bitmap = Utils.scaleCenterCrop(bitmap, SlideShowConst.FRAME_SIZE, SlideShowConst.FRAME_SIZE);
+                        } else {
+                            bitmap = ImageLoader.getInstance().loadImageSync(SlideShowConst.FILE_PREFIX + path[0].get(i).getPath(), new ImageSize(SlideShowConst.FRAME_SIZE, SlideShowConst.FRAME_SIZE), DisplayImageOptions.createSimple());
+                            bitmap = Utils.scaleCenterCrop(bitmap, SlideShowConst.FRAME_SIZE, SlideShowConst.FRAME_SIZE);
+                        }
                     } else {
-                        bitmap = ImageLoader.getInstance().loadImageSync("file://" + path[0].get(i).getPath(), new ImageSize(720, 720), DisplayImageOptions.createSimple());
-                        bitmap = Utils.scaleCenterCrop(bitmap, 720, 720);
+                        bitmap = Bitmap.createBitmap(SlideShowConst.FRAME_SIZE, SlideShowConst.FRAME_SIZE, Bitmap.Config.ARGB_8888);
                     }
-                    encoder.addFrame(bitmap, 1000);
+                    encoder.addFrame(bitmap, frameDuration);
                     onProgressUpdate(i);
 
                 } catch (Exception e) {
@@ -315,7 +318,6 @@ public class SlideShowActivity extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(), "Error while SaveToMemory", Toast.LENGTH_SHORT).show();
                 }
             }
-
             return null;
         }
 
@@ -330,10 +332,11 @@ public class SlideShowActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            encoder.endVideoGeneration();
             progressDialog.dismiss();
-            /*Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(root + "/vid1.mp4"));
-            intent.setDataAndType(Uri.parse(root + "/vid1.mp4"), "video/mp4");
-            startActivity(intent);*/
+            Intent tostart = new Intent(Intent.ACTION_VIEW);
+            tostart.setDataAndType(Uri.parse(root + "/vid1.mp4"), "video/*");
+            startActivity(tostart);
         }
 
         @Override
@@ -342,6 +345,9 @@ public class SlideShowActivity extends ActionBarActivity {
             progressDialog = new ProgressDialog(SlideShowActivity.this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.show();
+            encoder = new Encoder();
+            encoder.init(SlideShowConst.FRAME_SIZE, SlideShowConst.FRAME_SIZE, 15, null);
+            encoder.startVideoGeneration(new File(root + "/vid1.mp4"));
         }
     }
 

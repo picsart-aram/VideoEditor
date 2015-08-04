@@ -8,9 +8,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -220,20 +217,12 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
                     @Override
                     protected Void doInBackground(Void... params) {
                         for (int i = 0; i < arrayList.size(); i++) {
-                            //Bitmap bmp = Bitmap.createBitmap(360, 640, Bitmap.Config.ARGB_8888);
                             SharedPreferences sharedPreferences = context.getSharedPreferences("pics_art_video_editor", Context.MODE_PRIVATE);
                             int bufferSize = sharedPreferences.getInt("buffer_size", 0);
                             ByteBuffer buffer = PhotoUtils.readBufferFromFile(arrayList.get(i), bufferSize);
                             Bitmap bmp = PhotoUtils.fromBufferToBitmap(frameWidth, frameHeight, frameOrientation, buffer);
-                            //buffer.rewind();
-                            //bmp.copyPixelsFromBuffer(buffer);
-                            //Matrix m = new Matrix();
-                            //m.postRotate(180);
-                            //m.preScale(-1, 1);
-                            //bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), m, false);
-                            encoder.addFrame(bmp, 40);
-                            onProgressUpdate(i, arrayList.size());
-                            //encoder.addFrame(ImageLoader.getInstance().loadImageSync("file://" + arrayList.get(i)), 50);
+                            ImageOp.freeNativeBuffer(buffer);
+                            encoder.addFrame(bmp);
                             onProgressUpdate(i, arrayList.size());
                         }
                         return null;
@@ -250,13 +239,13 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
                         progressDialog1.show();
                         encoder = new Encoder();
                         encoder.init(frameWidth, frameHeight, 25, null);
-                        //encoder.init(ImageLoader.getInstance().loadImageSync("file://" + arrayList.get(0)).getWidth(), ImageLoader.getInstance().loadImageSync("file://" + arrayList.get(0)).getHeight(), 15, null);
                         encoder.startVideoGeneration(new File(root + "/vid.mp4"));
                     }
 
                     @Override
                     protected void onPostExecute(Void aVoid) {
                         super.onPostExecute(aVoid);
+                        encoder.endVideoGeneration();
                         videoView.setVideoPath(root + "/vid.mp4");
                         videoView.start();
                         progressDialog1.dismiss();

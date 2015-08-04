@@ -28,15 +28,15 @@ import java.util.ArrayList;
 
 import activity.ImageEditActivity;
 import item.SlideShowItem;
+import utils.SlideShowConst;
 import utils.Utils;
 
 
 public class SlideShowAdapter extends RecyclerView.Adapter<SlideShowAdapter.ViewHolder> {
 
-    public static final String FILE_PREFIX = "file://";
     public static final int REQUEST_CODE = 300;
     private static final String root = Environment.getExternalStorageDirectory().toString();
-    private File myDir = new File(root + "/req_images");
+    private File myDir = new File(root, SlideShowConst.MY_DIR_NAME);
 
     private ArrayList<SlideShowItem> arrayList;
     private Context context;
@@ -72,7 +72,7 @@ public class SlideShowAdapter extends RecyclerView.Adapter<SlideShowAdapter.View
 
         String path = arrayList.get(position).getPath();
         if (arrayList.get(position).isFromFileSystem()) {
-            path = FILE_PREFIX + arrayList.get(position).getPath();
+            path = SlideShowConst.FILE_PREFIX + arrayList.get(position).getPath();
         }
 
         try {

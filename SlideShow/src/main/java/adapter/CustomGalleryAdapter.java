@@ -4,10 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -19,13 +16,13 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import java.util.ArrayList;
 
 import item.CustomGalleryItem;
+import utils.SlideShowConst;
 
 import com.example.intern.picsartvideo.R;
 
 
 public class CustomGalleryAdapter extends RecyclerView.Adapter<CustomGalleryAdapter.ViewHolder> {
 
-    public static final String FILE_PREFIX = "file://";
     private ArrayList<CustomGalleryItem> array;
     private Context context;
     private LayoutInflater infalter;
@@ -75,7 +72,7 @@ public class CustomGalleryAdapter extends RecyclerView.Adapter<CustomGalleryAdap
         holder.icon.setLayoutParams(layoutParams);
         try {
 
-            ImageLoader.getInstance().displayImage(FILE_PREFIX + array.get(position).getImagePath()
+            ImageLoader.getInstance().displayImage(SlideShowConst.FILE_PREFIX + array.get(position).getImagePath()
                     , holder.icon, new SimpleImageLoadingListener() {
 
                 @Override

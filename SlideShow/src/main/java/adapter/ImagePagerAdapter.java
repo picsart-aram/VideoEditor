@@ -19,6 +19,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import java.util.ArrayList;
 
 import item.SlideShowItem;
+import utils.SlideShowConst;
 import utils.Utils;
 
 /**
@@ -66,7 +67,7 @@ public class ImagePagerAdapter extends PagerAdapter {
 
         String path = mImages.get(position).getPath();
         if (mImages.get(position).isFromFileSystem()) {
-            path = "file://" + mImages.get(position).getPath();
+            path = SlideShowConst.FILE_PREFIX + mImages.get(position).getPath();
         }
 
 

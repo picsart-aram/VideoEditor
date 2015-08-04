@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import videoeditor.picsart.com.videoeditor.clipart.ClipartActivity;
-//import videoeditor.picsart.com.videoeditor.decoder.MediaMuxerTest;
 
 
 public class MainActivity extends AppCompatActivity {

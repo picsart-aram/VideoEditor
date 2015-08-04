@@ -48,5 +48,30 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/duration_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_weight="1"
+            android:text="dur : 500 mls" />
+
+        <SeekBar
+            android:id="@+id/duration_seek_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:max="19"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:progress="5" />
+
+    </LinearLayout>
+
 </LinearLayout>
 

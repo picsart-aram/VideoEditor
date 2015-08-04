@@ -18,6 +18,7 @@ import android.hardware.Camera.CameraInfo;
 import android.media.CamcorderProfile;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Display;
@@ -45,6 +46,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import painternational.com.projectvid.VideoCollageActivity;
 
 
 public class CollageMainActivity extends Activity {
@@ -627,6 +630,12 @@ public class CollageMainActivity extends Activity {
                                         switchCamera2.setVisibility(View.GONE);
 
                                         recording = false;
+                                        /*Intent intent = new Intent(CollageMainActivity.this, VideoCollageActivity.class);
+                                        intent.putExtra("video_path", root + "/vid.mp4");
+                                        startActivity(intent);*/
+                                        Intent tostart = new Intent(Intent.ACTION_VIEW);
+                                        tostart.setDataAndType(Uri.parse(root + "/vid.mp4"), "video/*");
+                                        startActivity(tostart);
                                     }
                                 }
                             });

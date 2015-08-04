@@ -92,8 +92,7 @@ public class Render {
 
             for (int i = 0; i < x; i++) {
                 bitmaps.add(merge(files1[i].getAbsolutePath(), files2[i].getAbsolutePath()));
-                //saveBitmapToFile(mergedframes + String.format("frame-%03d.png", i), merge(files1[i].getAbsolutePath(), files2[i].getAbsolutePath()));
-                //arrayList.add(mergedframes + String.format("frame-%03d.png", i));
+                Log.d("gagagagag",bitmaps.get(i).getHeight()+"");
             }
 
             return null;
@@ -101,7 +100,7 @@ public class Render {
 
         @Override
         protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
+
             Encoder encoder = new Encoder();
             encoder.init(bitmaps.get(0).getWidth(), bitmaps.get(0).getHeight(), 15, null);
             encoder.startVideoGeneration(new File(root + "/vid.mp4"));
@@ -109,6 +108,7 @@ public class Render {
                 encoder.addFrame(bitmaps.get(i), 50);
             }
             onRenderFinishedListener.onFinish(3);
+            super.onPostExecute(result);
         }
     }
 
@@ -121,15 +121,13 @@ public class Render {
      */
     public Bitmap merge(String path1, String path2) {
 
-        ByteBuffer buffer1 = PhotoUtils.readBufferFromFile(path1, PhotoUtils.checkBufferSize(inputVideo1, VideoDecoder.FrameSize.NORMAL));
-        Bitmap bitmap1 = PhotoUtils.fromBufferToBitmap(360, 640, PhotoUtils.checkFrameOrientation(inputVideo1), buffer1);
+        ByteBuffer buffer1 = PhotoUtils.readBufferFromFile(path1, 360*640*4);
+        Bitmap bitmap1 = PhotoUtils.fromBufferToBitmap(360, 640, 0, buffer1);
         ImageOp.freeNativeBuffer(buffer1);
 
 
-        ByteBuffer buffer2 = PhotoUtils.readBufferFromFile(path2, PhotoUtils.checkBufferSize(inputVideo2, VideoDecoder.FrameSize.NORMAL));
-        Bitmap bitmap2 = PhotoUtils.fromBufferToBitmap(360, 640, PhotoUtils.checkFrameOrientation(inputVideo2), buffer2);
-        ImageOp.freeNativeBuffer(buffer2);
-        //buffer2.clear();
+        ByteBuffer buffer2 = PhotoUtils.readBufferFromFile(path2, 360*640*4);
+        Bitmap bitmap2 = PhotoUtils.fromBufferToBitmap(360, 640, 0, buffer2);
         ImageOp.freeNativeBuffer(buffer2);
 
         Bitmap mergedBitmap = Bitmap.createBitmap(720, 640, Bitmap.Config.ARGB_4444);
@@ -137,45 +135,7 @@ public class Render {
         canvas.drawBitmap(bitmap1, 0, 0, new Paint());
         canvas.drawBitmap(bitmap2, 360, 0, new Paint());
 
-        /*Bitmap bitmap1 = ImageLoader.getInstance().loadImageSync("file://" + path1);
-        Bitmap mutableBitmap1 = bitmap1.copy(Bitmap.Config.ARGB_4444, true);
-        Bitmap bitmap2 = ImageLoader.getInstance().loadImageSync("file://" + path2);
-        Bitmap mutableBitmap2 = bitmap2.copy(Bitmap.Config.ARGB_4444, true);
-        int width = mutableBitmap1.getWidth();
-        int height = mutableBitmap1.getHeight();
-
-        Bitmap mergedBitmap = Bitmap.createBitmap(2 * width, height, Bitmap.Config.ARGB_4444);
-        Canvas canvas = new Canvas(mergedBitmap);
-        canvas.drawBitmap(mutableBitmap1, 0, 0, new Paint());
-        canvas.drawBitmap(mutableBitmap2, width, 0, new Paint());*/
-
         return mergedBitmap;
-    }
-
-    /**
-     * Saving Bitmap to given directory
-     *
-     * @param path saving image path
-     * @param bmp  saving bitmap
-     */
-    private void saveBitmapToFile(String path, Bitmap bmp) {
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(path);
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.flush();
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public void setOnRenderFinishedListener(OnRenderFinishedListener l) {

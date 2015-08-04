@@ -1,54 +1,41 @@
 package activity;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Looper;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.intern.picsartvideo.R;
 import com.picsart.api.LoginManager;
-import com.picsart.api.PaArrayRequest;
 import com.picsart.api.Photo;
-import com.picsart.api.PhotoFactory;
 import com.picsart.api.PicsArtConst;
 import com.picsart.api.RequestListener;
-import com.picsart.api.SingletoneRequestQue;
-import com.picsart.api.User;
-import com.picsart.api.UserController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import adapter.PicsArtGalleryAdapter;
 import item.PicsArtGalleryItem;
 import utils.FileUtils;
+import utils.SlideShowConst;
 import utils.SpacesItemDecoration;
 
 public class PicsArtGalleryActvity extends ActionBarActivity {
@@ -70,7 +57,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
 
         init();
 
-        SharedPreferences sharedPreferences = this.getSharedPreferences("pics_art_video", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = this.getSharedPreferences(SlideShowConst.SHARED_PREFERENCES, MODE_PRIVATE);
         if (!LoginManager.getInstance().hasValidSession(this)) {
             LoginManager.getInstance().openSession(PicsArtGalleryActvity.this, new RequestListener(0) {
                 @Override
@@ -215,7 +202,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
     /*@Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sharedPreferences = this.getSharedPreferences("pics_art_video", MODE_PRIVATE);
+        SharedPreferences SHARED_PREFERENCES = this.getSharedPreferences("pics_art_video", MODE_PRIVATE);
         if (!LoginManager.getInstance().hasValidSession(this)) {
             LoginManager.getInstance().openSession(PicsArtGalleryActvity.this, new RequestListener(0) {
                 @Override
@@ -244,7 +231,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                 }
             });
         } else {
-            if (sharedPreferences.getBoolean("isopen", false) == false) {
+            if (SHARED_PREFERENCES.getBoolean("isopen", false) == false) {
                 final UserController userController = new UserController(LoginManager.getAccessToken(), PicsArtGalleryActvity.this);
                 userController.requestUserPhotos("me", 0, UserController.MAX_LIMIT);
                 userController.setListener(new RequestListener(0) {
@@ -342,7 +329,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
 
     @Override
     protected void onDestroy() {
-        SharedPreferences sharedPreferences = this.getSharedPreferences("pics_art_video", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = this.getSharedPreferences(SlideShowConst.SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isopen", true);
         editor.commit();
