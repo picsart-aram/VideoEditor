@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.VideoView;
 
 import com.decoder.PhotoUtils;
@@ -56,10 +57,8 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
     private VideoView videoView;
     private ProgressDialog progressDialog;
 
-    private RecyclerView recyclerView;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private RecyclerView.ItemAnimator itemAnimator;
-    private Adapter adapter;
     private boolean isPlaying = false;
     private String videoPath;
 
@@ -69,7 +68,8 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
     public static Context context;
 
     private int REQUEST_SELECT_BG = 302;
-
+    ImageAdapter imageAdapter;
+    LinearLayout framesContainer;
     private SeekBarWithTwoThumb seekBarWithTwoThumb;
     int frameWidth;
     int frameHeight;
@@ -89,8 +89,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
     public void init() {
 
         videoView = (VideoView) findViewById(R.id.video_view);
-        recyclerView = (RecyclerView) findViewById(R.id.rec_view);
-
+        framesContainer= (LinearLayout) findViewById(R.id.frames_container);
         final Button playPauseButton = (Button) findViewById(R.id.play_pause_button);
         seekBarWithTwoThumb = (SeekBarWithTwoThumb) findViewById(R.id.seek_bar_with_two_thumb);
         seekBarWithTwoThumb.setSeekBarChangeListener(this);
@@ -102,12 +101,6 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
 
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
         itemAnimator = new DefaultItemAnimator();
-
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setClipToPadding(true);
-        recyclerView.setLayoutManager(staggeredGridLayoutManager);
-        recyclerView.setItemAnimator(itemAnimator);
-        recyclerView.addItemDecoration(new SpacesItemDecoration(1));
 
         intent = getIntent();
         videoPath = intent.getStringExtra("video_path");
@@ -144,8 +137,12 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
                     }
                 }
 
-                adapter = new Adapter(previewArrayList, EditVideoActivity.this);
-                recyclerView.setAdapter(adapter);
+                imageAdapter = new ImageAdapter(EditVideoActivity.this, 0);
+                imageAdapter.addAll(previewArrayList);
+                for (int i = 0; i <previewArrayList.size() ; i++) {
+                    framesContainer.addView(imageAdapter.getView(i, null, framesContainer ));
+                }
+
                 videoView.setVideoPath(intent.getStringExtra("video_path"));
                 videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
@@ -283,11 +280,11 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_ADD_TEXT) {
-                adapter.notifyDataSetChanged();
+                imageAdapter.notifyDataSetChanged();
             }
 
             if (requestCode == REQUEST_ADD_CLIPART) {
-                adapter.notifyDataSetChanged();
+                imageAdapter.notifyDataSetChanged();
             }
 
             if (requestCode == REQUEST_SELECT_BG) {
