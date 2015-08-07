@@ -42,7 +42,6 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-import hackathon.videoeditor.framegrabber.util.Utils;
 import videoeditor.picsart.com.videoeditor.clipart.ClipartActivity;
 import videoeditor.picsart.com.videoeditor.effects.GreenScreenAction;
 
@@ -112,9 +111,9 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
         frameWidth = PhotoUtils.checkFrameWidth(videoPath, VideoDecoder.FrameSize.NORMAL);
         frameHeight = PhotoUtils.checkFrameHeight(videoPath, VideoDecoder.FrameSize.NORMAL);
         frameOrientation = PhotoUtils.checkFrameOrientation(videoPath);
-        Log.d("gagagagag",frameHeight+"");
-        Log.d("gagagagag",frameWidth+"");
-        Log.d("gagagagag",frameOrientation+"");
+        Log.d("gagagagag", frameHeight + "");
+        Log.d("gagagagag", frameWidth + "");
+        Log.d("gagagagag", frameOrientation + "");
 
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("pics_art_video_editor", MODE_PRIVATE);
@@ -175,7 +174,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
             }
         });
 
-        findViewById(R.id.gray_scale_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.effects_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                EmbossEffect effect = new EmbossEffect(EditVideoActivity.this);
@@ -229,7 +228,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
                             ByteBuffer buffer = PhotoUtils.readBufferFromFile(arrayList.get(i), bufferSize);
                             Bitmap bmp = PhotoUtils.fromBufferToBitmap(frameWidth, frameHeight, buffer);
                             ImageOp.freeNativeBuffer(buffer);
-                            encoder.addFrame(bmp,50);
+                            encoder.addFrame(bmp, 50);
                             onProgressUpdate(i, arrayList.size());
                         }
                         return null;

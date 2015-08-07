@@ -26,7 +26,7 @@ import utils.Utils;
 public class MainActivity extends ActionBarActivity {
 
     private static final String root = Environment.getExternalStorageDirectory().toString();
-    private File myDir = new File(root, SlideShowConst.MY_DIR_NAME);
+    private File myDir = new File(SlideShowConst.ROOT_DIR, SlideShowConst.MY_DIR_NAME);
 
     private static Context context;
     private Button picsArtGalleryButton;

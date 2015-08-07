@@ -6,28 +6,28 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context="videoeditor.picsart.com.videoeditor.EditVideoActivity">
+
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/accent_illusion"
-        />
+        android:background="@color/accent_illusion" />
 
     <TextView
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:textStyle="bold"
-        android:layout_marginLeft="16dp"
-        android:textSize="16sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Spring Adventure"
         android:textColor="@android:color/white"
-        android:text="Spring Adventure"/>
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <FrameLayout
-        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:layout_weight="1">
 
         <VideoView
             android:id="@+id/video_view"
@@ -44,15 +44,15 @@
 
 
     <FrameLayout
-        android:layout_margin="8dp"
         android:layout_width="wrap_content"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        android:layout_margin="8dp">
 
         <LinearLayout
             android:id="@+id/frames_container"
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal" />
 
         <videoeditor.picsart.com.videoeditor.SeekBarWithTwoThumb
             android:id="@+id/seek_bar_with_two_thumb"
@@ -65,55 +65,58 @@
     </FrameLayout>
 
     <LinearLayout
-        android:background="@color/accent_illusion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/accent_illusion"
         android:gravity="center"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/gray_scale_button"
+        <ImageButton
+            android:background="@android:color/transparent"
+            android:id="@+id/effects_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="gray" />
+            android:src="@drawable/edit_screen_add_fx" />
 
-        <ImageView
-            android:src="@drawable/add_text"
+        <ImageButton
+            android:background="@android:color/transparent"
             android:id="@+id/add_text_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="text" />
+            android:src="@drawable/edit_screen_add_text" />
 
-        <ImageView
-            android:src="@drawable/add_clipart"
+        <ImageButton
+            android:background="@android:color/transparent"
             android:id="@+id/add_clipart_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="+" />
+            android:src="@drawable/edit_screen_add_clipart" />
 
-        <Button
+        <ImageButton
+            android:background="@android:color/transparent"
             android:id="@+id/scale_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="scale" />
+            android:src="@drawable/edit_screen_scale_button" />
 
         <Button
-            android:layout_weight="1"
             android:id="@+id/green_screen_blending_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="GS Blend" />
 
-        <Button
-            android:layout_weight="1"
+        <ImageButton
+            android:background="@android:color/transparent"
             android:id="@+id/encode_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="encode" />
+            android:layout_weight="1"
+            android:src="@drawable/edit_screen_encode_button" />
     </LinearLayout>
 
 

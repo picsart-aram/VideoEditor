@@ -40,7 +40,7 @@ public class Encoder implements VideoEncoderFactory {
     private SegmentInfo muxerSegmentInfo;
     private Segment muxerSegment;
     private long newVideoTrackNumber;
-    private long lastFrameTime;
+    private long lastFrameTime=0;
     private StringBuilder error = new StringBuilder("Can't encode Video");
     private int framesIn;
     private long newAudioTrackNumber;
@@ -81,7 +81,6 @@ public class Encoder implements VideoEncoderFactory {
             encoderConfig = new LibVpxEncConfig(videoWidth, videoHeight);
             encoderConfig.setRCTargetBitrate(400000);
             encoderConfig.setTimebase(1, 1000000000);
-            // encoderConfig.set
             encoderConfig.setRCBufInitialSz(500);
             encoderConfig.setRCBufOptimalSz(600);
             encoderConfig.setRCBufSz(1000);
@@ -193,7 +192,7 @@ public class Encoder implements VideoEncoderFactory {
     }
 
 
-    private boolean addFrame(Bitmap bitmap) {
+    public boolean addFrame(Bitmap bitmap) {
         long frameStart = timeMultiplier.multiply(framesIn).toLong();
         long nextFrameStart = timeMultiplier.multiply(framesIn + 1).toLong();
         framesIn++;

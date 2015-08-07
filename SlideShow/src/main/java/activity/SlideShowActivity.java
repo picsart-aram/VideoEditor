@@ -5,7 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.media.MediaMuxer;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -40,6 +40,7 @@ import java.util.concurrent.TimeUnit;
 import adapter.ImagePagerAdapter;
 import adapter.SlideShowAdapter;
 import item.SlideShowItem;
+import utils.FileUtils;
 import utils.SlideShowConst;
 import utils.Utils;
 
@@ -83,10 +84,10 @@ public class SlideShowActivity extends ActionBarActivity {
 
         Intent intent = getIntent();
         ArrayList<CharSequence> charSequences;
-        charSequences = intent.getCharSequenceArrayListExtra("image_paths");
+        charSequences = intent.getCharSequenceArrayListExtra(SlideShowConst.IMAGE_PATHS);
         for (int i = 0; i < charSequences.size(); i++) {
             SlideShowItem slideShowItem = new SlideShowItem(charSequences.get(i).toString(), false, false);
-            if (intent.getBooleanExtra("isfile", false)) {
+            if (intent.getBooleanExtra(SlideShowConst.IS_FILE, false)) {
                 slideShowItem.setIsFromFileSystem(true);
             }
             selectedImagesPathList.add(slideShowItem);
@@ -183,7 +184,7 @@ public class SlideShowActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_FOR_PICS_ART && resultCode == Activity.RESULT_OK) {
-            ArrayList<CharSequence> all_path = data.getCharSequenceArrayListExtra("image_paths");
+            ArrayList<CharSequence> all_path = data.getCharSequenceArrayListExtra(SlideShowConst.IMAGE_PATHS);
             if (all_path.size() > 0) {
                 for (int i = 0; i < all_path.size(); i++) {
                     SlideShowItem slideShowItem = new SlideShowItem(all_path.get(i).toString(), false, false);
@@ -195,7 +196,7 @@ public class SlideShowActivity extends ActionBarActivity {
             }
         }
         if (requestCode == REQUEST_CODE_FOR_CUSTOM_GALLERY && resultCode == Activity.RESULT_OK) {
-            ArrayList<CharSequence> all_path = data.getCharSequenceArrayListExtra("image_paths");
+            ArrayList<CharSequence> all_path = data.getCharSequenceArrayListExtra(SlideShowConst.IMAGE_PATHS);
             if (all_path.size() > 0) {
                 for (int i = 0; i < all_path.size(); i++) {
                     SlideShowItem slideShowItem = new SlideShowItem(all_path.get(i).toString(), false, true);
@@ -303,14 +304,14 @@ public class SlideShowActivity extends ActionBarActivity {
                 try {
                     if (i < path[0].size()) {
                         if (!path[0].get(i).isFromFileSystem()) {
-                            bitmap = ImageLoader.getInstance().loadImageSync(path[0].get(i).getPath() + "?r1024x1024", new ImageSize(SlideShowConst.FRAME_SIZE, SlideShowConst.FRAME_SIZE), DisplayImageOptions.createSimple());
-                            bitmap = Utils.scaleCenterCrop(bitmap, SlideShowConst.FRAME_SIZE, SlideShowConst.FRAME_SIZE);
+                            bitmap = ImageLoader.getInstance().loadImageSync(path[0].get(i).getPath() + SlideShowConst.WEB_IMAGE_SIZE_1024);
+                            bitmap = Utils.scaleCenterCrop(bitmap, SlideShowConst.FRAME_SIZE_720, SlideShowConst.FRAME_SIZE_720);
                         } else {
-                            bitmap = ImageLoader.getInstance().loadImageSync(SlideShowConst.FILE_PREFIX + path[0].get(i).getPath(), new ImageSize(SlideShowConst.FRAME_SIZE, SlideShowConst.FRAME_SIZE), DisplayImageOptions.createSimple());
-                            bitmap = Utils.scaleCenterCrop(bitmap, SlideShowConst.FRAME_SIZE, SlideShowConst.FRAME_SIZE);
+                            bitmap = ImageLoader.getInstance().loadImageSync(SlideShowConst.FILE_PREFIX + path[0].get(i).getPath());
+                            bitmap = Utils.scaleCenterCrop(bitmap, SlideShowConst.FRAME_SIZE_720, SlideShowConst.FRAME_SIZE_720);
                         }
                     } else {
-                        bitmap = Bitmap.createBitmap(SlideShowConst.FRAME_SIZE, SlideShowConst.FRAME_SIZE, Bitmap.Config.ARGB_8888);
+                        bitmap = Bitmap.createBitmap(SlideShowConst.FRAME_SIZE_720, SlideShowConst.FRAME_SIZE_720, Bitmap.Config.ARGB_8888);
                     }
                     encoder.addFrame(bitmap, frameDuration);
                     onProgressUpdate(i);
@@ -328,19 +329,18 @@ public class SlideShowActivity extends ActionBarActivity {
                 progressDialog.setProgress(progress[0]);
                 progressDialog.setMax(selectedImagesPathList.size());
             }
-            Log.d("gagagagaga", "" + progress[0]);
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             encoder.endVideoGeneration();
-            MediaMuxerTest mediaMuxerTest=new MediaMuxerTest();
-            mediaMuxerTest.setContext(SlideShowActivity.this);
             progressDialog.dismiss();
             Intent tostart = new Intent(Intent.ACTION_VIEW);
-            tostart.setDataAndType(Uri.parse(root + "/vid1.mp4"), "video/*");
+            tostart.setDataAndType(Uri.parse(SlideShowConst.OUTPUT_VIDEO_DIR), "video/*");
             startActivity(tostart);
+            FileUtils.clearDir(new File(SlideShowConst.ROOT_DIR, SlideShowConst.MY_DIR_NAME));
+            finish();
         }
 
         @Override
@@ -350,9 +350,10 @@ public class SlideShowActivity extends ActionBarActivity {
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.show();
             encoder = new Encoder();
-            encoder.init(SlideShowConst.FRAME_SIZE, SlideShowConst.FRAME_SIZE, 15, null);
-            encoder.startVideoGeneration(new File(root + "/vid1.mp4"));
+            encoder.init(SlideShowConst.FRAME_SIZE_720, SlideShowConst.FRAME_SIZE_720, SlideShowConst.OUTPUT_FPS, null);
+            encoder.startVideoGeneration(new File(SlideShowConst.OUTPUT_VIDEO_DIR));
         }
     }
 
 }
+

@@ -56,7 +56,7 @@ public class CustomGalleryAdapter extends RecyclerView.Adapter<CustomGalleryAdap
                     array.get(position).setIsSeleted(false);
                     actionBar.setTitle(getSelected().size() + " Selected");
                     if (getSelected().size() == 0) {
-                        actionBar.setTitle("PicsArtVideo");
+                        actionBar.setTitle(SlideShowConst.APP_TITLE);
                     }
 
                 } else {
@@ -143,6 +143,29 @@ public class CustomGalleryAdapter extends RecyclerView.Adapter<CustomGalleryAdap
         return arrayList;
     }
 
+    public ArrayList<Integer> getSelectedItemIndex(){
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        for (int i=0;i<array.size();i++){
+            if (array.get(i).isSeleted()==true){
+                arrayList.add(i);
+            }
+        }
+        return arrayList;
+    }
+
+    public void setSelectedItemIndex(ArrayList<Integer> arrayList){
+
+        for (int i=0;i<array.size();i++){
+            for (int j=0;j<arrayList.size();j++){
+                if (i== arrayList.get(j)){
+                    array.get(i).setIsSeleted(true);
+                    notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
+    }
+
     public void deselectAll() {
         for (int i = 0; i < array.size(); i++) {
             if (array.get(i).isSeleted() == true) {
@@ -150,6 +173,17 @@ public class CustomGalleryAdapter extends RecyclerView.Adapter<CustomGalleryAdap
             }
         }
         notifyDataSetChanged();
+    }
+
+    public void setSelectedItems(ArrayList<CharSequence> selectedItems) {
+        for (int i = 0; i < array.size(); i++) {
+            for (int j = 0; j < selectedItems.size(); i++) {
+                if (array.get(i).getImagePath().toString().equals(selectedItems.get(i).toString())) {
+                    array.get(i).setIsSeleted(true);
+                    break;
+                }
+            }
+        }
     }
 
 }

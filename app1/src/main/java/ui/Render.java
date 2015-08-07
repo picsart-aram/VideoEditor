@@ -111,12 +111,12 @@ public class Render {
     public Bitmap merge(String path1, String path2) {
 
         ByteBuffer buffer1 = PhotoUtils.readBufferFromFile(path1, 360 * 640 * 4);
-        Bitmap bitmap1 = PhotoUtils.fromBufferToBitmap(360, 640, buffer1);
+        Bitmap bitmap1 = PhotoUtils.fromBufferToBitmap(640, 360, buffer1);
         ImageOp.freeNativeBuffer(buffer1);
 
 
         ByteBuffer buffer2 = PhotoUtils.readBufferFromFile(path2, 360 * 640 * 4);
-        Bitmap bitmap2 = PhotoUtils.fromBufferToBitmap(360, 640, buffer2);
+        Bitmap bitmap2 = PhotoUtils.fromBufferToBitmap(640, 360, buffer2);
         ImageOp.freeNativeBuffer(buffer2);
 
         Bitmap mergedBitmap = Bitmap.createBitmap(720, 640, Bitmap.Config.ARGB_8888);

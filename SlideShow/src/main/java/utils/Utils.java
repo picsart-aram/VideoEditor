@@ -266,7 +266,6 @@ public class Utils {
 
                     item.setImagePath(imagecursor.getString(dataColumnIndex));
                     item.setHeight((int) Utils.getBitmapHeight(item.getImagePath()));
-                    //item.setHeight(300);
                     item.setWidth((int) Utils.getBitmapWidth());
 
                     galleryList.add(item);

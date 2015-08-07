@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 
 import adapter.CustomGalleryAdapter;
 import item.CustomGalleryItem;
+import utils.SlideShowConst;
 import utils.SpacesItemDecoration;
 import utils.Utils;
 
@@ -42,11 +44,26 @@ public class CustomGalleryActivity extends ActionBarActivity {
 
         init();
 
+        if (savedInstanceState != null) {
+
+            ArrayList<Integer> integers=savedInstanceState.getIntegerArrayList("ggg");
+            Log.d("gagagaga",integers.get(0)+"");
+            for (int i=0;i<customGalleryArrayList.size();i++){
+                for (int j=0;j<integers.size();i++){
+                    if (i==integers.get(j)){
+                        customGalleryArrayList.get(i).setIsSeleted(true);
+                    }
+                }
+            }
+            //customGalleryAdapter.setSelectedItemIndex(savedInstanceState.getIntegerArrayList("ggg"));
+            customGalleryAdapter.notifyDataSetChanged();
+        }
+
     }
 
     private void init() {
 
-        getSupportActionBar().setTitle("PicsArtVideo");
+        getSupportActionBar().setTitle(SlideShowConst.APP_TITLE);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         customGalleryAdapter = new CustomGalleryAdapter(customGalleryArrayList, this, getSupportActionBar());
 
@@ -70,7 +87,7 @@ public class CustomGalleryActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(CustomGalleryActivity.this,"Gorisi tti arax",Toast.LENGTH_LONG).show();
+                Toast.makeText(CustomGalleryActivity.this, "Gorisi tti arax", Toast.LENGTH_LONG).show();
                 recyclerView.smoothScrollToPosition(0);
             }
         });
@@ -90,12 +107,12 @@ public class CustomGalleryActivity extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             if (customGalleryAdapter.getSelected().size() < 1) {
-                Toast.makeText(getApplicationContext(), "no images selected", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), SlideShowConst.NO_IMAGE_SELECTED, Toast.LENGTH_LONG).show();
             } else {
-                SharedPreferences sharedPreferences = this.getSharedPreferences("pics_art_video", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = this.getSharedPreferences(SlideShowConst.SHARED_PREFERENCES, MODE_PRIVATE);
                 if (sharedPreferences.getBoolean("custom_gallery_isopen", false) == true || sharedPreferences.getBoolean("pics_art_gallery_isopen", false) == true) {
 
-                    Intent data = new Intent().putExtra("image_paths", customGalleryAdapter.getSelected());
+                    Intent data = new Intent().putExtra(SlideShowConst.IMAGE_PATHS, customGalleryAdapter.getSelected());
                     setResult(RESULT_OK, data);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("custom_gallery_isopen", true);
@@ -104,8 +121,8 @@ public class CustomGalleryActivity extends ActionBarActivity {
                 } else {
 
                     Intent intent = new Intent(CustomGalleryActivity.this, SlideShowActivity.class);
-                    intent.putCharSequenceArrayListExtra("image_paths", customGalleryAdapter.getSelected());
-                    intent.putExtra("isfile", true);
+                    intent.putCharSequenceArrayListExtra(SlideShowConst.IMAGE_PATHS, customGalleryAdapter.getSelected());
+                    intent.putExtra(SlideShowConst.IS_FILE, true);
                     startActivity(intent);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("custom_gallery_isopen", true);
@@ -114,10 +131,19 @@ public class CustomGalleryActivity extends ActionBarActivity {
                 }
                 finish();
             }
-
+            /*ArrayList<Integer> charSequences=new ArrayList<>();
+            charSequences.add(1);
+            customGalleryAdapter.setSelectedItemIndex(charSequences);
+            customGalleryAdapter.notifyDataSetChanged();*/
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putIntegerArrayList("ggg",customGalleryAdapter.getSelectedItemIndex());
     }
 
     class MyTask extends AsyncTask<Void, Void, Void> {

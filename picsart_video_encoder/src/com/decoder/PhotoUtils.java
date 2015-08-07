@@ -110,7 +110,14 @@ public class PhotoUtils {
         metaRetriever.setDataSource(videoPath);
         int height = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
         int width = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
-        return width / (frameSize.ordinal() + 1);
+        int orientation = checkFrameOrientation(videoPath);
+        int x;
+        if (orientation == 90 || orientation == 270) {
+            x = height < width ? height : width;
+        } else {
+            x = height > width ? height : width;
+        }
+        return x / (frameSize.ordinal() + 1);
     }
 
     public static int checkFrameHeight(String videoPath, VideoDecoder.FrameSize frameSize) {
@@ -118,7 +125,14 @@ public class PhotoUtils {
         metaRetriever.setDataSource(videoPath);
         int height = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
         int width = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
-        return height / (frameSize.ordinal() + 1);
+        int orientation = checkFrameOrientation(videoPath);
+        int x;
+        if (orientation == 90 || orientation == 270) {
+            x = height > width ? height : width;
+        } else {
+            x = height < width ? height : width;
+        }
+        return x / (frameSize.ordinal() + 1);
     }
 
     public static int checkFrameOrientation(String videoPath) {

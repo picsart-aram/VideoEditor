@@ -16,6 +16,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import java.util.ArrayList;
 
 import item.PicsArtGalleryItem;
+import utils.SlideShowConst;
 
 import com.example.intern.picsartvideo.R;
 import com.squareup.picasso.MemoryPolicy;
@@ -39,7 +40,7 @@ public class PicsArtGalleryAdapter extends RecyclerView.Adapter<PicsArtGalleryAd
 
     public PicsArtGalleryAdapter(ArrayList<PicsArtGalleryItem> arr, Context c, int w, ActionBar actionBar) {
 
-        this.actionBar=actionBar;
+        this.actionBar = actionBar;
         displayWidth = w;
         array = arr;
         context = c;
@@ -62,7 +63,7 @@ public class PicsArtGalleryAdapter extends RecyclerView.Adapter<PicsArtGalleryAd
                         array.get(position).setIsSeleted(false);
                         actionBar.setTitle(getSelected().size() + " Selected");
                         if (getSelected().size() == 0) {
-                            actionBar.setTitle("PicsArtVideo");
+                            actionBar.setTitle(SlideShowConst.APP_TITLE);
                         }
                     } else {
                         array.get(position).setIsSeleted(true);
@@ -83,7 +84,7 @@ public class PicsArtGalleryAdapter extends RecyclerView.Adapter<PicsArtGalleryAd
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
             holder.icon.setLayoutParams(layoutParams);
 
-            ImageLoader.getInstance().displayImage(array.get(position).getImagePath() + "?r240x240"
+            ImageLoader.getInstance().displayImage(array.get(position).getImagePath() + SlideShowConst.WEB_IMAGE_SIZE_240
                     , holder.icon, new SimpleImageLoadingListener() {
 
                 @Override

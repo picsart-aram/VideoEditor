@@ -41,6 +41,7 @@ import java.util.ArrayList;
 
 import dialog.EditTextDialod;
 import dialog.ImageScaleDialog;
+import utils.SlideShowConst;
 
 
 public class ImageEditActivity extends ActionBarActivity {
@@ -50,7 +51,6 @@ public class ImageEditActivity extends ActionBarActivity {
     public static final String EDITED_IMAGE_PATH = "edited_image_path";
     public static final String INDEX = "index";
     public static final String IMAGE_PATH = "image_path";
-    public static final String FILE_PREFIX = "file://";
 
     private ImageView editedImageView;
     private TextView textView;
@@ -84,7 +84,7 @@ public class ImageEditActivity extends ActionBarActivity {
     private void init() {
 
         context = this;
-        SharedPreferences sharedPreferences = getSharedPreferences("pics_art_video", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(SlideShowConst.SHARED_PREFERENCES, MODE_PRIVATE);
         count = sharedPreferences.getInt("edited_count", 0);
         intent = getIntent();
 
@@ -102,12 +102,12 @@ public class ImageEditActivity extends ActionBarActivity {
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, width);
         editedImageView.setLayoutParams(layoutParams);
 
-        isFile = intent.getBooleanExtra("isfile", false);
+        isFile = intent.getBooleanExtra(SlideShowConst.IS_FILE, false);
 
         Bitmap imageBitmap;
         path = intent.getStringExtra(IMAGE_PATH);
         if (isFile) {
-            imageBitmap = ImageLoader.getInstance().loadImageSync(FILE_PREFIX + path);
+            imageBitmap = ImageLoader.getInstance().loadImageSync(SlideShowConst.FILE_PREFIX + path);
         } else {
             imageBitmap = ImageLoader.getInstance().loadImageSync(path);
         }
@@ -154,7 +154,7 @@ public class ImageEditActivity extends ActionBarActivity {
                         isFile = true;
                         ImageLoader.getInstance().clearMemoryCache();
                         ImageLoader.getInstance().clearDiskCache();
-                        ImageLoader.getInstance().displayImage(FILE_PREFIX + path1
+                        ImageLoader.getInstance().displayImage(SlideShowConst.FILE_PREFIX + path1
                                 , editedImageView, new SimpleImageLoadingListener());
                         path = path1;
 
@@ -340,9 +340,9 @@ public class ImageEditActivity extends ActionBarActivity {
                 fileName = "image_edit_" + String.format("%03d", count) + ".jpg";
                 count++;
 
-                SharedPreferences sharedPreferences = getSharedPreferences("pics_art_video", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences(SlideShowConst.SHARED_PREFERENCES, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("edited_count", count);
+                editor.putInt(SlideShowConst.EDITED_COUNT, count);
                 editor.commit();
 
                 File file = new File(myDir, fileName);
@@ -376,7 +376,7 @@ public class ImageEditActivity extends ActionBarActivity {
                 Intent data = new Intent();
                 data.putExtra(EDITED_IMAGE_PATH, file.getAbsolutePath());
                 data.putExtra(INDEX, intent.getIntExtra(INDEX, -1));
-                if (intent.getBooleanExtra("isEdited", false) == true) {
+                if (intent.getBooleanExtra(SlideShowConst.IS_EDITED, false) == true) {
                     new File(path).delete();
                 }
                 setResult(RESULT_OK, data);

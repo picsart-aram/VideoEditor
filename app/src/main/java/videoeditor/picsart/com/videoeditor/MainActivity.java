@@ -51,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
         Util.createDir(Util.VIDEO_FILES_DIR);
 
         init();
-
-        ImageOp.allocNativeBuffer(1000);
     }
 
     private void init() {

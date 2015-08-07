@@ -86,7 +86,7 @@ public class ImagePagerAdapter extends PagerAdapter {
 
             @Override
             public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                imageView.setImageBitmap(Utils.scaleCenterCrop(bitmap, 1000, 1000));
+                imageView.setImageBitmap(Utils.scaleCenterCrop(bitmap, 600, 600));
 
             }
 

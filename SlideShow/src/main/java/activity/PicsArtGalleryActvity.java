@@ -14,22 +14,12 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.intern.picsartvideo.R;
 import com.picsart.api.LoginManager;
 import com.picsart.api.Photo;
 import com.picsart.api.PicsArtConst;
 import com.picsart.api.RequestListener;
 import com.picsart.api.UserController;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -107,7 +97,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                         });
                         queue.add(stringRequest);*/
                         final UserController userController = new UserController(LoginManager.getAccessToken(), PicsArtGalleryActvity.this);
-                        userController.requestUserPhotos("me", 0, UserController.MAX_LIMIT);
+                        userController.requestUserPhotos(SlideShowConst.USER_ID, 0, UserController.MAX_LIMIT);
                         userController.setListener(new RequestListener(0) {
                             @Override
                             public void onRequestReady(int i, String s) {
@@ -118,7 +108,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                                     picsArtGalleryItems.add(picsArtGalleryItem);
 
                                 }
-                                FileUtils.writeListToJson(PicsArtGalleryActvity.this, picsArtGalleryItems, "myfile.json");
+                                FileUtils.writeListToJson(PicsArtGalleryActvity.this, picsArtGalleryItems, SlideShowConst.MY_JSON_FILE_NAME);
                                 picsArtGalleryAdapter.notifyDataSetChanged();
                                 progressBar.setVisibility(View.GONE);
 
@@ -128,7 +118,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                 }
             });
         } else {
-            if (sharedPreferences.getBoolean("isopen", false) == false) {
+            if (sharedPreferences.getBoolean(SlideShowConst.IS_OPEN, false) == false) {
                 /*RequestQueue queue = Volley.newRequestQueue(PicsArtGalleryActvity.this);
                 String url = "https://api.picsart.com/users/me/photos?token=" + LoginManager.getAccessToken();
 
@@ -171,7 +161,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                 });
                 queue.add(stringRequest);*/
                 final UserController userController = new UserController(LoginManager.getAccessToken(), PicsArtGalleryActvity.this);
-                userController.requestUserPhotos("me", 0, UserController.MAX_LIMIT);
+                userController.requestUserPhotos(SlideShowConst.USER_ID, 0, UserController.MAX_LIMIT);
                 userController.setListener(new RequestListener(0) {
                     @Override
                     public void onRequestReady(int i, String s) {
@@ -182,7 +172,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                             picsArtGalleryItems.add(picsArtGalleryItem);
 
                         }
-                        FileUtils.writeListToJson(PicsArtGalleryActvity.this, picsArtGalleryItems, "myfile.json");
+                        FileUtils.writeListToJson(PicsArtGalleryActvity.this, picsArtGalleryItems, SlideShowConst.MY_JSON_FILE_NAME);
                         picsArtGalleryAdapter.notifyDataSetChanged();
                         progressBar.setVisibility(View.GONE);
 
@@ -190,7 +180,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                 });
             } else {
 
-                FileUtils.readListFromJson(PicsArtGalleryActvity.this, picsArtGalleryItems, "myfile.json");
+                FileUtils.readListFromJson(PicsArtGalleryActvity.this, picsArtGalleryItems, SlideShowConst.MY_JSON_FILE_NAME);
                 picsArtGalleryAdapter.notifyDataSetChanged();
                 progressBar.setVisibility(View.GONE);
             }
@@ -267,7 +257,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
         PicsArtConst.REDIRECT_URI = "localhost";
         PicsArtConst.GRANT_TYPE = "authorization_code";
 
-        getSupportActionBar().setTitle("PicsArtVideo");
+        getSupportActionBar().setTitle(SlideShowConst.APP_TITLE);
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -300,16 +290,16 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             if (picsArtGalleryAdapter.getSelected().size() < 1) {
-                Toast.makeText(getApplicationContext(), "no images selected", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), SlideShowConst.NO_IMAGE_SELECTED, Toast.LENGTH_LONG).show();
             } else {
 
-                SharedPreferences sharedPreferences = this.getSharedPreferences("pics_art_video", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = this.getSharedPreferences(SlideShowConst.SHARED_PREFERENCES, MODE_PRIVATE);
                 if (sharedPreferences.getBoolean("custom_gallery_isopen", false) == true || sharedPreferences.getBoolean("pics_art_gallery_isopen", false) == true) {
-                    Intent data = new Intent().putExtra("image_paths", picsArtGalleryAdapter.getSelected());
+                    Intent data = new Intent().putExtra(SlideShowConst.IMAGE_PATHS, picsArtGalleryAdapter.getSelected());
                     setResult(RESULT_OK, data);
                 } else {
                     Intent intent = new Intent(PicsArtGalleryActvity.this, SlideShowActivity.class);
-                    intent.putCharSequenceArrayListExtra("image_paths", picsArtGalleryAdapter.getSelected());
+                    intent.putCharSequenceArrayListExtra(SlideShowConst.IMAGE_PATHS, picsArtGalleryAdapter.getSelected());
                     startActivity(intent);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("pics_art_gallery_isopen", true);
@@ -332,7 +322,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
     protected void onDestroy() {
         SharedPreferences sharedPreferences = this.getSharedPreferences(SlideShowConst.SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("isopen", true);
+        editor.putBoolean(SlideShowConst.IS_OPEN, true);
         editor.commit();
         super.onDestroy();
     }
