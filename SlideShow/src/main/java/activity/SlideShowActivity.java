@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.media.MediaMuxer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -25,6 +26,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.decoder.MediaMuxerTest;
 import com.example.intern.picsartvideo.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -333,6 +335,8 @@ public class SlideShowActivity extends ActionBarActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             encoder.endVideoGeneration();
+            MediaMuxerTest mediaMuxerTest=new MediaMuxerTest();
+            mediaMuxerTest.setContext(SlideShowActivity.this);
             progressDialog.dismiss();
             Intent tostart = new Intent(Intent.ACTION_VIEW);
             tostart.setDataAndType(Uri.parse(root + "/vid1.mp4"), "video/*");

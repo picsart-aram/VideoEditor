@@ -1,13 +1,14 @@
 package ui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 
 
 import com.decoder.PhotoUtils;
@@ -16,8 +17,6 @@ import com.socialin.android.photo.imgop.ImageOp;
 import com.socialin.android.encoder.Encoder;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 public class Render {
 
     private Context context;
-    private ArrayList<String> arrayList = new ArrayList<>();
     private static final String root = Environment.getExternalStorageDirectory().toString();
 
     private String inputVideo1 = Environment.getExternalStorageDirectory().getPath() + "/picsartVideo/myvideo1.mp4";
@@ -36,6 +34,9 @@ public class Render {
     private String outputImagesDir1 = Environment.getExternalStorageDirectory().getPath() + "/picsartVideo/sourcefirst/";
     private String outputImagesDir2 = Environment.getExternalStorageDirectory().getPath() + "/picsartVideo/sourcesecond/";
     private String mergedframes = Environment.getExternalStorageDirectory().getPath() + "/picsartVideo/mergedframes/";
+
+    private int frameWidth;
+    private int frameHeight;
 
     private static OnRenderFinishedListener onRenderFinishedListener;
 
@@ -58,7 +59,6 @@ public class Render {
                         @Override
                         public void onFinish(boolean isDone) {
                             onRenderFinishedListener.onFinish(2);
-                            Log.d("gagagagaga", "exav ashkt lus");
                             new MergeFrames().execute();
                         }
                     });
@@ -84,7 +84,6 @@ public class Render {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
         }
 
         @Override
@@ -92,7 +91,6 @@ public class Render {
 
             for (int i = 0; i < x; i++) {
                 bitmaps.add(merge(files1[i].getAbsolutePath(), files2[i].getAbsolutePath()));
-                Log.d("gagagagag",bitmaps.get(i).getHeight()+"");
             }
 
             return null;
@@ -101,13 +99,9 @@ public class Render {
         @Override
         protected void onPostExecute(Void result) {
 
-            Encoder encoder = new Encoder();
-            encoder.init(bitmaps.get(0).getWidth(), bitmaps.get(0).getHeight(), 15, null);
-            encoder.startVideoGeneration(new File(root + "/vid.mp4"));
-            for (int i = 0; i < bitmaps.size(); i++) {
-                encoder.addFrame(bitmaps.get(i), 50);
-            }
-            onRenderFinishedListener.onFinish(3);
+            frameWidth = bitmaps.get(0).getWidth();
+            frameHeight = bitmaps.get(0).getHeight();
+            new EncodeFrames().execute(bitmaps);
             super.onPostExecute(result);
         }
     }
@@ -121,12 +115,12 @@ public class Render {
      */
     public Bitmap merge(String path1, String path2) {
 
-        ByteBuffer buffer1 = PhotoUtils.readBufferFromFile(path1, 360*640*4);
+        ByteBuffer buffer1 = PhotoUtils.readBufferFromFile(path1, 360 * 640 * 4);
         Bitmap bitmap1 = PhotoUtils.fromBufferToBitmap(360, 640, 0, buffer1);
         ImageOp.freeNativeBuffer(buffer1);
 
 
-        ByteBuffer buffer2 = PhotoUtils.readBufferFromFile(path2, 360*640*4);
+        ByteBuffer buffer2 = PhotoUtils.readBufferFromFile(path2, 360 * 640 * 4);
         Bitmap bitmap2 = PhotoUtils.fromBufferToBitmap(360, 640, 0, buffer2);
         ImageOp.freeNativeBuffer(buffer2);
 
@@ -136,6 +130,34 @@ public class Render {
         canvas.drawBitmap(bitmap2, 360, 0, new Paint());
 
         return mergedBitmap;
+    }
+
+    private class EncodeFrames extends AsyncTask<ArrayList<Bitmap>, Integer, Void> {
+
+        Encoder encoder;
+
+        protected Void doInBackground(ArrayList<Bitmap>... path) {
+
+            for (int i = 0; i < path[0].size(); i++) {
+                encoder.addFrame(path[0].get(i), 500);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            encoder.endVideoGeneration();
+            onRenderFinishedListener.onFinish(3);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            encoder = new Encoder();
+            encoder.init(frameWidth, frameHeight, 15, null);
+            encoder.startVideoGeneration(new File(root + "/vid.mp4"));
+        }
     }
 
     public void setOnRenderFinishedListener(OnRenderFinishedListener l) {

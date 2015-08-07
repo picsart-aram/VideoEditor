@@ -25,6 +25,7 @@ import com.picsart.api.LoginManager;
 import com.picsart.api.Photo;
 import com.picsart.api.PicsArtConst;
 import com.picsart.api.RequestListener;
+import com.picsart.api.UserController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,7 +64,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                 @Override
                 public void onRequestReady(int reqnumber, String message) {
                     if (reqnumber == 7777) {
-                        Toast.makeText(PicsArtGalleryActvity.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
+                        /*Toast.makeText(PicsArtGalleryActvity.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
                         RequestQueue queue = Volley.newRequestQueue(PicsArtGalleryActvity.this);
                         String url = "https://api.picsart.com/users/me/photos?token=" + LoginManager.getAccessToken();
 
@@ -104,8 +105,8 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                                 finish();
                             }
                         });
-                        queue.add(stringRequest);
-                        /*final UserController userController = new UserController(LoginManager.getAccessToken(), PicsArtGalleryActvity.this);
+                        queue.add(stringRequest);*/
+                        final UserController userController = new UserController(LoginManager.getAccessToken(), PicsArtGalleryActvity.this);
                         userController.requestUserPhotos("me", 0, UserController.MAX_LIMIT);
                         userController.setListener(new RequestListener(0) {
                             @Override
@@ -122,13 +123,13 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                                 progressBar.setVisibility(View.GONE);
 
                             }
-                        });*/
+                        });
                     }
                 }
             });
         } else {
             if (sharedPreferences.getBoolean("isopen", false) == false) {
-                RequestQueue queue = Volley.newRequestQueue(PicsArtGalleryActvity.this);
+                /*RequestQueue queue = Volley.newRequestQueue(PicsArtGalleryActvity.this);
                 String url = "https://api.picsart.com/users/me/photos?token=" + LoginManager.getAccessToken();
 
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -168,8 +169,8 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                         finish();
                     }
                 });
-                queue.add(stringRequest);
-                /*final UserController userController = new UserController(LoginManager.getAccessToken(), PicsArtGalleryActvity.this);
+                queue.add(stringRequest);*/
+                final UserController userController = new UserController(LoginManager.getAccessToken(), PicsArtGalleryActvity.this);
                 userController.requestUserPhotos("me", 0, UserController.MAX_LIMIT);
                 userController.setListener(new RequestListener(0) {
                     @Override
@@ -186,7 +187,7 @@ public class PicsArtGalleryActvity extends ActionBarActivity {
                         progressBar.setVisibility(View.GONE);
 
                     }
-                });*/
+                });
             } else {
 
                 FileUtils.readListFromJson(PicsArtGalleryActvity.this, picsArtGalleryItems, "myfile.json");

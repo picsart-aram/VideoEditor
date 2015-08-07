@@ -37,10 +37,10 @@ public class Utils {
 
     }
 
-    public static void craeteDir(String fileName) {
+    public static void createDir(String fileFullPath) {
 
         String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/" + fileName);
+        File myDir = new File(fileFullPath);
         if (!myDir.exists()) {
             myDir.mkdirs();
         } else {

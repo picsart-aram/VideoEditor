@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -117,6 +118,10 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
         frameWidth = PhotoUtils.checkFrameWidth(videoPath, VideoDecoder.FrameSize.NORMAL);
         frameHeight = PhotoUtils.checkFrameHeight(videoPath, VideoDecoder.FrameSize.NORMAL);
         frameOrientation = PhotoUtils.checkFrameOrientation(videoPath);
+        Log.d("gagagagag",frameHeight+"");
+        Log.d("gagagagag",frameWidth+"");
+        Log.d("gagagagag",frameOrientation+"");
+
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("pics_art_video_editor", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -220,9 +225,9 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
                             SharedPreferences sharedPreferences = context.getSharedPreferences("pics_art_video_editor", Context.MODE_PRIVATE);
                             int bufferSize = sharedPreferences.getInt("buffer_size", 0);
                             ByteBuffer buffer = PhotoUtils.readBufferFromFile(arrayList.get(i), bufferSize);
-                            Bitmap bmp = PhotoUtils.fromBufferToBitmap(frameWidth, frameHeight, frameOrientation, buffer);
+                            Bitmap bmp = PhotoUtils.fromBufferToBitmap(frameWidth, frameHeight, buffer);
                             ImageOp.freeNativeBuffer(buffer);
-                            encoder.addFrame(bmp);
+                            encoder.addFrame(bmp,50);
                             onProgressUpdate(i, arrayList.size());
                         }
                         return null;
@@ -238,7 +243,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
                         progressDialog1.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                         progressDialog1.show();
                         encoder = new Encoder();
-                        encoder.init(frameWidth, frameHeight, 25, null);
+                        encoder.init(360, 640, 15, null);
                         encoder.startVideoGeneration(new File(root + "/vid.mp4"));
                     }
 
@@ -293,7 +298,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
 
     @Override
     public void SeekBarValueChanged(int Thumb1Value, int Thumb2Value) {
-        //Log.d("MyLog", "thumb1 : " + Thumb1Value * framesCount / 100 + " thumb2 " + Thumb2Value * framesCount / 100);
+//        Log.d("MyLog", "thumb1 : " + Thumb1Value * framesCount / 100 + " thumb2 " + Thumb2Value * framesCount / 100);
     }
 
     @Override
@@ -321,7 +326,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
 
 
     private void startGreenScreenBlending() {
-        startActivityForResult( Intent.createChooser( new Intent(Intent.ACTION_GET_CONTENT).setType("image/*"), "Choose an image"), REQUEST_SELECT_BG);
+        startActivityForResult(Intent.createChooser(new Intent(Intent.ACTION_GET_CONTENT).setType("image/*"), "Choose an image"), REQUEST_SELECT_BG);
     }
 
     private void handleGalleryResult(Intent data) {

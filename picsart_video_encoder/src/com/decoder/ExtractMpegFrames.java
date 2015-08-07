@@ -5,6 +5,8 @@ package com.decoder;
  */
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
@@ -22,13 +24,16 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 import android.view.Surface;
 
+import com.socialin.android.photo.imgop.ImageOpCommon;
+
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-
 
 
 //20131122: minor tweaks to saveFrame() I/O
@@ -177,11 +182,11 @@ public class ExtractMpegFrames extends AndroidTestCase {
             Log.d(TAG, "isportriet:  " + isPortriet);
 
             if (isPortriet) {
-                savedFrameHeight = width / size;
-                savedFrameWidth = height / size;
+                savedFrameHeight = (width > height ? width : height) / size;
+                savedFrameWidth = (height < width ? height : width) / size;
             } else {
-                savedFrameHeight = height / size;
-                savedFrameWidth = width / size;
+                savedFrameHeight = (height < width ? height : width) / size;
+                savedFrameWidth = (width > height ? width : height) / size;
             }
 
             if (VERBOSE) {
@@ -617,24 +622,23 @@ public class ExtractMpegFrames extends AndroidTestCase {
             GLES20.glReadPixels(0, 0, mWidth, mHeight, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE,
                     mPixelBuf);
 
-            PhotoUtils.saveBufferToSDCard(filename, mPixelBuf);
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(mWidth * mHeight * 4);
+            if (isPortriet) {
+                ImageOpCommon.rotateBuffer(mPixelBuf, byteBuffer, mWidth, mHeight, 180);
+            } else {
+                ImageOpCommon.rotateBuffer(mPixelBuf, byteBuffer, mWidth, mHeight, 0);
+            }
+
+            PhotoUtils.saveBufferToSDCard(filename, byteBuffer);
+
 
             /*BufferedOutputStream bos = null;
             try {
                 bos = new BufferedOutputStream(new FileOutputStream(filename));
                 Bitmap bmp = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
-                mPixelBuf.rewind();
-                bmp.copyPixelsFromBuffer(mPixelBuf);
+                byteBuffer.rewind();
+                bmp.copyPixelsFromBuffer(byteBuffer);
 
-
-                if (isPortriet) {
-
-                    Matrix m = new Matrix();
-                    m.postRotate(180);
-                    m.preScale(-1, 1);
-                    bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), m, false);
-
-                }
 
                 bmp.compress(Bitmap.CompressFormat.PNG, 90, bos);
                 bmp.recycle();

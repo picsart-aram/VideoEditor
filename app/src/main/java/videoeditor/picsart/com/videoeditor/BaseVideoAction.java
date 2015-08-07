@@ -139,7 +139,7 @@ public abstract class BaseVideoAction<T> {
                 int height = sharedPreferences.getInt("frame_height", 0);
                 int orientation = sharedPreferences.getInt("frame_orientation", 0);
                 ByteBuffer buffer = PhotoUtils.readBufferFromFile(path, bufferSize);
-                Bitmap bitmap = PhotoUtils.fromBufferToBitmap(width, height, orientation, buffer);
+                Bitmap bitmap = PhotoUtils.fromBufferToBitmap(width, height, buffer);
 //                Bitmap bitmapAfterAction = doActionOnBitmap(bitmap, parameters);
 //                PhotoUtils.saveBufferToSDCard(path, PhotoUtils.fromBitmapToBuffer(bitmapAfterAction));
 //                onProgressUpdate(i, bitmapPaths.length);

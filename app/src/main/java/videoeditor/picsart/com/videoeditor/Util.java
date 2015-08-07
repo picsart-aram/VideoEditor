@@ -259,7 +259,7 @@ public class Util {
         return (xlarge || large);
     }
 
-    public static String getVideoFilePath(){
+    public static String getVideoFilePath() {
         return new File(Environment.getExternalStorageDirectory(), VIDEO_FILES_DIR).getPath();
     }
 
@@ -285,52 +285,14 @@ public class Util {
         return (float) Math.toDegrees(radians);
     }
 
-    public static void WriteByteToFile(Context contexts,byte[] mybytes, String filename){
-
-        FileOutputStream outputStream;
-        try {
-            outputStream = contexts.openFileOutput(filename, Context.MODE_PRIVATE);
-            outputStream.write(mybytes);
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
-    public static byte[] ReadByteFromFile (String filename){
-
-        byte[] mybytes = null;
-
-        try {
-            File file = new File(filename);
-            FileInputStream FIS = new FileInputStream(file);
-
-            mybytes = new byte[(int)file.length()];
-
-            FIS.read(mybytes);
-            FIS.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return mybytes;
-    }
-
-
-    public static Bitmap readBitmapFromBufferFile(Context context, String bytesFilePath){
-        if(!TextUtils.isEmpty(bytesFilePath)) {
+    public static Bitmap readBitmapFromBufferFile(Context context, String bytesFilePath) {
+        if (!TextUtils.isEmpty(bytesFilePath)) {
             SharedPreferences sharedPreferences = context.getSharedPreferences("pics_art_video_editor", Context.MODE_PRIVATE);
             int bufferSize = sharedPreferences.getInt("buffer_size", 0);
             int width = sharedPreferences.getInt("frame_width", 0);
             int height = sharedPreferences.getInt("frame_height", 0);
-            int orientation = sharedPreferences.getInt("frame_orientation", 0);
             ByteBuffer buffer = PhotoUtils.readBufferFromFile(bytesFilePath, bufferSize);
-            return PhotoUtils.fromBufferToBitmap(width, height, orientation, buffer);
+            return PhotoUtils.fromBufferToBitmap(width, height, buffer);
         }
         return null;
     }
