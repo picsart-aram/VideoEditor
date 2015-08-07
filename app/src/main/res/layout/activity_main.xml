@@ -34,7 +34,7 @@
         android:layout_marginTop="8dp"
         android:textSize="16sp"
         android:textColor="@android:color/white"
-        android:id="@+id/select_image"
+        android:id="@+id/video_collage"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:drawableTop="@drawable/main_screen_select_image"

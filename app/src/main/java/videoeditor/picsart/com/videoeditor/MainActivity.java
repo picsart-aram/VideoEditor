@@ -77,6 +77,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(imgChooser, "Select Picture"), REQUEST_SELECT_IMAGE);*/
             }
         });
+
+        findViewById(R.id.video_collage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent("com.javacodegeeks.androidvideocaptureexample.collage");
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
