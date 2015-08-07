@@ -3,12 +3,10 @@ package com.decoder;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.MediaMetadataRetriever;
-
-import com.socialin.android.photo.imgop.ImageOp;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -86,21 +84,13 @@ public class PhotoUtils {
         return result;
     }
 
-    public static Bitmap fromBufferToBitmap(int w, int h, int orientation, ByteBuffer buffer) {
-        Bitmap result = null;
-        if (orientation == 90 || orientation == 270) {
-            result = Bitmap.createBitmap(h, w, Bitmap.Config.ARGB_8888);
-            buffer.rewind();
-            result.copyPixelsFromBuffer(buffer);
-            Matrix m = new Matrix();
-            m.postRotate(180);
-            m.preScale(-1, 1);
-            result = Bitmap.createBitmap(result, 0, 0, result.getWidth(), result.getHeight(), m, false);
-        } else {
-            result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-            buffer.rewind();
-            result.copyPixelsFromBuffer(buffer);
-        }
+    //gago xi ches push linum
+    public static Bitmap fromBufferToBitmap(int w, int h, ByteBuffer buffer) {
+
+        Bitmap result = Bitmap.createBitmap(h, w, Bitmap.Config.ARGB_8888);
+        buffer.rewind();
+        result.copyPixelsFromBuffer(buffer);
+
         return result;
     }
 
@@ -136,74 +126,9 @@ public class PhotoUtils {
         metaRetriever.setDataSource(videoPath);
         String orientation = metaRetriever.extractMetadata(
                 MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
+
         return Integer.parseInt(orientation);
     }
 
-    public static byte[] bytebuffertobytearray(ByteBuffer byteBuffer) {
-
-
-        byte[] bytes = byteBuffer.array();
-        /*byte[] bytes = new byte[10];
-
-        // Wrap a byte array into a buffer
-        ByteBuffer buf = ByteBuffer.wrap(bytes);
-
-        // Retrieve bytes between the position and limit
-        // (see Putting Bytes into a ByteBuffer)
-        bytes = new byte[buf.remaining()];
-
-        // transfer bytes from this buffer into the given destination array
-        buf.get(bytes, 0, bytes.length);
-
-        // Retrieve all bytes in the buffer
-        buf.clear();
-        bytes = new byte[buf.capacity()];
-
-        // transfer bytes from this buffer into the given destination array
-        buf.get(bytes, 0, bytes.length);*/
-
-        return bytes;
-
-    }
-
-    public static void writeToFile(byte[] array, String path) {
-
-        try {
-            FileOutputStream stream = new FileOutputStream(path);
-            stream.write(array);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static byte[] readByteFromFile(String filename) {
-
-        byte[] mybytes = null;
-
-        try {
-            File file = new File(filename);
-            FileInputStream FIS = new FileInputStream(file);
-
-            mybytes = new byte[(int) file.length()];
-
-            FIS.read(mybytes);
-            FIS.close();
-
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return mybytes;
-    }
-
-    public static native Object allocNative(long size);
-
-    public static native void freeNative(Object globalRef);
 }
 
