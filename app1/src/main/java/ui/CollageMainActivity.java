@@ -12,7 +12,6 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,6 +29,8 @@ import android.widget.VideoView;
 import com.generatingmain.AbsolutePathActivity;
 import com.javacodegeeks.androidvideocaptureexample.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import net.pocketmagic.android.openmxplayer.OpenMXPlayer;
 
 import java.io.File;
 
@@ -57,6 +58,7 @@ public class CollageMainActivity extends Activity {
     private TextView musicTimeText;
     private TextView musicNameText;
     private Button pickMusicbtn;
+    private OpenMXPlayer player = null;
 
 //    private boolean cameraFront = false;
 //    private int firstSecondCameraIndex = 1;
@@ -86,7 +88,6 @@ public class CollageMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        Log.d("ASHOTLOG", "onCreate called");
 
         Utils.initImageLoader(CollageMainActivity.this);
         ImageLoader.getInstance().clearMemoryCache();
@@ -105,9 +106,7 @@ public class CollageMainActivity extends Activity {
 
     @Override
     public void onResume() {
-        Log.d("ASHOTLOG", "onResume called");
         super.onResume();
-        Log.d("ASHOTLOG", "onResume called");
         if (!CameraController.hasCamera(context)) {
             Toast toast = Toast.makeText(context, "Sorry, your phone does not have a camera!", Toast.LENGTH_LONG);
             toast.show();
@@ -185,6 +184,7 @@ public class CollageMainActivity extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         width = display.getWidth();
         int height = display.getHeight();
+        captureController.setWidth(width);
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width / 2, (8 * width / 9));
 

@@ -41,6 +41,8 @@ public class CaptureController {
     private int index = 1;
     MediaController media_Controller;
 
+    private int width;
+
     public CaptureController(Activity activity, CollageMainActivity.OnCaptureEndListener listener) {
         this.activity = activity;
         this.listener = listener;
@@ -98,7 +100,7 @@ public class CaptureController {
 
         if (capturedVideosCount < 2) {
             final VideoView video = new VideoView(activity);
-            video.setLayoutParams(new LinearLayout.LayoutParams(500, 500));
+            video.setLayoutParams(new LinearLayout.LayoutParams(width / 2, (width * 8) / 9));
             media_Controller = new MediaController(activity);
             ///video.setMinimumWidth(width);
             //video.setMinimumHeight(height);
@@ -215,6 +217,11 @@ public class CaptureController {
     public void setIndex(int index) {
         this.index = index;
     }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
 
     public void setCapturedVideosCount(int capturedVideosCount) {
         this.capturedVideosCount = capturedVideosCount;

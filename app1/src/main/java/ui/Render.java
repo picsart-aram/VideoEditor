@@ -134,7 +134,7 @@ public class Render {
         protected Void doInBackground(ArrayList<Bitmap>... path) {
 
             for (int i = 0; i < path[0].size(); i++) {
-                encoder.addFrame(path[0].get(i), 500);
+                encoder.addFrame(path[0].get(i), 100);
             }
             return null;
         }
