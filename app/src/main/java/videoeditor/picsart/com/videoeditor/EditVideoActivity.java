@@ -129,22 +129,24 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
         videoDecoder.setOnDecodeFinishedListener(new VideoDecoder.OnDecodeFinishedListener() {
             @Override
             public void onFinish(boolean isDone) {
+
+
+                int framesCount = 8;
                 File[] files = myDir.listFiles();
-                int x = (4 * files.length) / 25;
-                for (int i = 0; i < files.length; i++) {
+                int duration= files.length/framesCount;
+                for (int i = 0; i <files.length ; i++) {
                     arrayList.add(files[i].getAbsolutePath());
-                    if (i % x == 0) {
+                    if(i%duration==0){
                         previewArrayList.add(files[i].getAbsolutePath());
                     }
                 }
 
                 imageAdapter = new ImageAdapter(EditVideoActivity.this, 0);
                 imageAdapter.addAll(previewArrayList);
-                for (int i = 0; i <7 ; i++) {
-                    View view=imageAdapter.getView(i, null, framesContainer);
-                    Log.d("MyLog", "view width is : " + view.getWidth());
-                    framesContainer.addView(view);
+                for (int i = 0; i <previewArrayList.size() ; i++) {
+                    framesContainer.addView(imageAdapter.getView(i, null, framesContainer));
                 }
+
 
                 videoView.setVideoPath(intent.getStringExtra("video_path"));
                 videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
