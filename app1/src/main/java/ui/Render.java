@@ -1,20 +1,15 @@
 package ui;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Environment;
 
-
 import com.decoder.PhotoUtils;
 import com.decoder.VideoDecoder;
-import com.socialin.android.photo.imgop.ImageOp;
 import com.socialin.android.encoder.Encoder;
+import com.socialin.android.photo.imgop.ImageOp;
 
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -124,10 +119,10 @@ public class Render {
         Bitmap bitmap2 = PhotoUtils.fromBufferToBitmap(360, 640, buffer2);
         ImageOp.freeNativeBuffer(buffer2);
 
-        Bitmap mergedBitmap = Bitmap.createBitmap(720, 640, Bitmap.Config.ARGB_4444);
+        Bitmap mergedBitmap = Bitmap.createBitmap(720, 640, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(mergedBitmap);
-        canvas.drawBitmap(bitmap1, 0, 0, new Paint());
-        canvas.drawBitmap(bitmap2, 360, 0, new Paint());
+        canvas.drawBitmap(bitmap1, 0, 0, null);
+        canvas.drawBitmap(bitmap2, 360, 0, null);
 
         return mergedBitmap;
     }
