@@ -9,7 +9,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#00DAB8"
+        android:background="@color/accent_illusion"
         />
 
     <TextView
@@ -44,13 +44,14 @@
 
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"        >
+        android:layout_margin="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp">
 
         <LinearLayout
             android:id="@+id/frames_container"
             android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
 
         <videoeditor.picsart.com.videoeditor.SeekBarWithTwoThumb
@@ -64,7 +65,7 @@
     </FrameLayout>
 
     <LinearLayout
-        android:background="#00DAB8"
+        android:background="@color/accent_illusion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

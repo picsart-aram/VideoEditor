@@ -42,6 +42,7 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
+import hackathon.videoeditor.framegrabber.util.Utils;
 import videoeditor.picsart.com.videoeditor.clipart.ClipartActivity;
 import videoeditor.picsart.com.videoeditor.effects.GreenScreenAction;
 
@@ -139,8 +140,10 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
 
                 imageAdapter = new ImageAdapter(EditVideoActivity.this, 0);
                 imageAdapter.addAll(previewArrayList);
-                for (int i = 0; i <previewArrayList.size() ; i++) {
-                    framesContainer.addView(imageAdapter.getView(i, null, framesContainer ));
+                for (int i = 0; i <7 ; i++) {
+                    View view=imageAdapter.getView(i, null, framesContainer);
+                    Log.d("MyLog", "view width is : " + view.getWidth());
+                    framesContainer.addView(view);
                 }
 
                 videoView.setVideoPath(intent.getStringExtra("video_path"));

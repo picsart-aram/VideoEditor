@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar" />
 
     <style name="Illusion" parent="AppTheme">
-        <item name="colorAccent">#00DAB8</item>
+        <item name="colorAccent">@color/accent_illusion</item>
         <item name="actionBarStyle">@style/Illusion.ActionBar</item>
         <item name="android:seekBarStyle">@style/Illusion.SeekBar</item>
     </style>

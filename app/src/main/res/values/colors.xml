@@ -2,4 +2,5 @@
 <resources>
     <color name="action_bar_bg">@android:color/black</color>
     <color name="test_color">@android:color/holo_purple</color>
+    <color name="accent_illusion">#02C9AC</color>
 </resources>
