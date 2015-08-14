@@ -14,5 +14,6 @@
         android:id="@+id/frame_image_imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/effects_list_recyclerview" />
+        android:layout_above="@id/effects_list_recyclerview"
+        android:src="@drawable/bg"/>
 </RelativeLayout>
