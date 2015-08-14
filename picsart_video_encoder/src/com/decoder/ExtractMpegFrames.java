@@ -195,7 +195,7 @@ public class ExtractMpegFrames extends AndroidTestCase {
             }
 
             // Could use width/height from the MediaFormat to get full-size frames.
-            outputSurface = new CodecOutputSurface(savedFrameHeight, savedFrameWidth);
+            outputSurface = new CodecOutputSurface(savedFrameWidth, savedFrameHeight);
 
             // Create a MediaCodec decoder, and configure it with the MediaFormat from the
             // extractor.  It's very important to use the format from the extractor because
