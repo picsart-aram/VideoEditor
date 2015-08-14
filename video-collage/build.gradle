@@ -24,7 +24,7 @@ android {
             java.srcDirs = ['src/main/java']
             resources.srcDirs = ['src/main/']
             //renderscript.srcDirs = ['src']
-            res.srcDirs = ['src/main/res']
+            res.srcDirs = ['src/main/res', 'src/main/res/layout']
             assets.srcDirs = ['assets']
         }
     }
