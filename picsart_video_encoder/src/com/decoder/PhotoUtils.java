@@ -1,9 +1,7 @@
 package com.decoder;
 
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.media.MediaMetadataRetriever;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
