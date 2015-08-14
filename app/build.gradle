@@ -33,7 +33,65 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
+
+    enforceUniquePackageName = false
+
+    packagingOptions {
+        exclude '**/BuildConfig/**'
+        exclude 'META-INF/LICENSE.txt'
+        exclude '**/android-support-v13.jar'
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'com/nineoldandroids/util/NoSuchPropertyException.class'
+        exclude 'AndroidManifest.xml'
+        exclude 'resources.arsc'
+        exclude 'res/anim/top_down.xml'
+        exclude 'res/anim/top_up.xml'
+        exclude 'res/drawable/bg_edittext.xml'
+        exclude 'res/drawable/campick.png'
+        exclude 'res/drawable/com_zetbrush_view_scroll_picker_background.png'
+        exclude 'res/drawable/com_zetbrush_view_scroll_picker_bar.png'
+        exclude 'res/drawable/delete.png'
+        exclude 'res/drawable/frame2.png'
+        exclude 'res/drawable/frame3.png'
+        exclude 'res/drawable/frame6.png'
+        exclude 'res/drawable/frame7.png'
+        exclude 'res/drawable/ic_vid.png'
+        exclude 'res/drawable/pick.png'
+        exclude 'res/drawable/picsart_international1.png'
+        exclude 'res/drawable/picsintframe1.png'
+        exclude 'res/drawable/play.png'
+        exclude 'res/drawable/playbuttonpressed.xml'
+        exclude 'res/drawable/playbuttonshape.xml'
+        exclude 'res/drawable/render_button.xml'
+        exclude 'res/drawable/render_button_pressed.xml'
+        exclude 'res/drawable/seek_thumb_disabled.png'
+        exclude 'res/drawable/selector_render_button.xml'
+        exclude 'res/drawable/selectorplaybutton.xml'
+        exclude 'res/drawable/switchcam.png'
+        exclude 'res/layout/activity_chooser.xml'
+        exclude 'res/layout/activity_main.xml'
+        exclude 'res/layout/activity_video_collage.xml'
+        exclude 'res/layout/f_1.xml'
+        exclude 'res/layout/f_2.xml'
+        exclude 'res/layout/popup_settings.xml'
+        exclude 'res/layout/slide_show_item.xml'
+        exclude 'res/menu/menu_main.xml'
+        exclude 'res/menu/menu_video_collage.xml'
+    }
+
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+        preDexLibraries = false
+        jumboMode = true
+    }
+
 }
+
+project.ext.preDexLibs = !project.hasProperty('disablePreDex')
+
 
 def getBuildVersion() {
     if (hasProperty("releaseVersion")) {

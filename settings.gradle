@@ -1,1 +1,2 @@
 include ':app', ':picsart_video_encoder', ':oMXPlayer', ':video-collage', ':fab_library', ':cropper', ':SlideShow'
+project(':video-collage').projectDir = new File(settingsDir, 'video-collage')
