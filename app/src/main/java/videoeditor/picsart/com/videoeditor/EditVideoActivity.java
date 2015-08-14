@@ -244,7 +244,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
                         progressDialog1.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                         progressDialog1.show();
                         encoder = new Encoder();
-                        encoder.init(360, 640, 15, null);
+                        encoder.init(frameWidth, frameHeight, 15, null);
                         encoder.startVideoGeneration(new File(root + "/vid.mp4"));
                     }
 
