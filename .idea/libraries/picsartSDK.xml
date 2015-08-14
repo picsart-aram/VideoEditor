@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="picsartSDK">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/SlideShow/libs/picsartSDK.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
