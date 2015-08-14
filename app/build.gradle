@@ -13,7 +13,16 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                def file = variant.outputs[0].outputFile
+                variant.outputs[0].outputFile = new File(file.parent, file.name.replace(".apk", "-" + getBuildVersion() + ".apk"))
+            }
+
+        }
+        debug {
+            minifyEnabled false
+            proguardFile file('proguard.cfg')
+
         }
     }
     lintOptions {
@@ -25,6 +34,14 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 }
+
+def getBuildVersion() {
+    if (hasProperty("releaseVersion")) {
+        return "$releaseVersion";
+    }
+    return "1.0";
+}
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
