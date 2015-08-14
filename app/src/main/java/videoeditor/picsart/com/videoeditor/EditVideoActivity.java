@@ -130,7 +130,7 @@ public class EditVideoActivity extends ActionBarActivity implements SeekBarWithT
             public void onFinish(boolean isDone) {
 
 
-                int framesCount = 8;
+                int framesCount = 7;
                 File[] files = myDir.listFiles();
                 int duration= files.length/framesCount;
                 for (int i = 0; i <files.length ; i++) {

@@ -292,7 +292,7 @@ public class Util {
             int width = sharedPreferences.getInt("frame_width", 0);
             int height = sharedPreferences.getInt("frame_height", 0);
             ByteBuffer buffer = PhotoUtils.readBufferFromFile(bytesFilePath, bufferSize);
-            return PhotoUtils.fromBufferToBitmap(width, height, buffer);
+            return PhotoUtils.fromBufferToBitmap(height, width, buffer);
         }
         return null;
     }
