@@ -47,13 +47,6 @@ public class ClipartActivity extends ActionBarActivity implements OnVideoActionF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.clipart_main);
 
-        if (getSupportActionBar() != null) {
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(false);
-            actionBar.setTitle("Add Clipart");
-        }
-
         String realPath = getIntent().getStringExtra("image_path");
 //        String message = realPath;
 //        File imgFile = new File(realPath);
@@ -72,7 +65,7 @@ public class ClipartActivity extends ActionBarActivity implements OnVideoActionF
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
+        if (item.getTitle() == "apply") {
             done();
         }
         return true;
@@ -91,7 +84,9 @@ public class ClipartActivity extends ActionBarActivity implements OnVideoActionF
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        menu.add("apply");
+        menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        return true;
     }
 
     private void initView(String path) {

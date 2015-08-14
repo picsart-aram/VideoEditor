@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:label=" "
             android:name=".clipart.ClipartActivity"
             android:hardwareAccelerated="true" />
         <activity
