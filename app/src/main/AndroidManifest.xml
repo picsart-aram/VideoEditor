@@ -6,16 +6,15 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:label=" "
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:theme="@style/Illusion" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:theme="@style/Illusion.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -24,16 +23,13 @@
             android:hardwareAccelerated="true" />
         <activity
             android:theme="@style/Illusion"
-            android:name=".EditVideoActivity"
-            android:label="@string/title_activity_edit_video" >
+            android:name=".EditVideoActivity">
         </activity>
         <activity
-            android:name=".TextArtActivity"
-            android:label="@string/title_activity_text_art" >
+            android:name=".TextArtActivity">
         </activity>
         <activity
-            android:name=".VideoEffectsActivity"
-            android:label="@string/title_activity_effects" >
+            android:name=".VideoEffectsActivity" >
         </activity>
     </application>
 

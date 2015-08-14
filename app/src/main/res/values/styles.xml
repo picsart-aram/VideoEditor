@@ -11,14 +11,19 @@
 
     <style name="Illusion.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="background">@color/action_bar_bg</item>
-        <item name="homeAsUpIndicator">@drawable/add_effect</item>
+        <item name="homeAsUpIndicator">@mipmap/actionbar_header</item>
         <item name="displayOptions">homeAsUp|showTitle</item>
+        <item name="title"> </item>
     </style>
 
     <style name="Illusion.SeekBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal</item>
         <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal</item>
         <item name="android:thumb">@drawable/scrubber_control</item>
+    </style>
+    <style name="Illusion.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
 </resources>

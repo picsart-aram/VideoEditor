@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -111,17 +112,22 @@ public class VideoEffectsActivity extends AppCompatActivity {
     }
 
     private void applyEffectOnVideo() {
-        selectedItem.getAction().setOnVideoFinishListener(new OnVideoActionFinishListener() {
-            @Override
-            public void onSuccess() {
-                finish();
-            }
+        if(selectedItem!=null) {
+            selectedItem.getAction().setOnVideoFinishListener(new OnVideoActionFinishListener() {
+                @Override
+                public void onSuccess() {
+                    finish();
+                }
 
-            @Override
-            public void onFailure() {
+                @Override
+                public void onFailure() {
 
-            }
-        });
-        selectedItem.getAction().startAction(folderPath, null);
+                }
+            });
+            selectedItem.getAction().startAction(folderPath, null);
+        } else {
+            Toast.makeText(this, "please select any effect", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
